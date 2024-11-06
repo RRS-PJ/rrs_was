@@ -35,13 +35,19 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> d985bc15eabded98a265c61c8c081a0185771c2f
 
     // JWT 의존성 추가
     implementation('io.jsonwebtoken:jjwt-api:0.11.2')
     implementation('io.jsonwebtoken:jjwt-impl:0.11.2')
     implementation('io.jsonwebtoken:jjwt-jackson:0.11.2')
+<<<<<<< HEAD
 >>>>>>> 5f1e32913699017d23e626cc8155a64f4eb058ea
+=======
+>>>>>>> d985bc15eabded98a265c61c8c081a0185771c2f
 }
 
 tasks.named('test') {
