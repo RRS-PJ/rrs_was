@@ -1,4 +1,4 @@
-package org.example.springbootdeveloper.filter;
+package com.korit.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
