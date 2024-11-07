@@ -1,4 +1,4 @@
-package org.example.springbootdeveloper.config;
+package com.korit.config;
 
 import org.example.springbootdeveloper.filter.JwtAuthenticationFilter;
 

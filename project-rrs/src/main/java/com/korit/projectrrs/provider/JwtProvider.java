@@ -1,4 +1,4 @@
-package org.example.springbootdeveloper.provider;
+package com.korit.provider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
