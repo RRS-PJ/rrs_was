@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service.implement;
 
-
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
@@ -30,7 +29,7 @@ public class AuthServiceImplement implements AuthService {
         String userName = dto.getUserName();
         String userId = dto.getUserId();
         String userPassword = dto.getUserPassword();
-        String ConfirmUserPassword = dto.getConfirmUserPassword();
+        String confirmPassword = dto.getConfirmUserPassword();
         String userNickName = dto.getUserNickName();
         String userPhone = dto.getUserPhone();
         String userAddress = dto.getUserAddress();
@@ -38,68 +37,80 @@ public class AuthServiceImplement implements AuthService {
         String userEmail = dto.getUserEmail();
         String userProfileImageUrl = dto.getUserProfileImageUrl();
 
+
         SignUpResponseDto data = null;
 
         // 1. 유효성 검사 //
         if (userName == null || userName.isEmpty() || !userName.matches("^[가-힣]+$")) {
-            return ResponseDto.setFailed((ResponseMessage.INVALID_NAME));
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
+        if ( userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
         }
 
-        if (userPassword == null || userPassword.isEmpty() || !userPassword.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$") || ConfirmUserPassword == null || ConfirmUserPassword.isEmpty()  || !ConfirmUserPassword.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_PASSWORD);
+        if (userPassword == null || userPassword.isEmpty() || confirmPassword == null || confirmPassword.isEmpty()) {
+            // INVALID_PASSWORD
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
-        if (!userPassword.equals(ConfirmUserPassword)) {
-            return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
+        if (!userPassword.equals(confirmPassword)) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_CONFIRM_PASSWORD);
         }
 
-        if (userNickName == null || userNickName.isEmpty() || !userNickName.matches("^[a-zA-Z0-9]{2,10}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_NICKNAME);
+        if (userPassword.length() < 8 ||
+            !userPassword.matches("(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
-        if (userPhone == null || userPhone.isEmpty() || !userPhone.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_PHONE);
+        if ( userNickName == null || userNickName.isEmpty() || !userNickName.matches("^[a-zA-Z0-9]{2,10}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NICKNAME);
         }
 
-        if (userAddress == null || userAddress.isEmpty() || userAddressDetail == null || userAddressDetail.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_ADDRESS);
+        if ( userPhone == null || userPhone.isEmpty() || !userPhone.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
-        if (userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_EMAIL);
+        if ( userAddress == null || userAddress.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ADDRESS);
         }
 
-        if (!userProfileImageUrl.matches("^.*\\.(?i)(jpg|jpeg|png|gif)$\n")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_IMAGE_URL);
+        if ( userAddressDetail == null || userAddressDetail.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ADDRESS_DETAIL);
+        }
+
+        if ( userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)
+            || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
+        }
+
+        if (!userProfileImageUrl.matches("\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
         // 2. 중복 체크 //
         if (userRepository.existsByUserId(userId)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER);
-        }
-
-        if (userRepository.existsByUserEmail(userEmail)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER);
+            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_ID);
         }
 
         if (userRepository.existsByUserNickName(userNickName)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER);
+            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_NICKNAME);
         }
 
-        if (userRepository.existsByUserPhone(userPhone)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER );
+        if (userRepository.existsBuUserPhone(userPhone)) {
+            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_PHONE);
+        }
+
+        if (userRepository.existsByUserEmail(userEmail)) {
+            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_EMAIL);
         }
 
         try {
-            String encodedPassword = bCryptpasswordEncoder.encode(userPassword);
+            String encodedUserPassword = bCryptpasswordEncoder.encode(userPassword);
             User user = User.builder()
                     .userName(userName)
                     .userId(userId)
-                    .userPassword(encodedPassword)
+                    .userPassword(encodedUserPassword)
                     .userNickName(userNickName)
                     .userPhone(userPhone)
                     .userAddress(userAddress)
@@ -127,12 +138,12 @@ public class AuthServiceImplement implements AuthService {
         LoginResponseDto data = null;
 
         // 1. 유효성 검사 //
-        if (userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
+        if (userId == null || userId.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
         }
 
-        if (userPassword == null || userPassword.isEmpty() || !userPassword.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_PASSWORD);
+        if (userPassword == null || userPassword.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
         }
 
         try {
@@ -140,11 +151,11 @@ public class AuthServiceImplement implements AuthService {
                     .orElse(null);
 
             if (user == null) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER);
+                return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
             }
 
             if (!bCryptpasswordEncoder.matches(userPassword, user.getUserPassword())) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
+                return ResponseDto.setFailed((ResponseMessage.NOT_MATCH_PASSWORD));
             }
 
             String token = jwtProvider.generateJwtToken(userId);

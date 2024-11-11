@@ -41,6 +41,11 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String userEmail;
+<<<<<<< HEAD
+=======
+
+    private String userProfileImageUrl;
+>>>>>>> develop
 
     private String userProfileImageUrl;
 }

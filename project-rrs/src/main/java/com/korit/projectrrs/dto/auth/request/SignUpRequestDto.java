@@ -14,7 +14,11 @@ public class SignUpRequestDto {
     @NotBlank
     private String userPassword;
     @NotBlank
+<<<<<<< HEAD
     private String ConfirmUserPassword;
+=======
+    private String confirmUserPassword;
+>>>>>>> develop
     @NotBlank
     private String userNickName;
     @NotBlank
@@ -27,4 +31,8 @@ public class SignUpRequestDto {
     private String userEmail;
 
     private String userProfileImageUrl;
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
 }

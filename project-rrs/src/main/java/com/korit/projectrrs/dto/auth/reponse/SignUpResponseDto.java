@@ -11,6 +11,10 @@ public class SignUpResponseDto {
 
     public SignUpResponseDto(User user) {
         this.id = user.getId();
+<<<<<<< HEAD
         this.userNickName = getUserNickName();
+=======
+        this.userNickName = user.getUserNickName();
+>>>>>>> develop
     }
 }
