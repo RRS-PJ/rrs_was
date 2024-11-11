@@ -10,5 +10,5 @@ public class LoginRequestDto {
     @NotBlank
     private String userId;
     @NotBlank
-    private String password;
+    private String userPassword;
 }
