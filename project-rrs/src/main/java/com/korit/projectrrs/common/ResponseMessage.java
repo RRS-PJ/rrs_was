@@ -29,4 +29,16 @@ public class ResponseMessage {
     // 기타 메시지
     public static final String TOKEN_CREATE_FAIL = "Token creation failed."; // 토큰 생성 실패 시 반환 메시지
     public static final String MESSAGE_SEND_FAIL = "Failed to send authentication number."; // 인증 번호 전송 실패 시 반환 메시지
+
+    // 추가
+    public static final String INVALID_NAME = "유효하지 않는 이름입니다.";
+    public static final String INVALID_USER_ID = "유효하지 않는 아이디입니다.";
+    public static final String INVALID_PASSWORD = "유효하지 않는 비밀번호입니다.";
+    public static final String INVALID_NICKNAME = "유효하지 않는 닉네임입니다.";
+    public static final String INVALID_EMAIL = "유효하지 않는 이메일입니다.";
+    public static final String INVALID_PHONE = "유효하지 않는 전화번호입니다.";
+    public static final String INVALID_ADDRESS = "유효하지 않는 번호입니다.";
+    public static final String INVALID_IMAGE_URL = "유효하지 않는 이미지 형식입니다.";
+
+
 }

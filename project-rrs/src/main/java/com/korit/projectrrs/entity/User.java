@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,19 +27,20 @@ public class User {
     @Column(nullable = false)
     private String userPassword;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userNickName;
 
+    @Column(nullable = false, unique = true)
+    private String userPhone;
+
     @Column(nullable = false)
-    private String
+    private String userAddress;
+
+    @Column(nullable = false)
+    private String userAddressDetail;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String userEmail;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String phone;
-
+    private String userProfileImageUrl;
 }
