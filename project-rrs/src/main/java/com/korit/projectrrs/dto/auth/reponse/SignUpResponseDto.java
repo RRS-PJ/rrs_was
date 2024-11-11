@@ -7,15 +7,10 @@ import lombok.Getter;
 @Getter
 public class SignUpResponseDto {
     private Long id;
-    private String userId;
-    private String name;
-    private String email;
+    private String userNickName;
 
     public SignUpResponseDto(User user) {
         this.id = user.getId();
-        this.userId = user.getUserId();
-        this.name = user.getName();
-        this.email = user.getEmail();
+        this.userNickName = user.getUserNickName();
     }
-
 }
