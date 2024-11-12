@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,7 +41,11 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String userEmail;
+<<<<<<< HEAD
+=======
 
     private String userProfileImageUrl;
+>>>>>>> develop
 
+    private String userProfileImageUrl;
 }
