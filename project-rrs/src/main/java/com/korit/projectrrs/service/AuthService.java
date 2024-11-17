@@ -11,5 +11,4 @@ public interface AuthService{
 
     ResponseDto<SignUpResponseDto> singUp(SignUpRequestDto dto);
     ResponseDto<LoginResponseDto> login(LoginRequestDto dto);
-
 }
