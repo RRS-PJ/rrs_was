@@ -59,7 +59,7 @@ public class AuthServiceImplement implements AuthService {
         }
 
         if (userPassword.length() < 8 ||
-            !userPassword.matches("(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+                !userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
@@ -84,7 +84,8 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 
-        if (!userProfileImageUrl.matches("\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
+                !userProfileImageUrl.matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -97,7 +98,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.EXIST_USER_NICKNAME);
         }
 
-        if (userRepository.existsBuUserPhone(userPhone)) {
+        if (userRepository.existsByUserPhone(userPhone)) {
             return ResponseDto.setFailed(ResponseMessage.EXIST_USER_PHONE);
         }
 
@@ -131,36 +132,42 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
-    public ResponseDto<LoginResponseDto> login(LoginRequestDto dto) {
+    public ResponseDto<LoginResponseDto> login(@Valid LoginRequestDto dto) {
+        // 1. 입력값 추출 //
         String userId = dto.getUserId();
         String userPassword = dto.getUserPassword();
 
         LoginResponseDto data = null;
 
-        // 1. 유효성 검사 //
-        if (userId == null || userId.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
+        // 2. 유효성 검사 //
+        if (userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
         }
 
-        if (userPassword == null || userPassword.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
+        if (userPassword == null || userPassword.isEmpty() ||
+                userPassword.length() < 8 ||
+                !userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
         try {
+            // 3. 사용자 인증 //
             User user = userRepository.findByUserId(userId)
                     .orElse(null);
 
             if (user == null) {
-                return ResponseDto.setFailed(ResponseMessage.VALIDATION_FAIL);
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
             }
 
             if (!bCryptpasswordEncoder.matches(userPassword, user.getUserPassword())) {
-                return ResponseDto.setFailed((ResponseMessage.NOT_MATCH_PASSWORD));
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
             }
 
+            // 4. 토큰 생성 //
             String token = jwtProvider.generateJwtToken(userId);
             int exprTime = jwtProvider.getExpiration();
 
+            // 5. 응답 데이터 생성 //
             data = new LoginResponseDto(user, token, exprTime);
 
         } catch (Exception e) {
@@ -168,6 +175,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
 
+        // 6. 성공 응답 반환 //
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }
