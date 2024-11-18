@@ -42,12 +42,8 @@ public class User {
 
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
-<<<<<<< HEAD
-=======
 
     @Column(name = "USER_PROFILE_IMAGE_URL", nullable = true)
     private String userProfileImageUrl;
->>>>>>> develop
 
-    private String userProfileImageUrl;
 }
