@@ -112,4 +112,5 @@ public class ResponseMessage {
     // 인증 관련 메시지
     public static final String IMAGE_AUTHORIZATION_FAIL = "Image authorization failed."; // 이미지 인증 실패
 
+
 }
