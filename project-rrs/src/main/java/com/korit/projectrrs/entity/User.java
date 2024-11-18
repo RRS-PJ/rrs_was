@@ -1,3 +1,4 @@
+
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
