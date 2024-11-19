@@ -80,7 +80,7 @@ public class AuthServiceImplement implements AuthService {
         }
 
         if (userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)
-                || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 

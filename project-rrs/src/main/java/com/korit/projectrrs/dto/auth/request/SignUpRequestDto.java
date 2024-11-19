@@ -1,4 +1,3 @@
-
 package com.korit.projectrrs.dto.auth.request;
 
 import jakarta.validation.constraints.NotBlank;
