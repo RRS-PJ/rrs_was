@@ -58,8 +58,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_CONFIRM_PASSWORD);
         }
 
-        if (userPassword.length() < 8 ||
-                !userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+        if (!userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
@@ -67,7 +66,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NICKNAME);
         }
 
-        if (userPhone == null || userPhone.isEmpty() || !userPhone.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
+        if (userPhone == null || userPhone.isEmpty() || userPhone.matches("^[0-9]{11}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
