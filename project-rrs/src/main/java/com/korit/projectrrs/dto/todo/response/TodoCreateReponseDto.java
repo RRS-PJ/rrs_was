@@ -1,9 +1,17 @@
 package com.korit.projectrrs.dto.todo.response;
 
-import java.util.Date;
+import com.korit.projectrrs.entity.Todo;
+
+import java.time.LocalDateTime;
 
 public class TodoCreateReponseDto {
     Long todoId;
     String todoPreparationContent;
-    Date todoCreateAt = new Date();
+    LocalDateTime todoCreateAt;
+
+    public TodoCreateReponseDto(Todo todo) {
+        this.todoId = todo.getTodoId();
+        this.todoPreparationContent = todo.getTodoPreparationContent();
+        this.todoCreateAt = todo.getTodoCreateAt();
+    }
 }

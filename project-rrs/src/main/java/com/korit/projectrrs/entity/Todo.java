@@ -1,22 +1,32 @@
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Entity
-@Table(name = "Todos")
+@Table(name = "TODOS")
 public class Todo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int todoID;
+    private Long todoId;
 
-    @JoinColumn(name = "id", nullable = false)
-    int id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID", nullable = false)
+    private User user;
+
+    @Column(nullable = false, length = 255)
+    private String todoPreparationContent;
 
     @Column(nullable = false)
-    String todoPreparationContent;
-
-    @Column(nullable = false)
-    Date todoCreateAt;
+    private LocalDateTime todoCreateAt;
 }
