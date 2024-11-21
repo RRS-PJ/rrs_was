@@ -48,7 +48,4 @@ public class User {
     @Column(name = "USER_PROFILE_IMAGE_URL", nullable = true)
     private String userProfileImageUrl;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Todo> todos;
-
 }
