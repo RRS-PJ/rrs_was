@@ -2,21 +2,18 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.Todo.request.TodoPostRequestDto;
-import com.korit.projectrrs.dto.Todo.request.TodoUpdateRequestDto;
-import com.korit.projectrrs.dto.Todo.response.TodoGetResponseDto;
-import com.korit.projectrrs.dto.Todo.response.TodoPostResponseDto;
-import com.korit.projectrrs.dto.Todo.response.TodoUpdateResponseDto;
+import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
+import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
 import com.korit.projectrrs.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(ApiMappingPattern.TODO)

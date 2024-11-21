@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TodoRepository extends JpaRepository {
+public interface TodoRepository extends JpaRepository<Todo, Long> {
     @Query("SELECT t FROM Todo t WHERE t.user.id = :userId " +
             "AND FUNCTION('DATE', t.todoCreateAt) = :day " +
             "ORDER BY t.todoCreateAt ASC")

@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.Todo.response;
+package com.korit.projectrrs.dto.todo.response;
 
 import com.korit.projectrrs.entity.Todo;
 

@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.Todo.request;
+package com.korit.projectrrs.dto.todo.request;
 
 import lombok.Data;
 

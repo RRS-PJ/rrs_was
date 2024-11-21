@@ -2,21 +2,28 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.Todo.request.TodoPostRequestDto;
-import com.korit.projectrrs.dto.Todo.response.TodoPostResponseDto;
+import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
+import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
 import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.entity.User;
+import com.korit.projectrrs.repositoiry.TodoRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.TodoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
+
     @Override
     public ResponseDto<TodoPostResponseDto> createTodo(String userId, TodoPostRequestDto dto) {
-        TodoPostRequestDto data = null;
+        TodoPostResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
@@ -41,13 +48,12 @@ public class TodoServiceImpl implements TodoService {
                     .todoCreateAt(LocalDate.now())
                     .build();
             todoRepository.save(todo);
-            data =  new TodoPostRequestDto(todo);
-
+            data =  new TodoPostResponseDto(todo);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
-
         }
+
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }

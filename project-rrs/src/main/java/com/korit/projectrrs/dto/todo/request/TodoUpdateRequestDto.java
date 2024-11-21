@@ -1,7 +1,8 @@
-package com.korit.projectrrs.dto.Todo.request;
+package com.korit.projectrrs.dto.todo.request;
 
-import java.time.LocalDate;
+import lombok.Data;
 
+@Data
 public class TodoUpdateRequestDto {
     private String todoPreparationContent;
 }
