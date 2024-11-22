@@ -79,16 +79,11 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ADDRESS_DETAIL);
         }
 
-        if (userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)
-            || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+        if (!userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 
-        if (userProfileImageUrl == null || userProfileImageUrl.isEmpty()) {
-            userProfileImageUrl = "https://example.com/default-profile.png";
-        }
-
-        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() && !userProfileImageUrl.matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+        if (userProfileImageUrl == null && !userProfileImageUrl.isEmpty() && !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 

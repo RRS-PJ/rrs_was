@@ -43,6 +43,6 @@ public class User {
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false)
+    @Column(name = "USER_PROFILE_IMAGE_URL", columnDefinition = "VARCHAR(255) DEFAULT 'example.jpg'")
     private String userProfileImageUrl;
 }
