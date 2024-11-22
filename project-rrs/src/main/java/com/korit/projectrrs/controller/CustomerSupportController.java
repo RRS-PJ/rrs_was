@@ -1,21 +1,8 @@
 package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
-import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportCreateRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportUpdateRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportCreateResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
-import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
-import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(ApiMappingPattern.CUSTOMER_SUPPORT)

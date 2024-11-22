@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalTime;
 
 @Data
-public class CustomerSupportUpdateRequestDto {
+public class CustomerSupportPostRequestDto {
     private Long customerSupportId;
     private String userId;
     private String customerSupportTitle;

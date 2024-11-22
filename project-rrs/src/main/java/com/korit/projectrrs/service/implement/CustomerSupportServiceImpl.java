@@ -2,11 +2,11 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportCreateRequestDto;
+import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportUpdateRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportCreateResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
+import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
@@ -22,10 +22,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<CustomerSupportCreateResponseDto> createCustomerSupport(CustomerSupportCreateRequestDto dto) {
+    public ResponseDto<CustomerSupportCreateResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto) {
         CustomerSupportCreateResponseDto data = null;
-        try {
 
+        try {
+            CustomerSupport customerSupport =  CustomerSupport.builder()
+                    .build();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);

@@ -43,6 +43,13 @@ public class User {
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", columnDefinition = "VARCHAR(255) DEFAULT 'example.jpg'")
+    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, insertable = false, updatable = true)
     private String userProfileImageUrl;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.userProfileImageUrl == null || this.userProfileImageUrl.isEmpty()) {
+            this.userProfileImageUrl = "https://example.com/default-profile.png"; // 기본 프로필 이미지 URL
+        }
+    }
 }

@@ -83,7 +83,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 
-        if (userProfileImageUrl == null && !userProfileImageUrl.isEmpty() && !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() && !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -115,7 +115,7 @@ public class AuthServiceImplement implements AuthService {
                     .userAddress(userAddress)
                     .userAddressDetail(userAddressDetail)
                     .userEmail(userEmail)
-                    .userProfileImageUrl(userProfileImageUrl)
+                    .userProfileImageUrl(userProfileImageUrl == null ? "example.jpg" : userProfileImageUrl)
                     .build();
 
             userRepository.save(user);
