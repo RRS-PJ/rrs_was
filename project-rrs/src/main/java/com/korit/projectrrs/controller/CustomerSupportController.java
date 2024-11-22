@@ -22,9 +22,9 @@ import java.util.List;
 public class CustomerSupportController {
     private final CustomerSupportService customerSupportService;
 
-    private final String CUSTOMER_SUPPORT_GET = "/{”customer_support_Id”}";
-    private final String CUSTOMER_SUPPORT_UPDATE = "/{”customer_support_Id”}";
-    private final String CUSTOMER_SUPPORT_DELETE = "/{”customer_support_Id”}";
+    private final String CUSTOMER_SUPPORT_GET = "/{customerSupportId}";
+    private final String CUSTOMER_SUPPORT_UPDATE = "/{customerSupportId}";
+    private final String CUSTOMER_SUPPORT_DELETE = "/{customerSupportId}";
 
     @PostMapping
     private ResponseEntity<ResponseDto<CustomerSupportPostResponseDto>> createCustomerSupport (
@@ -36,7 +36,7 @@ public class CustomerSupportController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(CUSTOMER_SUPPORT_GET)
     private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserId (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId
@@ -56,7 +56,7 @@ public class CustomerSupportController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping
+    @PutMapping(CUSTOMER_SUPPORT_UPDATE)
     private ResponseEntity<ResponseDto<CustomerSupportUpdateResponseDto>> createCustomerSupport (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId,
@@ -67,7 +67,7 @@ public class CustomerSupportController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping(CUSTOMER_SUPPORT_DELETE)
     private ResponseEntity<ResponseDto<Void>> deleteCustomerSupport(
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId
