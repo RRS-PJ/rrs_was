@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "CUSTOMER_SUPPORTS")
@@ -30,10 +30,10 @@ public class CustomerSupport {
     private String customerSupportContent;
 
     @Column(nullable = false)
-    private String customerSupportStatus;
+    private char customerSupportStatus;
 
     @Column(nullable = false)
-    private LocalTime customerSupportCreateAt;
+    private LocalDate customerSupportCreateAt;
 
     @Column(nullable = false)
     private char customerSupportCategory;

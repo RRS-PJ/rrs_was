@@ -14,6 +14,8 @@ import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -25,10 +27,19 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     @Override
     public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto) {
         CustomerSupportPostResponseDto data = null;
+        String title = dto.getCustomerSupportTitle();
+        String content = dto.getCustomerSupportContent();
+        char category =  dto.getCustomerSupportCategory();
 
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
+                    .customerSupportTitle(title)
+                    .customerSupportContent(content)
+                    .customerSupportCategory(category)
+                    .customerSupportStatus('0')
+                    .customerSupportCreateAt(LocalDate.now())
                     .build();
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
