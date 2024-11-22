@@ -5,6 +5,7 @@ import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportUpdateRequestDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
+import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
@@ -22,8 +23,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<CustomerSupportCreateResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto) {
-        CustomerSupportCreateResponseDto data = null;
+    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto) {
+        CustomerSupportPostResponseDto data = null;
 
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
