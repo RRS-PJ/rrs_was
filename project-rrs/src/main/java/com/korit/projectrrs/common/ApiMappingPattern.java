@@ -7,4 +7,5 @@ public class ApiMappingPattern {
     public static final String ARTICLE = "/api/v1/articles";
     public static final String COMMENT = "/api/v1/commemts";
     public static final String TODO = "/api/v1/todos";
+    public static final String CUSTOMER_SUPPORT = "/api/v1/customer-support";
 }

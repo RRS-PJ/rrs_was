@@ -16,7 +16,7 @@ public interface TodoService {
 
     ResponseDto<List<TodoGetResponseDto>> getAllTodosByUserIdAndDay(String userId, LocalDate day);
 
-    ResponseDto<TodoUpdateResponseDto> updateTodo(String userId, Long todoId, TodoUpdateRequestDto dto);
+    ResponseDto<TodoUpdateResponseDto> updateTodo(Long todoId, TodoUpdateRequestDto dto);
 
     ResponseDto<Void> deleteTodo(String userId, Long todoId);
 }

@@ -58,15 +58,16 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_CONFIRM_PASSWORD);
         }
 
-        if (!userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+        if (userPassword.length() < 8 ||
+                !userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
-        if (userNickName == null || userNickName.isEmpty() || !userNickName.matches("^[a-zA-Z0-9가-힣]{2,10}$")) {
+        if (userNickName == null || userNickName.isEmpty() || !userNickName.matches("^[a-zA-Z0-9]{2,10}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NICKNAME);
         }
 
-        if (userPhone == null || userPhone.isEmpty() || !userPhone.matches("^[0-9]{11}$")) {
+        if (userPhone == null || userPhone.isEmpty() || !userPhone.matches("^\\d{3}-\\d{3,4}-\\d{4}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
@@ -79,12 +80,15 @@ public class AuthServiceImplement implements AuthService {
         }
 
         if (userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)
-                || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 
-        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+        if (userProfileImageUrl == null || userProfileImageUrl.isEmpty()) {
+            userProfileImageUrl = "https://example.com/default-profile.png";
+        }
+
+        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() && !userProfileImageUrl.matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 

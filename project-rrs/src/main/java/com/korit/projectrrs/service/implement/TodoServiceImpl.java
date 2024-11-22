@@ -80,8 +80,9 @@ public class TodoServiceImpl implements TodoService {
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
+
     @Override
-    public ResponseDto<TodoUpdateResponseDto> updateTodo(String userId, Long todoId, TodoUpdateRequestDto dto) {
+    public ResponseDto<TodoUpdateResponseDto> updateTodo(Long todoId, TodoUpdateRequestDto dto) {
         TodoUpdateResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
 

@@ -23,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
+
     private final String TODO_GET = "";
     private final String TODO_UPDATE = "/{todoId}";
     private final String TODO_DELETE = "/{todoId}";
@@ -53,7 +54,7 @@ public class TodoController {
             @PathVariable Long todoId,
             @RequestBody TodoUpdateRequestDto dto
     ) {
-        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(userId, todoId, dto);
+        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(todoId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
