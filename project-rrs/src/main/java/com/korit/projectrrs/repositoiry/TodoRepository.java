@@ -12,11 +12,15 @@ import java.util.Optional;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    @Query("SELECT t FROM Todo t WHERE t.user.id = :userId " +
+    @Query("SELECT t " +
+            "FROM Todo t " +
+            "WHERE t.user.userId = :userId " +
             "AND FUNCTION('DATE', t.todoCreateAt) = :day " +
             "ORDER BY t.todoCreateAt ASC")
     Optional<List<Todo>> findTodosByUserIdAndDay(@Param("userId") String userId, @Param("day") LocalDate day);
 
-    @Query("SELECT t FROM Todo t WHERE t.user.id = :userId ")
+    @Query("SELECT t " +
+            "FROM Todo t " +
+            "WHERE t.user.userId = :userId ")
     Optional<Todo> findTodoByUserId(@Param("userId") String userId);
 }

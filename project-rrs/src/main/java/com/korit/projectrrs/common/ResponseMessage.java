@@ -112,5 +112,8 @@ public class ResponseMessage {
     // 인증 관련 메시지
     public static final String IMAGE_AUTHORIZATION_FAIL = "Image authorization failed."; // 이미지 인증 실패
 
+    // Todo 관련 메세지
+    public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
+    public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
 
 }
