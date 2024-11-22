@@ -78,6 +78,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }
