@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImplement implements AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
@@ -66,7 +66,7 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NICKNAME);
         }
 
-        if (userPhone == null || userPhone.isEmpty() || userPhone.matches("^[0-9]{11}$")) {
+        if (userPhone == null || userPhone.isEmpty() || !userPhone.matches("^[0-9]{11}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
@@ -84,7 +84,7 @@ public class AuthServiceImplement implements AuthService {
         }
 
         if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches(".*\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+                !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -116,7 +116,7 @@ public class AuthServiceImplement implements AuthService {
                     .userAddress(userAddress)
                     .userAddressDetail(userAddressDetail)
                     .userEmail(userEmail)
-                    .userProfileImageUrl(userProfileImageUrl)
+                    .userProfileImageUrl(userProfileImageUrl != null ? userProfileImageUrl : "example.jpg")
                     .build();
 
             userRepository.save(user);
