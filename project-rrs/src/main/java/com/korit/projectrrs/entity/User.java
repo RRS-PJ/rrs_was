@@ -47,8 +47,4 @@ public class User {
 
     @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'example.jpg'")
     private String userProfileImageUrl;
-<<<<<<< HEAD
-
-=======
->>>>>>> a2b4a51ab5e8da1ba41e1cefd27a6143efa33c48
 }
