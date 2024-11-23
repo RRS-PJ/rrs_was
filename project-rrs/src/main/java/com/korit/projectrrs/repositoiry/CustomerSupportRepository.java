@@ -4,6 +4,7 @@ import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,15 +15,17 @@ public interface CustomerSupportRepository extends JpaRepository <CustomerSuppor
     @Query("SELECT c " +
             "FROM CustomerSupport c " +
             "WHERE c.user.userId = :userId ")
-    Optional<CustomerSupport> findByUserId(String userId);
+    Optional<CustomerSupport> findByUserId(@Param("userId")String userId);
 
     @Query("SELECT c " +
             "FROM CustomerSupport c " +
             "WHERE c.user.userId = :userId ")
-    Optional<List<CustomerSupport>> findAllByUserId(String userId);
+    Optional<List<CustomerSupport>> findAllByUserId(@Param("userId")String userId);
 
-    @Query("SELECT c " +
-            "FROM CustomerSupport c " +
-            "WHERE c.user.userId = :userId ")
-    Optional<CustomerSupport> findByUserIdAndCustomerSupportId(String userId, Long customerSupportId);
+    @Query("SELECT c "+
+           "FROM CustomerSupport c " +
+           "WHERE c.user.userId = :userId " +
+           "AND c.customerSupportId = :customerSupportId ")
+    Optional<CustomerSupport> findByUserIdAndCustomerSupportId(@Param("userId")String userId,
+                                                               @Param("customerSupportId") Long customerSupportId);
 }

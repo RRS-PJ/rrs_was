@@ -107,7 +107,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
         try {
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findByUserIdAndCustomerSupportId(userId, customerSupportId);
-
+            if (optionalCustomerSupport.isPresent()) {
+                data = CustomerSupportUpdateResponseDto.builder()
+                        .customerSupportTitle(title)
+                        .customerSupportContent(content)
+                        .build();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

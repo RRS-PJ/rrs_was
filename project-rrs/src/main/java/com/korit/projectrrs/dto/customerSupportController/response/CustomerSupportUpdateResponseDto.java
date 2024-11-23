@@ -1,11 +1,13 @@
 package com.korit.projectrrs.dto.customerSupportController.response;
 
 import com.korit.projectrrs.entity.CustomerSupport;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Builder
 @Data
 public class CustomerSupportUpdateResponseDto {
     private Long customerSupportId;
@@ -15,7 +17,7 @@ public class CustomerSupportUpdateResponseDto {
     private LocalDate customerSupportCreateAt;
     private char customerSupportCategory;
 
-    private CustomerSupportUpdateResponseDto(CustomerSupport customerSupport){
+    public CustomerSupportUpdateResponseDto(CustomerSupport customerSupport){
         this.customerSupportId = customerSupport.getCustomerSupportId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
