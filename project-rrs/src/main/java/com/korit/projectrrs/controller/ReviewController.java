@@ -42,11 +42,11 @@ public class ReviewController {
     }
 
     @GetMapping
-    private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getReviewByReviewId (
+    private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getByReviewId (
             @AuthenticationPrincipal String userId,
             @RequestParam Long reviewId
     ) {
-        ResponseDto<ReviewGetResponseDto> response = reviewService.getReviewByReviewId(reviewId);
+        ResponseDto<ReviewGetResponseDto> response = reviewService.getByReviewId(reviewId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
