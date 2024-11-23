@@ -30,25 +30,25 @@ public class Provider {
     private char providerProvisionYN;
 
     @Column(name = "MON", nullable = false)
-    private char MON;
+    private char mon;
 
     @Column(name = "TUE", nullable = false)
-    private char TUE;
+    private char tue;
 
     @Column(name = "WED", nullable = false)
-    private char WED;
+    private char wed;
 
     @Column(name = "THU", nullable = false)
-    private char THU;
+    private char thu;
 
     @Column(name = "FRI", nullable = false)
-    private char FRI;
+    private char fri;
 
     @Column(name = "SAT", nullable = false)
-    private char SAT;
+    private char sat;
 
     @Column(name = "SUN", nullable = false)
-    private char SUN;
+    private char sun;
 
     @Builder.Default
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)

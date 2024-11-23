@@ -29,11 +29,11 @@ public class Review {
     private Provider provider;
 
     @Column(name = "REVIEW_CREATE_AT")
-    private LocalDate createAt;
+    private LocalDate reviewCreateAt;
 
     @Column(name = "REVIEW_SCORE")
-    private int score;
+    private int reviewScore;
 
     @Column(name = "REVIEW_CONTENT")
-    private String content;
+    private String reviewContent;
 }

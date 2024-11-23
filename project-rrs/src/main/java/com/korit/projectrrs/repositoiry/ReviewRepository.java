@@ -1,4 +1,7 @@
 package com.korit.projectrrs.repositoiry;
 
-public interface ReviewRepository {
+import com.korit.projectrrs.entity.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 }
