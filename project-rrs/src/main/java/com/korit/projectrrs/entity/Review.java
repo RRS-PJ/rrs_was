@@ -36,5 +36,4 @@ public class Review {
 
     @Column(name = "REVIEW_CONTENT")
     private String content;
-
 }

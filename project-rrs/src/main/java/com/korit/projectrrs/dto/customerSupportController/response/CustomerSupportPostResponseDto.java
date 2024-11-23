@@ -8,7 +8,6 @@ import java.time.LocalTime;
 
 @Data
 public class CustomerSupportPostResponseDto {
-    private Long customerSupportId;
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportStatus;
@@ -17,7 +16,6 @@ public class CustomerSupportPostResponseDto {
     private String customerSupportStatusMessage;
 
     public CustomerSupportPostResponseDto(CustomerSupport customerSupport){
-        this.customerSupportId = customerSupport.getCustomerSupportId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
