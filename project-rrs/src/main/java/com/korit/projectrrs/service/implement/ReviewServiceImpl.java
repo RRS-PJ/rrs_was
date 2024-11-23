@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewGetResponseDto> getReviewByReviewId(Long reviewId) {
+    public ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId) {
         return null;
     }
 
