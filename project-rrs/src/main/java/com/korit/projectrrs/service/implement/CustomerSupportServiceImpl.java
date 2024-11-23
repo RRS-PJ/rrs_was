@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,19 +54,19 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId) {
         CustomerSupportGetResponseDto data = null;
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
-            if (optionalUser.isEmpty()) {
+            if (!userRepository.existsByUserId(userId)) {
                 // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
 
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
-            if (optionalCustomerSupport.isEmpty()) {
+
+            if (optionalCustomerSupport.isPresent()) {
+                data = new CustomerSupportGetResponseDto(optionalCustomerSupport.get());
+            } else {
                 // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
-            CustomerSupport responseCustomerSupport = optionalCustomerSupport.get();
-            data = new CustomerSupportGetResponseDto(responseCustomerSupport);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +79,19 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId) {
         List<CustomerSupportGetResponseDto> data = null;
         try {
-
+            if (!userRepository.existsByUserId(userId)) {
+                // 유저 아이디가 존재하지 않음
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+            Optional<List<CustomerSupport>> optionalCustomerServices = customerSupportRepository.findAllByUserId(userId);
+            if(optionalCustomerServices.isPresent()){
+                data = optionalCustomerServices.get()
+                        .stream().map(CustomerSupportGetResponseDto::new)
+                        .collect(Collectors.toList());
+            } else {
+                // 고객센터 포스트가 존재하지 않음
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -87,9 +100,14 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(Long customerSupportId, CustomerSupportUpdateRequestDto dto) {
+    public ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportUpdateRequestDto dto) {
         CustomerSupportUpdateResponseDto data = null;
+        String title = dto.getCustomerSupportTitle();
+        String content = dto.getCustomerSupportContent();
+
         try {
+            Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findByUserIdAndCustomerSupportId(userId, customerSupportId);
+
 
         } catch (Exception e) {
             e.printStackTrace();
