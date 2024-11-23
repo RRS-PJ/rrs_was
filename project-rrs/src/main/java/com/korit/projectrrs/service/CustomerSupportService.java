@@ -10,7 +10,7 @@ import com.korit.projectrrs.dto.customerSupportController.response.CustomerSuppo
 import java.util.List;
 
 public interface CustomerSupportService {
-    ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto);
+    ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(String userId, CustomerSupportPostRequestDto dto);
 
     ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId);
 

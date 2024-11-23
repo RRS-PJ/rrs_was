@@ -7,10 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -43,13 +45,6 @@ public class User {
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, insertable = false, updatable = true)
+    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'example.jpg'")
     private String userProfileImageUrl;
-
-    @PrePersist
-    public void prePersist() {
-        if (this.userProfileImageUrl == null || this.userProfileImageUrl.isEmpty()) {
-            this.userProfileImageUrl = "https://example.com/default-profile.png"; // 기본 프로필 이미지 URL
-        }
-    }
 }

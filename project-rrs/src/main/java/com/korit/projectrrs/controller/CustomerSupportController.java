@@ -31,13 +31,13 @@ public class CustomerSupportController {
             @AuthenticationPrincipal String userId,
             @RequestBody CustomerSupportPostRequestDto dto
             ) {
-        ResponseDto<CustomerSupportPostResponseDto> response = customerSupportService.createCustomerSupport(dto);
+        ResponseDto<CustomerSupportPostResponseDto> response = customerSupportService.createCustomerSupport(userId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(CUSTOMER_SUPPORT_GET)
-    private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserIdAndCutomerId (
+    private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserIdAndCustomerId (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId
     ) {
@@ -56,7 +56,7 @@ public class CustomerSupportController {
     }
 
     @PutMapping(CUSTOMER_SUPPORT_UPDATE)
-    private ResponseEntity<ResponseDto<CustomerSupportUpdateResponseDto>> createCustomerSupport (
+    private ResponseEntity<ResponseDto<CustomerSupportUpdateResponseDto>> updateCustomerSupport (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId,
             @RequestBody CustomerSupportUpdateRequestDto dto

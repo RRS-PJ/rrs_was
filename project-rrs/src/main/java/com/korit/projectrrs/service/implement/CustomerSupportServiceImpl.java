@@ -28,7 +28,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(CustomerSupportPostRequestDto dto) {
+    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(String userId, CustomerSupportPostRequestDto dto) {
         CustomerSupportPostResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
@@ -47,12 +47,15 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
+                    .user(userRepository.findByUserId(userId).get())
                     .customerSupportTitle(title)
                     .customerSupportContent(content)
                     .customerSupportCategory(category)
                     .customerSupportStatus('0')
                     .customerSupportCreateAt(LocalDate.now())
                     .build();
+            customerSupportRepository.save(customerSupport);
+            data = new CustomerSupportPostResponseDto(customerSupport);
 
         } catch (Exception e) {
             e.printStackTrace();

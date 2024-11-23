@@ -145,4 +145,3 @@ public class UserServiceImpl implements UserService {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }
-
