@@ -20,10 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final String GET_REVIEW = "/{review_id}";
+    private final String GET_REVIEW = "/{reviewId}";
+    private final String DELETE_REVIEW = "/{reviewId}";
+    private final String UPDATE_REVIEW = "/{reviewId}";
 
     @PostMapping
-    private ResponseEntity<ResponseDto<ReviewPostResponseDto>> creaeteReview (
+    private ResponseEntity<ResponseDto<ReviewPostResponseDto>> createReview (
             @AuthenticationPrincipal String userId,
             @RequestBody ReviewPostRequestDto dto
             ){
@@ -52,7 +54,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping
+    @PutMapping(UPDATE_REVIEW)
     private ResponseEntity<ResponseDto<ReviewPutResponseDto>> updateReview (
             @AuthenticationPrincipal String userId,
             @RequestBody ReviewPutResponseDto dto
@@ -62,7 +64,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping(DELETE_REVIEW)
     ResponseEntity<ResponseDto<Void>> deleteReview (
             @AuthenticationPrincipal String userId,
             @RequestParam Long reviewId

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReviewPutRequestDto {
+    private Long providerId;
     private int reviewScore;
     private String reviewContent;
 }
