@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
+    private final String GET_REVIEW = "/{review_id}";
 
     @PostMapping
     private ResponseEntity<ResponseDto<ReviewPostResponseDto>> creaeteReview (
@@ -41,7 +42,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(GET_REVIEW)
     private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getByReviewId (
             @AuthenticationPrincipal String userId,
             @RequestParam Long reviewId
