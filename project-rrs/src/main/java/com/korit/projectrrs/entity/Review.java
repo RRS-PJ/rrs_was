@@ -24,7 +24,7 @@ public class Review {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROVIDER_ID", nullable = false)
     private Provider provider;
 
@@ -36,4 +36,5 @@ public class Review {
 
     @Column(name = "REVIEW_CONTENT")
     private String content;
+
 }

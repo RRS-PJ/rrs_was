@@ -1,7 +1,18 @@
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Entity
 public class Provider {
     @Id
@@ -38,4 +49,8 @@ public class Provider {
 
     @Column(name = "SUN", nullable = false)
     private char SUN;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 }
