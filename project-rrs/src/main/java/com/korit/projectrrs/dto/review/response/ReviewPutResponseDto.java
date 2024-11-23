@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class ReviewPutResponseDto {
+    private Long reviewId;
     private LocalDate reviewCreateAt;
     private int reviewScore;
     private String reviewContent;

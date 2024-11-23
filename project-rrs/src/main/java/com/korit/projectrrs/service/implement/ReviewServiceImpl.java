@@ -27,22 +27,19 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewPostResponseDto data = null;
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
-
         //유효성 검사
         if(content == null || content.isEmpty() || content.length() > 500) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_TOO_lONG);
         }
-
         try {
             Review review = Review.builder()
                     .reviewScore(score)
                     .reviewContent(content)
                     .reviewCreateAt(LocalDate.now())
                     .build();
-
             reviewRepository.save(review);
-
             data = new ReviewPostResponseDto(review);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -53,7 +50,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ResponseDto<List<ReviewGetResponseDto>> getAllReviewByProviderId(Long providerId) {
         List<ReviewGetResponseDto> data = null;
-
         try {
             Optional<List<Review>> reviews = reviewRepository.findAllByProiderId(providerId);
             if (reviews.isPresent()) {
@@ -70,27 +66,46 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId) {
-        return null;
+        ReviewGetResponseDto data = null;
+        try {
+            Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+            if (optionalReview.isPresent()) {
+                data = new ReviewGetResponseDto(optionalReview.get());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutResponseDto dto) {
         ReviewPutResponseDto data = null;
-
+        int score = dto.getReviewScore();
+        String content = dto.getReviewContent();
         try {
-
+            Optional<Review> optionalReview = reviewRepository.findById(dto.getReviewId());
+            if (optionalReview.isPresent()) {
+                Review respondedReview = optionalReview.get().toBuilder()
+                        .reviewScore(score)
+                        .reviewContent(content)
+                        .build();
+                reviewRepository.save(respondedReview);
+                data = new ReviewPutResponseDto(respondedReview);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<ReviewPutResponseDto> deleteReview(Long reviewId) {
         try {
-
+            if(!reviewRepository.existsById(reviewId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            reviewRepository.deleteById(reviewId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
