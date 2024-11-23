@@ -127,10 +127,13 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         try {
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findByUserIdAndCustomerSupportId(userId, customerSupportId);
             if (optionalCustomerSupport.isPresent()) {
-                data = CustomerSupportUpdateResponseDto.builder()
-                        .customerSupportTitle(title)
-                        .customerSupportContent(content)
-                        .build();
+
+                CustomerSupport responsedCustomerSupport = optionalCustomerSupport.get();
+                responsedCustomerSupport.setCustomerSupportTitle(title);
+                responsedCustomerSupport.setCustomerSupportContent(content);
+
+                data = new CustomerSupportUpdateResponseDto(responsedCustomerSupport);
+
             } else {
                 // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);

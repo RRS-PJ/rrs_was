@@ -20,6 +20,7 @@ public class CustomerSupportGetResponseDto {
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportStatus = customerSupport.getCustomerSupportStatus();
-        this.customerSupportCategory = getCustomerSupportCategory();
+        this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
+        this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
     }
 }

@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
-@Builder
 @Data
 public class CustomerSupportUpdateResponseDto {
     private Long customerSupportId;
@@ -22,6 +20,7 @@ public class CustomerSupportUpdateResponseDto {
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportStatus = customerSupport.getCustomerSupportStatus();
-        this.customerSupportCategory = getCustomerSupportCategory();
+        this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
+        this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
     }
 }
