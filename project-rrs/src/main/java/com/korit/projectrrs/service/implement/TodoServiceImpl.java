@@ -114,7 +114,8 @@ public class TodoServiceImpl implements TodoService {
             data = new TodoUpdateResponseDto(updateTodo);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
@@ -125,6 +126,7 @@ public class TodoServiceImpl implements TodoService {
             if(!todoRepository.existsById(todoId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
             todoRepository.deleteById(todoId);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);

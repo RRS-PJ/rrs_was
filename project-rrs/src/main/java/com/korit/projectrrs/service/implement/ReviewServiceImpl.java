@@ -1,5 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
+import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
@@ -18,25 +19,56 @@ public class ReviewServiceImpl implements ReviewService {
     public ResponseDto<ReviewPostResponseDto> createReview(ReviewPostRequestDto dto) {
         ReviewPostResponseDto data = null;
 
-        return null;
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<List<ReviewGetResponseDto>> getAllReviewByProviderId(Long providerId) {
         List<ReviewGetResponseDto> data = null;
-        return null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<ReviewGetResponseDto> getReviewByUserId(String userId) {
         ReviewGetResponseDto data = null;
-        return null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutResponseDto dto) {
         ReviewPutResponseDto data = null;
-        return null;
+
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
@@ -44,8 +76,9 @@ public class ReviewServiceImpl implements ReviewService {
         try {
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-        return null;
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }
