@@ -3,10 +3,10 @@ package com.korit.projectrrs.controller;
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportUpdateRequestDto;
+import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
+import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPutResponseDto;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,12 +56,12 @@ public class CustomerSupportController {
     }
 
     @PutMapping(CUSTOMER_SUPPORT_UPDATE)
-    private ResponseEntity<ResponseDto<CustomerSupportUpdateResponseDto>> updateCustomerSupport (
+    private ResponseEntity<ResponseDto<CustomerSupportPutResponseDto>> updateCustomerSupport (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId,
-            @RequestBody CustomerSupportUpdateRequestDto dto
+            @RequestBody CustomerSupportPutRequestDto dto
     ) {
-        ResponseDto<CustomerSupportUpdateResponseDto> response = customerSupportService.updateCustomerSupport(userId, customerSupportId, dto);
+        ResponseDto<CustomerSupportPutResponseDto> response = customerSupportService.updateCustomerSupport(userId, customerSupportId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -72,7 +72,7 @@ public class CustomerSupportController {
             @PathVariable Long customerSupportId
     ) {
         ResponseDto<Void> response = customerSupportService.deleteCustomerService(customerSupportId);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
 }

@@ -3,12 +3,11 @@ package com.korit.projectrrs.service.implement;
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportUpdateRequestDto;
+import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
+import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPutResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,8 +112,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportUpdateRequestDto dto) {
-        CustomerSupportUpdateResponseDto data = null;
+    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportPutRequestDto dto) {
+        CustomerSupportPutResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
 
@@ -135,7 +133,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 responsedCustomerSupport.setCustomerSupportTitle(title);
                 responsedCustomerSupport.setCustomerSupportContent(content);
 
-                data = new CustomerSupportUpdateResponseDto(responsedCustomerSupport);
+                data = new CustomerSupportPutResponseDto(responsedCustomerSupport);
 
             } else {
                 // 고객센터 포스트가 존재하지 않음
