@@ -14,12 +14,12 @@ public class CustomerSupportPostResponseDto {
     private char customerSupportStatus;
     private LocalDate customerSupportCreateAt;
     private char customerSupportCategory;
+    private String customerSupportStatusMessage;
 
     public CustomerSupportPostResponseDto(CustomerSupport customerSupport){
         this.customerSupportId = customerSupport.getCustomerSupportId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
-        this.customerSupportStatus = customerSupport.getCustomerSupportStatus();
         this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
     }

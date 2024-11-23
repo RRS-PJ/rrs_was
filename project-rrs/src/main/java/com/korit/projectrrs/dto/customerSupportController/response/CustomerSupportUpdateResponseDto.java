@@ -14,6 +14,7 @@ public class CustomerSupportUpdateResponseDto {
     private char customerSupportStatus;
     private LocalDate customerSupportCreateAt;
     private char customerSupportCategory;
+    private String customerSupportStatusMessage;
 
     public CustomerSupportUpdateResponseDto(CustomerSupport customerSupport){
         this.customerSupportId = customerSupport.getCustomerSupportId();
