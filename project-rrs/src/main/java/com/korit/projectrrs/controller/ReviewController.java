@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RequiredArgsConstructor
 public class ReviewController {
-//    private final ReviewService reviewService;
+    private final ReviewService reviewService;
 }
