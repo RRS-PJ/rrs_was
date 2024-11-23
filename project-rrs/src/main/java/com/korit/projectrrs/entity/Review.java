@@ -31,8 +31,9 @@ public class Review {
     @Column(name = "REVIEW_CREATE_AT")
     private LocalDate reviewCreateAt;
 
+    @Builder.Default
     @Column(name = "REVIEW_SCORE")
-    private int reviewScore;
+    private int reviewScore = 0;
 
     @Column(name = "REVIEW_CONTENT")
     private String reviewContent;

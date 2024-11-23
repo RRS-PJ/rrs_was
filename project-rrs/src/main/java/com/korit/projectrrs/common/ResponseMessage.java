@@ -118,4 +118,10 @@ public class ResponseMessage {
 
     // 고객센터 관련 메세지
     public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
+
+    // 리뷰 관련 메세지
+    public static final String REVIEW_TOO_lONG =  "Review Content is too long.";
+
+    // 댕시터 관련 메세지
+    public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";
 }

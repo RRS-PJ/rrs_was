@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReviewService {
     ResponseDto<ReviewPostResponseDto> createReview(ReviewPostRequestDto dto);
     ResponseDto<List<ReviewGetResponseDto>> getAllReviewByProviderId(Long providerId);
-    ResponseDto<ReviewGetResponseDto> getReviewByUserId(String userId);
+    ResponseDto<ReviewGetResponseDto> getReviewByReviewId(Long reviewId);
     ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutResponseDto dto);
     ResponseDto<ReviewPutResponseDto> deleteReview(Long reviewId);
 }
