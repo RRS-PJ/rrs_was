@@ -15,7 +15,7 @@ public class CustomerSupportGetResponseDto {
     private LocalDate customerSupportCreateAt;
     private char customerSupportCategory;
 
-    private CustomerSupportGetResponseDto(CustomerSupport customerSupport){
+    public CustomerSupportGetResponseDto(CustomerSupport customerSupport){
         this.customerSupportId = customerSupport.getCustomerSupportId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();

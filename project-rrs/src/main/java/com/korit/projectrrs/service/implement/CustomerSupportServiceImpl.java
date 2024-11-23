@@ -8,6 +8,7 @@ import com.korit.projectrrs.dto.customerSupportController.response.CustomerSuppo
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
 import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportUpdateResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
@@ -52,6 +53,19 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId) {
         CustomerSupportGetResponseDto data = null;
         try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            if (optionalUser.isEmpty()) {
+                // 유저 아이디가 존재하지 않음
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
+            if (optionalCustomerSupport.isEmpty()) {
+                // 고객센터 포스트가 존재하지 않음
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
+            }
+            CustomerSupport responseCustomerSupport = optionalCustomerSupport.get();
+            data = new CustomerSupportGetResponseDto(responseCustomerSupport);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +75,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId, Long customerSupportId) {
+    public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId) {
         List<CustomerSupportGetResponseDto> data = null;
         try {
 
@@ -73,7 +87,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportUpdateRequestDto dto) {
+    public ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(Long customerSupportId, CustomerSupportUpdateRequestDto dto) {
         CustomerSupportUpdateResponseDto data = null;
         try {
 

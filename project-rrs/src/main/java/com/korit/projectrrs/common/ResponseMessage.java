@@ -116,4 +116,6 @@ public class ResponseMessage {
     public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
     public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
 
+    // 고객센터 관련 메세지
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
 }

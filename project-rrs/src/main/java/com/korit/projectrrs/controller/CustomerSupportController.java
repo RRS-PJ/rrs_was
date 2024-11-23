@@ -37,7 +37,7 @@ public class CustomerSupportController {
     }
 
     @GetMapping(CUSTOMER_SUPPORT_GET)
-    private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserId (
+    private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserIdAndCutomerId (
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId
     ) {
@@ -48,10 +48,9 @@ public class CustomerSupportController {
 
     @GetMapping
     private ResponseEntity<ResponseDto<List<CustomerSupportGetResponseDto>>> getAllCustomerSupportByUserId (
-            @AuthenticationPrincipal String userId,
-            @PathVariable Long customerSupportId
+            @AuthenticationPrincipal String userId
     ) {
-        ResponseDto<List<CustomerSupportGetResponseDto>> response = customerSupportService.getAllCustomerSupportByUserId(userId, customerSupportId);
+        ResponseDto<List<CustomerSupportGetResponseDto>> response = customerSupportService.getAllCustomerSupportByUserId(userId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -62,7 +61,7 @@ public class CustomerSupportController {
             @PathVariable Long customerSupportId,
             @RequestBody CustomerSupportUpdateRequestDto dto
     ) {
-        ResponseDto<CustomerSupportUpdateResponseDto> response = customerSupportService.updateCustomerSupport(userId, customerSupportId, dto);
+        ResponseDto<CustomerSupportUpdateResponseDto> response = customerSupportService.updateCustomerSupport(customerSupportId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

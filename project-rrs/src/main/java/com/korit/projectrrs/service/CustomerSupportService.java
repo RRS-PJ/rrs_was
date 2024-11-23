@@ -14,9 +14,9 @@ public interface CustomerSupportService {
 
     ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId);
 
-    ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId, Long customerSupportId);
+    ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId);
 
-    ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportUpdateRequestDto dto);
+    ResponseDto<CustomerSupportUpdateResponseDto> updateCustomerSupport(Long customerSupportId, CustomerSupportUpdateRequestDto dto);
 
     ResponseDto<Void> deleteCustomerService(Long customerSupportId);
 }
