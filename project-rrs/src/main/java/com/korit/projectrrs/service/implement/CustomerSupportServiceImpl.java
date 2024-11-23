@@ -34,6 +34,17 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         String content = dto.getCustomerSupportContent();
         char category =  dto.getCustomerSupportCategory();
 
+        // 요효성 검사
+        if (title == null || title.isEmpty() || title.length() > 20) {
+            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+        }
+        if (content == null || content.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+        }
+        if (category != '0' && category != '1') {
+            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+        }
+
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
                     .customerSupportTitle(title)
@@ -105,6 +116,14 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
 
+        // 요효성 검사
+        if (title == null || title.isEmpty() || title.length() > 20) {
+            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+        }
+        if (content == null || content.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+        }
+
         try {
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findByUserIdAndCustomerSupportId(userId, customerSupportId);
             if (optionalCustomerSupport.isPresent()) {
@@ -112,8 +131,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                         .customerSupportTitle(title)
                         .customerSupportContent(content)
                         .build();
+            } else {
+                // 고객센터 포스트가 존재하지 않음
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -124,7 +145,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     @Override
     public ResponseDto<Void> deleteCustomerService(Long customerSupportId) {
         try {
-
+            if(!customerSupportRepository.existsById(customerSupportId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            customerSupportRepository.deleteById(customerSupportId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
