@@ -20,7 +20,7 @@ public class CustomerSupport {
     private Long customerSupportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
     @Column(nullable = false)

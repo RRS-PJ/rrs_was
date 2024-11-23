@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -19,8 +21,19 @@ public class Review {
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROVIDER_ID", nullable = false)
+    private Provider provider;
 
+    @Column(name = "REVIEW_CREATE_AT")
+    private LocalDate createAt;
+
+    @Column(name = "REVIEW_SCORE")
+    private int score;
+
+    @Column(name = "REVIEW_CONTENT")
+    private String content;
 }
