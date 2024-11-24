@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.pet.response;
+package com.korit.projectrrs.dto.petProfile.response;
 
 import com.korit.projectrrs.entity.PetProfile;
 import lombok.AllArgsConstructor;

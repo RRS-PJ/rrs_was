@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.pet.request;
+package com.korit.projectrrs.dto.petProfile.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

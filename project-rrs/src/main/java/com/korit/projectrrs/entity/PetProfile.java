@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "PetProfiles")
+@Table(name = "petProfiles")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,9 +14,9 @@ public class PetProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long petProfileId;
 
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private User userId;
+    private User user;
 
     @Column(nullable = false)
     private String petProfileName;

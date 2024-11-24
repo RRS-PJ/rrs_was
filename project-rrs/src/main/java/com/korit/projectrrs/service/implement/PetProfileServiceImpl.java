@@ -2,25 +2,27 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
-import com.korit.projectrrs.dto.pet.request.PetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.request.UpdatePetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileListResponseDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileResponseDto;
+import com.korit.projectrrs.dto.petProfile.request.PetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.request.UpdatePetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileListResponseDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileResponseDto;
 import com.korit.projectrrs.entity.PetProfile;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.PetProfileRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.PetProfileService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PetProfileServiceImpl implements PetProfileService {
 
     private final PetProfileRepository petProfileRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseDto<PetProfileResponseDto> createPetProfile(String userId, @Valid PetProfileRequestDto dto) {
@@ -60,6 +62,14 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            User user = optionalUser.get();
+
             PetProfile petProfile = PetProfile.builder()
                     .petProfileName(petProfileName)
                     .petProfileGender(petProfileGender)
@@ -68,6 +78,7 @@ public class PetProfileServiceImpl implements PetProfileService {
                     .petProfileNeutralityYn(petProfileNeutralityYn)
                     .petProfileAddInfo(petProfileAddInfo)
                     .petProfileImageUrl(petProfileImageUrl != null ? petProfileImageUrl : "petExample.jpg")
+                    .user(user)
                     .build();
 
             petProfileRepository.save(petProfile);

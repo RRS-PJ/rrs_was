@@ -1,10 +1,10 @@
 package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.pet.request.PetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.request.UpdatePetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileListResponseDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileResponseDto;
+import com.korit.projectrrs.dto.petProfile.request.PetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.request.UpdatePetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileListResponseDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileResponseDto;
 
 public interface PetProfileService {
     ResponseDto<PetProfileResponseDto> createPetProfile(String userId, PetProfileRequestDto dto);

@@ -2,10 +2,10 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.pet.request.PetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.request.UpdatePetProfileRequestDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileListResponseDto;
-import com.korit.projectrrs.dto.pet.response.PetProfileResponseDto;
+import com.korit.projectrrs.dto.petProfile.request.PetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.request.UpdatePetProfileRequestDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileListResponseDto;
+import com.korit.projectrrs.dto.petProfile.response.PetProfileResponseDto;
 import com.korit.projectrrs.service.PetProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -50,6 +50,6 @@ public class User {
     private String userProfileImageUrl;
 
     @Builder.Default
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PetProfile> petProfiles = new ArrayList<>();
 }

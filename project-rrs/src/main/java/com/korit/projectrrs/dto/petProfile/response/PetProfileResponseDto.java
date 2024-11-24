@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.pet.response;
+package com.korit.projectrrs.dto.petProfile.response;
 
 import com.korit.projectrrs.entity.PetProfile;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PetProfileResponseDto {
+    private Long petProfileId;
     private String petProfileName;
     private Character petProfileGender;
     private String petProfileBirthDate;
@@ -18,6 +19,7 @@ public class PetProfileResponseDto {
     private Character petProfileNeutralityYn;
 
     public PetProfileResponseDto(PetProfile petProfile) {
+        this.petProfileId = petProfile.getPetProfileId();
         this.petProfileName = petProfile.getPetProfileName();
         this.petProfileGender = petProfile.getPetProfileGender();
         this.petProfileBirthDate = petProfile.getPetProfileBirthDate();
