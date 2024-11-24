@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,6 +46,10 @@ public class User {
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'example.jpg'")
+    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'example.jpg'")
     private String userProfileImageUrl;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PetProfile> petProfiles = new ArrayList<>();
 }

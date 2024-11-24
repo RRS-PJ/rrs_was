@@ -1,5 +1,6 @@
 package com.korit.projectrrs.dto.user.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,5 +13,6 @@ public class UpdateUserRequestDto {
     private String userPhone;
     private String userAddress;
     private String userAddressDetail;
+    @NotBlank
     private String userProfileImageUrl;
 }

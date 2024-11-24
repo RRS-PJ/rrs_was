@@ -25,7 +25,7 @@ public class SignUpRequestDto {
     private String userAddressDetail;
     @NotBlank
     private String userEmail;
-
+    @NotBlank
     private String userProfileImageUrl;
 
 }

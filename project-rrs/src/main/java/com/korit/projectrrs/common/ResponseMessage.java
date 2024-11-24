@@ -112,5 +112,14 @@ public class ResponseMessage {
     // 인증 관련 메시지
     public static final String IMAGE_AUTHORIZATION_FAIL = "Image authorization failed."; // 이미지 인증 실패
 
+    // 강아지 프로필 유효성 검사
+    public static final String INVALID_PET_NAME = "Invalid pet name format."; // 유효하지 않은 강아지 이름 형식
+    public static final String INVALID_PET_GENDER = "Invalid pet gender format."; // 유효하지 않은 강아지 성별 형식
+    public static final String INVALID_PET_BIRTH_DATE = "Invalid pet birth date format."; // 유효하지 않은 강아지 생일 형식
+    public static final String INVALID_PET_WEIGHT = "Invalid pet wight format."; // 유효하지 않은 강아지 몸무게 형식
+    public static final String INVALID_PET_PROFILE = "Invalid pet profile format."; // 유효하지 않은 강아지 프로필 형식
+    public static final String INVALID_PET_NEUTRALITY_YN = "Invalid pet neutrality format."; // 유효하지 않은 강아지 중성화 여부 형식
+
+
 
 }
