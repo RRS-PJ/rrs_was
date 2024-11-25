@@ -176,7 +176,8 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<Void> deletePetProfile(String userId, Long id) {
+    public ResponseDto<Void> deletePetProfile(String userId, Long petProfileId) {
         return null;
     }
 }
+// 수정확인용

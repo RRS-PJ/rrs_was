@@ -20,9 +20,9 @@ public class PetProfileController {
 
     private final PetProfileService petProfileService;
 
-    private static final String PET_PUT = "/{id}";
-    private static final String PET_GET_BY_ID = "/{id}";
-    private static final String PET_DELETE = "/{id}";
+    private static final String PET_PUT = "/{petProfileId}";
+    private static final String PET_GET_BY_ID = "/{petProfileId}";
+    private static final String PET_DELETE = "/{petProfileId}";
 
     @PostMapping
     public ResponseEntity<ResponseDto<PetProfileResponseDto>> createPetProfile(
@@ -46,9 +46,9 @@ public class PetProfileController {
     @GetMapping(PET_GET_BY_ID)
     public ResponseEntity<ResponseDto<PetProfileResponseDto>> getPetProfileInfo(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long id
+            @PathVariable Long petProfileId
     ) {
-        ResponseDto<PetProfileResponseDto> response = petProfileService.getPetProfileInfo(userId, id);
+        ResponseDto<PetProfileResponseDto> response = petProfileService.getPetProfileInfo(userId, petProfileId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
@@ -67,9 +67,9 @@ public class PetProfileController {
     @DeleteMapping(PET_DELETE)
     public ResponseEntity<ResponseDto<Void>> deletePetProfile(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long id
+            @PathVariable Long petProfileId
     ) {
-        ResponseDto<Void> response = petProfileService.deletePetProfile(userId, id);
+        ResponseDto<Void> response = petProfileService.deletePetProfile(userId, petProfileId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
