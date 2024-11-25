@@ -2,11 +2,11 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPutRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPutResponseDto;
+import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
+import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

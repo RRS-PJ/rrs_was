@@ -3,6 +3,7 @@ package com.korit.projectrrs.controller;
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
+import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
@@ -23,23 +24,36 @@ public class ReviewController {
     private final String GET_REVIEW = "/{reviewId}";
     private final String DELETE_REVIEW = "/{reviewId}";
     private final String UPDATE_REVIEW = "/{reviewId}";
+    private final String GET_REVIEW_BY_PROVIDER = "/provider/{providerId}";
+    private final String GET_REVIEW_AVG_SCORE_BY_PROVIDER = "/provider-avg/{providerId}";
+
 
     @PostMapping
     private ResponseEntity<ResponseDto<ReviewPostResponseDto>> createReview (
             @AuthenticationPrincipal String userId,
             @RequestBody ReviewPostRequestDto dto
             ){
-        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(dto);
+        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(GET_REVIEW_BY_PROVIDER)
     private ResponseEntity<ResponseDto<List<ReviewGetResponseDto>>> getAllReviewByProviderId (
             @AuthenticationPrincipal String userId,
             @PathVariable Long providerId
     ) {
-        ResponseDto<List<ReviewGetResponseDto>> response = reviewService.getAllReviewByProviderId(providerId);
+        ResponseDto<List<ReviewGetResponseDto>> response = reviewService.getReviewsByProvider(providerId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping(GET_REVIEW_AVG_SCORE_BY_PROVIDER)
+    private ResponseEntity<ResponseDto<ReviewAvgScoreResponseDto>> getAverageReviewScoreByProvider (
+            @AuthenticationPrincipal String userId,
+            @PathVariable Long providerId
+    ) {
+        ResponseDto<ReviewAvgScoreResponseDto> response = reviewService.getAverageReviewScoreByProvider(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

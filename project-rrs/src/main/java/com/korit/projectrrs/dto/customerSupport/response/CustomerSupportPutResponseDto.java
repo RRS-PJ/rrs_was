@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.customerSupportController.response;
+package com.korit.projectrrs.dto.customerSupport.response;
 
 import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.Data;

@@ -1,23 +1,22 @@
-package com.korit.projectrrs.dto.customerSupportController.response;
+package com.korit.projectrrs.dto.customerSupport.response;
 
 import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Data
-public class CustomerSupportPostResponseDto {
+public class CustomerSupportGetResponseDto {
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportStatus;
     private LocalDate customerSupportCreateAt;
     private char customerSupportCategory;
-    private String customerSupportStatusMessage;
 
-    public CustomerSupportPostResponseDto(CustomerSupport customerSupport){
+    public CustomerSupportGetResponseDto(CustomerSupport customerSupport){
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
+        this.customerSupportStatus = customerSupport.getCustomerSupportStatus();
         this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
     }

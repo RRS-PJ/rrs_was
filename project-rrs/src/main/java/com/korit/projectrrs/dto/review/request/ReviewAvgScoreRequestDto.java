@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewGetRequestDto {
-    private Long reviewId;
+public class ReviewAvgScoreRequestDto {
     private Long providerId;
 }

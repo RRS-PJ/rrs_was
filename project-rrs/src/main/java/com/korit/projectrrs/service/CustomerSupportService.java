@@ -1,11 +1,11 @@
 package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.request.CustomerSupportPutRequestDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportGetResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupportController.response.CustomerSupportPutResponseDto;
+import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
+import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
 
 import java.util.List;
 

@@ -1,11 +1,15 @@
 package com.korit.projectrrs.dto.review.response;
 
 import com.korit.projectrrs.entity.Review;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewGetResponseDto {
     private LocalDate reviewCreateAt;
     private int reviewScore;

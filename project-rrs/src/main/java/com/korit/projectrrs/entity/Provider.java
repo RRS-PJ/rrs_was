@@ -1,10 +1,7 @@
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Table(name = "PROVIDERS")
 public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +22,7 @@ public class Provider {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
+    @Column(name = "PROVIDERS_INTRODUCTION", nullable = true)
     private String providerIntroduction;
 
     @Column(name = "PROVIDER_PROVISION_YN", nullable = false)

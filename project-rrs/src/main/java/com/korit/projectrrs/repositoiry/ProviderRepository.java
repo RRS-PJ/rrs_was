@@ -1,7 +1,6 @@
 package com.korit.projectrrs.repositoiry;
 
 import com.korit.projectrrs.entity.Provider;
-import com.korit.projectrrs.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,16 +19,4 @@ public interface ProviderRepository extends JpaRepository<Provider, Long> {
             "(p.sun = '1' AND :startDate <= :endDate) AND " +
             "((p.sun = '1' AND p.mon = '1') OR (p.mon = '1'))")
     List<Provider> findProvidersAvailableOnRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-
-    // 특정 댕시터에 대한 모든 리뷰 조회
-    @Query("SELECT r " +
-            "FROM Review r " +
-            "WHERE r.provider = :providerId")
-    List<Review> findReviewsByProvider(@Param("providerId") Long providerId);
-
-    // 제공자 닉네임으로 평균 리뷰 조회
-    @Query("SELECT AVG(r.reviewScore) " +
-            "FROM Review r " +
-            "WHERE r.provider = :providerId")
-    Double findAverageReviewScoreByProvider(@Param("providerId") Long providerId);
 }
