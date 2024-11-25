@@ -18,7 +18,7 @@ public class Review {
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false) // 데이터베이스의 "ID" 컬럼을 참조
+    @JoinColumn(name = "ID", nullable = false) // 데이터베이스의 "ID" 컬럼을 참조
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

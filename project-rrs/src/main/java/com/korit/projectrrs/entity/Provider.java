@@ -19,7 +19,7 @@ public class Provider {
     private Long providerId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "ID", nullable = false)
     private User user;
 
     @Column(name = "PROVIDERS_INTRODUCTION", nullable = true)
