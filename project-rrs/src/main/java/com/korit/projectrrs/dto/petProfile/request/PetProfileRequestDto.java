@@ -3,8 +3,9 @@ package com.korit.projectrrs.dto.petProfile.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
+@NoArgsConstructor
 @Data
 public class PetProfileRequestDto {
     @NotBlank
@@ -14,7 +15,7 @@ public class PetProfileRequestDto {
     @NotBlank
     private String petProfileBirthDate;
     @NotBlank
-    private int petProfileWeight;
+    private Integer petProfileWeight;
     @NotBlank
     private String petProfileImageUrl;
     @NotBlank

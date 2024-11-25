@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +15,9 @@ public class PetProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long petProfileId;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private User user;
 
     @Column(nullable = false)
@@ -28,7 +30,7 @@ public class PetProfile {
     private String petProfileBirthDate;
 
     @Column(nullable = false)
-    private int petProfileWeight;
+    private Integer petProfileWeight;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'petExample.jpg'")
     private String petProfileImageUrl;

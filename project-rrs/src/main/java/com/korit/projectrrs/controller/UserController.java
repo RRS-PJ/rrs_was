@@ -2,6 +2,7 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.user.request.DeleteUserRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.service.UserService;
@@ -39,9 +40,10 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<ResponseDto<Void>> deleteUser(
-            @AuthenticationPrincipal String userId
-    ) {
-        ResponseDto<Void> response = userService.deleteUser(userId);
+            @AuthenticationPrincipal String userId,
+            @RequestBody DeleteUserRequestDto dto
+            ) {
+        ResponseDto<Void> response = userService.deleteUser(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

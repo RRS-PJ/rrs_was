@@ -56,10 +56,10 @@ public class PetProfileController {
     @PutMapping(PET_PUT)
     public ResponseEntity<ResponseDto<PetProfileResponseDto>> updatePetProfile(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long id,
+            @PathVariable Long petProfileId,
             @RequestBody UpdatePetProfileRequestDto dto
     ) {
-        ResponseDto<PetProfileResponseDto> response = petProfileService.updatePetProfile(userId, id, dto);
+        ResponseDto<PetProfileResponseDto> response = petProfileService.updatePetProfile(userId, petProfileId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

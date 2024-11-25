@@ -120,6 +120,9 @@ public class ResponseMessage {
     public static final String INVALID_PET_PROFILE = "Invalid pet profile format."; // 유효하지 않은 강아지 프로필 형식
     public static final String INVALID_PET_NEUTRALITY_YN = "Invalid pet neutrality format."; // 유효하지 않은 강아지 중성화 여부 형식
 
+    // 존재하지 않는 강아지 id
+    public static final String NOT_EXIST_PET_ID = "Pet does not exist."; // 강아지가 존재하지 않을 때 반환 메시지
+
 
 
 }

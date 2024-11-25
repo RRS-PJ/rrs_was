@@ -29,7 +29,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         String petProfileName = dto.getPetProfileName();
         Character petProfileGender = dto.getPetProfileGender();
         String petProfileBirthDate = dto.getPetProfileBirthDate();
-        int petProfileWeight = dto.getPetProfileWeight();
+        Integer petProfileWeight = dto.getPetProfileWeight();
         String petProfileImageUrl = dto.getPetProfileImageUrl();
         Character petProfileNeutralityYn = dto.getPetProfileNeutralityYn();
         String petProfileAddInfo = dto.getPetProfileAddInfo();
@@ -48,7 +48,7 @@ public class PetProfileServiceImpl implements PetProfileService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_BIRTH_DATE);
         }
 
-        if (petProfileWeight <= 0) {
+        if (petProfileWeight == null || petProfileWeight <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_WEIGHT);
         }
 
@@ -98,13 +98,81 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<PetProfileResponseDto> getPetProfileInfo(String userId, Long id) {
+    public ResponseDto<PetProfileResponseDto> getPetProfileInfo(String userId, Long petProfileId) {
         return null;
     }
 
     @Override
-    public ResponseDto<PetProfileResponseDto> updatePetProfile(String userId, Long id, UpdatePetProfileRequestDto dto) {
-        return null;
+    public ResponseDto<PetProfileResponseDto> updatePetProfile(String userId, Long petProfileId, @Valid UpdatePetProfileRequestDto dto) {
+        String petProfileName = dto.getPetProfileName();
+        Character petProfileGender = dto.getPetProfileGender();
+        String petProfileBirthDate = dto.getPetProfileBirthDate();
+        Integer petProfileWeight = dto.getPetProfileWeight();
+        String petProfileImageUrl = dto.getPetProfileImageUrl();
+        Character petProfileNeutralityYn = dto.getPetProfileNeutralityYn();
+        String petProfileAddInfo = dto.getPetProfileAddInfo();
+
+        PetProfileResponseDto data = null;
+
+        if (petProfileName != null && !petProfileName.isEmpty() && !petProfileName.matches("^[가-힣]+$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
+        }
+
+        if (petProfileGender != null && !petProfileGender.equals('0') && !petProfileGender.equals('1')) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_PET_GENDER);
+        }
+
+        if (petProfileBirthDate != null && petProfileBirthDate.isEmpty() && !petProfileBirthDate.matches("^[0-9]{6}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_PET_BIRTH_DATE);
+        }
+
+        if (petProfileWeight != null && petProfileWeight <= 0) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_PET_WEIGHT);
+        }
+
+        if (petProfileImageUrl != null && !petProfileImageUrl.isEmpty() &&
+                !petProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
+        }
+
+        if (petProfileNeutralityYn != null && (petProfileNeutralityYn != '0' && petProfileNeutralityYn != '1')) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_PET_NEUTRALITY_YN);
+        }
+
+        try {
+            Optional<PetProfile> optionalPetProfile = petProfileRepository.findByUserIdAndPetProfileId(userId, petProfileId);
+
+            if (optionalPetProfile.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
+            }
+
+            PetProfile petProfile = optionalPetProfile.get();
+
+            petProfile = petProfile.toBuilder()
+                    .petProfileName(petProfileName != null ? petProfileName : petProfile.getPetProfileName())
+                    .petProfileGender(petProfileGender != null ? petProfileGender : petProfile.getPetProfileGender())
+                    .petProfileBirthDate(petProfileBirthDate != null ? petProfileBirthDate : petProfile.getPetProfileBirthDate())
+                    .petProfileWeight(petProfileWeight != null ? petProfileWeight : petProfile.getPetProfileWeight())
+                    .petProfileImageUrl(
+                            (petProfileImageUrl != null && !petProfileImageUrl.isEmpty())
+                                    ? petProfileImageUrl
+                                    : (petProfileImageUrl == null && petProfile.getPetProfileImageUrl() != null)
+                                    ? petProfile.getPetProfileImageUrl()
+                                    : "petExample.jpg"
+                    )
+                    .petProfileNeutralityYn(petProfileNeutralityYn != null ? petProfileNeutralityYn : petProfile.getPetProfileNeutralityYn())
+                    .petProfileAddInfo(petProfileAddInfo != null ? petProfileAddInfo : petProfile.getPetProfileAddInfo())
+                    .build();
+
+            petProfileRepository.save(petProfile);
+
+            data = new PetProfileResponseDto(petProfile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override

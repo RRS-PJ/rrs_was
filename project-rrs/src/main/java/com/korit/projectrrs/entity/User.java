@@ -1,6 +1,7 @@
 
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +51,7 @@ public class User {
     private String userProfileImageUrl;
 
     @Builder.Default
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PetProfile> petProfiles = new ArrayList<>();
 }

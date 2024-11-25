@@ -2,11 +2,13 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.user.request.DeleteUserRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -104,12 +106,11 @@ public class UserServiceImpl implements UserService {
                     .userAddress(userAddress != null ? userAddress : user.getUserAddress())
                     .userAddressDetail(userAddressDetail != null ? userAddressDetail : user.getUserAddressDetail())
                     .userProfileImageUrl(
-                            // 새로운 이미지 URL이 있을 때
                             (userProfileImageUrl != null && !userProfileImageUrl.isEmpty())
-                                    ? userProfileImageUrl  // 새로운 이미지 URL로 설정
+                                    ? userProfileImageUrl
                                     : (userProfileImageUrl == null && user.getUserProfileImageUrl() != null)
-                                    ? user.getUserProfileImageUrl() // null이면 기존 이미지 유지
-                                    : "example.jpg"   // 빈 문자열("")일 경우 기본 이미지로 설정
+                                    ? user.getUserProfileImageUrl()
+                                    : "example.jpg"
                     )
                     .build();
 
@@ -125,7 +126,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(String userId) {
+    public ResponseDto<Void> deleteUser(String userId, @Valid DeleteUserRequestDto dto) {
+        String userPassword = dto.getUserPassword();
 
         try {
             Optional<User> optionalUser = userRepository.findByUserId(userId);
@@ -135,13 +137,17 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = optionalUser.get();
+
+            if (!bCryptpasswordEncoder.matches(userPassword, user.getUserPassword())) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
+            }
+
             userRepository.delete(user);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }

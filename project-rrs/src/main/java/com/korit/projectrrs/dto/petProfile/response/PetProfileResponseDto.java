@@ -9,17 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PetProfileResponseDto {
-    private Long petProfileId;
     private String petProfileName;
     private Character petProfileGender;
     private String petProfileBirthDate;
-    private int petProfileWeight;
+    private Integer petProfileWeight;
     private String petProfileImageUrl;
     private String petProfileAddInfo;
     private Character petProfileNeutralityYn;
 
     public PetProfileResponseDto(PetProfile petProfile) {
-        this.petProfileId = petProfile.getPetProfileId();
         this.petProfileName = petProfile.getPetProfileName();
         this.petProfileGender = petProfile.getPetProfileGender();
         this.petProfileBirthDate = petProfile.getPetProfileBirthDate();
