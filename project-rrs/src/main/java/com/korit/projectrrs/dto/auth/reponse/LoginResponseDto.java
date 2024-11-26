@@ -10,5 +10,4 @@ public class LoginResponseDto {
    private User user;
    private String token;
    private int exprTime;
-
 }

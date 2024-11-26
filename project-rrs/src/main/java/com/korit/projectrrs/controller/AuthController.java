@@ -1,6 +1,5 @@
 package com.korit.projectrrs.controller;
 
-
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
@@ -22,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     private static final String SING_UP_PATH= "/sign-up";
-    private static final String LOGIN_PATH= "/sign-in";
+    private static final String LOGIN_PATH= "/login";
 
     @PostMapping(SING_UP_PATH)
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto dto) {
@@ -37,7 +36,4 @@ public class AuthController {
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status).body(response);
     }
-
-
-
 }
