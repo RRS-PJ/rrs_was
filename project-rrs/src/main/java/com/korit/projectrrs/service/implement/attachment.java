@@ -11,8 +11,6 @@ public class attachment {
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
 
-
-
     private List<CommunityAttachment> saveAttachments(List<MultipartFile> files, Community community) throws IOException {
         List<CommunityAttachment> attachments = new ArrayList<>();
         if (files != null && !files.isEmpty()) {
