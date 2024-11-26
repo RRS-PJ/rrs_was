@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !userProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
