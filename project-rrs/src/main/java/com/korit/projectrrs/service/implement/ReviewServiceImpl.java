@@ -37,10 +37,10 @@ public class ReviewServiceImpl implements ReviewService {
         String content = dto.getReviewContent();
 
         //유효성 검사
-        if(content == null || content.isEmpty() || content.length() > 500) {
+        if (content == null || content.isEmpty() || content.length() > 500) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_TOO_lONG);
         }
-        if(score > 5 || score < 0) {
+        if (score > 5 || score < 0) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_SCORE_NUMBER_VALIDATION);
         }
 
@@ -50,10 +50,10 @@ public class ReviewServiceImpl implements ReviewService {
             if (optionalProvider.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
             }
-
+            // Provider 등록여부 확인
             Provider provider = optionalProvider.get();
             if (provider.getProviderProvisionYN() == '0') {
-                return ResponseDto.setFailed("등록되지 않은 댕시터입니다.");
+                return ResponseDto.setFailed(ResponseMessage.NOT_REGISTERED_PROVIDER);
             }
 
             // User 조회
