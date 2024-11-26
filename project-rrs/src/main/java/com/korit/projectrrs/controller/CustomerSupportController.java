@@ -72,7 +72,7 @@ public class CustomerSupportController {
             @PathVariable Long customerSupportId
     ) {
         ResponseDto<Void> response = customerSupportService.deleteCustomerService(customerSupportId);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
 }

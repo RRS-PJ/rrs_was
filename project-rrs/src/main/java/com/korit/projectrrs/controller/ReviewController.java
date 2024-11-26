@@ -21,11 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final String GET_REVIEW = "/{reviewId}";
-    private final String DELETE_REVIEW = "/{reviewId}";
-    private final String UPDATE_REVIEW = "/{reviewId}";
-    private final String GET_REVIEW_BY_PROVIDER = "/provider/{providerId}";
-    private final String GET_REVIEW_AVG_SCORE_BY_PROVIDER = "/provider-avg/{providerId}";
+    private static final String REVIEW = "/{reviewId}";
+    private static final String PROVIDER = "/provider/{providerId}";
+    private static final String PROVIDER_AVG = "/provider-avg/{providerId}";
 
 
     @PostMapping
@@ -38,8 +36,8 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(GET_REVIEW_BY_PROVIDER)
-    private ResponseEntity<ResponseDto<List<ReviewGetResponseDto>>> getAllReviewByProviderId (
+    @GetMapping(PROVIDER)
+    private ResponseEntity<ResponseDto<List<ReviewGetResponseDto>>> getReviewsByProvider (
             @AuthenticationPrincipal String userId,
             @PathVariable Long providerId
     ) {
@@ -48,7 +46,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(GET_REVIEW_AVG_SCORE_BY_PROVIDER)
+    @GetMapping(PROVIDER_AVG)
     private ResponseEntity<ResponseDto<ReviewAvgScoreResponseDto>> getAverageReviewScoreByProvider (
             @AuthenticationPrincipal String userId,
             @PathVariable Long providerId
@@ -58,17 +56,17 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(GET_REVIEW)
+    @GetMapping(REVIEW)
     private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getByReviewId (
             @AuthenticationPrincipal String userId,
-            @RequestParam Long reviewId
+            @PathVariable Long reviewId
     ) {
         ResponseDto<ReviewGetResponseDto> response = reviewService.getByReviewId(reviewId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping(UPDATE_REVIEW)
+    @PutMapping(REVIEW)
     private ResponseEntity<ResponseDto<ReviewPutResponseDto>> updateReview (
             @AuthenticationPrincipal String userId,
             @RequestBody ReviewPutResponseDto dto
@@ -78,13 +76,13 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping(DELETE_REVIEW)
+    @DeleteMapping(REVIEW)
     ResponseEntity<ResponseDto<Void>> deleteReview (
             @AuthenticationPrincipal String userId,
-            @RequestParam Long reviewId
+            @PathVariable Long reviewId
     ){
         ResponseDto<ReviewPutResponseDto> response = reviewService.deleteReview(reviewId);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(null);
     }
 }

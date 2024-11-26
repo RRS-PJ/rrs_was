@@ -19,8 +19,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             "ORDER BY t.todoCreateAt ASC")
     Optional<List<Todo>> findTodosByUserIdAndDay(@Param("userId") String userId, @Param("day") LocalDate day);
 
-    @Query("SELECT t " +
-            "FROM Todo t " +
-            "WHERE t.user.userId = :userId ")
-    Optional<Todo> findTodoByUserId(@Param("userId") String userId);
+//    @Query("SELECT t " +
+//            "FROM Todo t " +
+//            "WHERE t.user.userId = :userId ")
+//    Optional<Todo> findTodoByUserId(@Param("userId") String userId);
 }

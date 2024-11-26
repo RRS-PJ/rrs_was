@@ -46,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         try {
             // Provider 조회
-            Optional<Provider> optionalProvider = providerRepository.findById(dto.getProviderId());
+            Optional<Provider> optionalProvider = providerRepository.findById(providerId);
             if (optionalProvider.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
             }
@@ -65,8 +65,8 @@ public class ReviewServiceImpl implements ReviewService {
             User user = optionalUser.get();
 
             Review review = Review.builder()
-                    .user(optionalUser.get())
-                    .provider(optionalProvider.get())
+                    .user(user)
+                    .provider(provider)
                     .reviewScore(score)
                     .reviewContent(content)
                     .reviewCreateAt(LocalDate.now())

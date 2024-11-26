@@ -65,7 +65,7 @@ public class TodoController {
             @PathVariable Long todoId
     ) {
         ResponseDto<Void> response = todoService.deleteTodo(userId, todoId);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
 }
