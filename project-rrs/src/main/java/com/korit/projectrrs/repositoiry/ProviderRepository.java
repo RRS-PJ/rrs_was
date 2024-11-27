@@ -9,5 +9,4 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ProviderRepository extends JpaRepository<Provider, Long> {
-    List<Provider> findProvidersAvailableOnRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

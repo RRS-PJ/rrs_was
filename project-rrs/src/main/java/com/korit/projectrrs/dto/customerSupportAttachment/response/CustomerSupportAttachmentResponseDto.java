@@ -1,13 +1,11 @@
 package com.korit.projectrrs.dto.customerSupportAttachment.response;
 
-import com.korit.projectrrs.entity.CustomerSupportAttachment;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class CustomerSupportAttachmentResponseDto {
+    private Long customerSupportAttachmentId;
     private String customerSupportAttachmentFile;
-
-    public CustomerSupportAttachmentResponseDto(CustomerSupportAttachment customerSupportAttachment){
-        this.customerSupportAttachmentFile = customerSupportAttachment.getCustomerSupportAttachmentFile();
-    }
 }
