@@ -138,11 +138,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 responsedCustomerSupport.setCustomerSupportTitle(title);
                 responsedCustomerSupport.setCustomerSupportContent(content);
 
-                // 유저 아이디 불일치 시
-                if (userId.equals(optionalCustomerSupport.get().getUser().getUserId())) {
-                    return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
-                }
-
                 data = new CustomerSupportPutResponseDto(responsedCustomerSupport);
 
             } else {
@@ -159,7 +154,9 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     @Override
     public ResponseDto<Void> deleteCustomerService(Long customerSupportId) {
         try {
-            if(!customerSupportRepository.existsById(customerSupportId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            if(!customerSupportRepository.existsById(customerSupportId)) {
+                ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
+            }
             customerSupportRepository.deleteById(customerSupportId);
         } catch (Exception e) {
             e.printStackTrace();

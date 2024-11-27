@@ -1,5 +1,10 @@
-package com.korit.projectrrs.dto.CustomerSupportAttachment.request;
+package com.korit.projectrrs.dto.customerSupportAttachment.request;
 
-public class CustomerSupportAttachmentPutDto {
+import com.korit.projectrrs.entity.CustomerSupport;
+import lombok.Data;
+
+@Data
+public class CustomerSupportAttachmentRequestDto {
+    private CustomerSupport customerSupport;
     private String customerSupportAttachmentFile;
 }

@@ -126,4 +126,9 @@ public class ResponseMessage {
     // 댕시터 관련 메세지
     public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";
     public static final String NOT_REGISTERED_PROVIDER = "Provider is not registered";
+
+    // 첨부파일 관련 메세지
+    public static final String FILE_UPLOAD_ERROR = "File upload is failed";
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
+
 }

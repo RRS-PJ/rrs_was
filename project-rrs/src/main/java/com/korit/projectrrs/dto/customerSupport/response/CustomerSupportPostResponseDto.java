@@ -12,7 +12,6 @@ public class CustomerSupportPostResponseDto {
     private char customerSupportStatus;
     private LocalDateTime customerSupportCreateAt;
     private char customerSupportCategory;
-    private String customerSupportStatusMessage;
 
     public CustomerSupportPostResponseDto(CustomerSupport customerSupport){
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
