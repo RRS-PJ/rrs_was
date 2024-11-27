@@ -90,11 +90,14 @@ public class PetProfileServiceImpl implements PetProfileService {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
-        }
+    }
 
     @Override
     public ResponseDto<PetProfileListResponseDto> getPetProfileList(String userId) {
-        return null;
+        PetProfileListResponseDto data = null;
+
+
+
     }
 
     @Override
@@ -180,4 +183,3 @@ public class PetProfileServiceImpl implements PetProfileService {
         return null;
     }
 }
-// 수정확인용
