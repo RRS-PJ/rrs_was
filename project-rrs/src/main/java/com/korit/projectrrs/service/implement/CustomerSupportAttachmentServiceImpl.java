@@ -70,7 +70,6 @@ public class CustomerSupportAttachmentServiceImpl implements CustomerSupportAtta
             return ResponseDto.setFailed(ResponseMessage.FILE_UPLOAD_ERROR);
         }
 
-        // 엔티티를 DTO로 변환
         List<CustomerSupportAttachmentResponseDto> attachmentDtos = attachments.stream()
                 .map(attachment -> CustomerSupportAttachmentResponseDto.builder()
                         .customerSupportAttachmentId(attachment.getCustomerSupportAttachmentId())

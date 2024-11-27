@@ -24,7 +24,7 @@ public class CustomerSupportAttachmentController {
 
     private final CustomerSupportAttachmentService customerSupportAttachmentService;
     private final String UPLOAD_ATTACHMENT = "/customer-support/{customerSupportId}";
-    private final String DELETE_ATTACHMENT = "/customer-support-attachment/{customerSupportAttachmentId}";
+    private final String DELETE_ATTACHMENT = "/{customerSupportAttachmentId}";
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -49,7 +49,6 @@ public class CustomerSupportAttachmentController {
     ) {
         ResponseDto<Void> response =
                 customerSupportAttachmentService.deleteAttachments(customerSupportAttachmentId);
-
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
