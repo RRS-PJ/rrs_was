@@ -17,7 +17,7 @@ import com.korit.projectrrs.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .provider(provider)
                     .reviewScore(score)
                     .reviewContent(content)
-                    .reviewCreateAt(LocalDate.now())
+                    .reviewCreateAt(LocalDateTime.now())
                     .build();
 
             reviewRepository.save(review);
