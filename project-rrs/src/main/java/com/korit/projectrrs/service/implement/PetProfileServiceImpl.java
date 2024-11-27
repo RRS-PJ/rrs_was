@@ -15,7 +15,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +56,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         if (petProfileImageUrl != null && !petProfileImageUrl.isEmpty() &&
-                !petProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !petProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -93,16 +96,59 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<PetProfileListResponseDto> getPetProfileList(String userId) {
-        PetProfileListResponseDto data = null;
+    public ResponseDto<List<PetProfileListResponseDto>> getPetProfileList(String userId) {
+        List<PetProfileListResponseDto> data = new ArrayList<>();
 
+        try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
 
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
 
+            Optional<List<PetProfile>> optionalPetProfiles = petProfileRepository.findAllPetByUserId(userId);
+
+            if (optionalPetProfiles.isEmpty() || optionalPetProfiles.get().isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
+            }
+
+            data = optionalPetProfiles.get().stream()
+                    .map(PetProfileListResponseDto::new)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<PetProfileResponseDto> getPetProfileInfo(String userId, Long petProfileId) {
-        return null;
+        PetProfileResponseDto data = null;
+
+        try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            Optional<PetProfile> optionalPetProfiles = petProfileRepository.findPetByUserId(userId, petProfileId);
+
+            if (optionalPetProfiles.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
+            }
+
+            PetProfile petProfile = optionalPetProfiles.get();
+
+            data = new PetProfileResponseDto(petProfile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
@@ -134,7 +180,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         if (petProfileImageUrl != null && !petProfileImageUrl.isEmpty() &&
-                !petProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !petProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -143,7 +189,13 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         try {
-            Optional<PetProfile> optionalPetProfile = petProfileRepository.findByUserIdAndPetProfileId(userId, petProfileId);
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
 
             if (optionalPetProfile.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
@@ -180,6 +232,26 @@ public class PetProfileServiceImpl implements PetProfileService {
 
     @Override
     public ResponseDto<Void> deletePetProfile(String userId, Long petProfileId) {
-        return null;
+        try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
+
+            if (optionalPetProfile.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
+            }
+
+            PetProfile petProfile = optionalPetProfile.get();
+            petProfileRepository.delete(petProfile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }

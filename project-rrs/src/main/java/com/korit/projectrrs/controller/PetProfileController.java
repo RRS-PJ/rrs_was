@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ApiMappingPattern.PET)
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class PetProfileController {
 
     private final PetProfileService petProfileService;
 
-    private static final String PET_PUT = "/{petProfileId}";
     private static final String PET_GET_BY_ID = "/{petProfileId}";
+    private static final String PET_PUT = "/{petProfileId}";
     private static final String PET_DELETE = "/{petProfileId}";
 
     @PostMapping
@@ -35,10 +37,10 @@ public class PetProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto<PetProfileListResponseDto>> getPetProfileList(
+    public ResponseEntity<ResponseDto<List<PetProfileListResponseDto>>> getPetProfileList(
             @AuthenticationPrincipal String userId
     ) {
-        ResponseDto<PetProfileListResponseDto> response = petProfileService.getPetProfileList(userId);
+        ResponseDto<List<PetProfileListResponseDto>> response = petProfileService.getPetProfileList(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

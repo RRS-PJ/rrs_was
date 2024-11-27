@@ -123,6 +123,4 @@ public class ResponseMessage {
     // 존재하지 않는 강아지 id
     public static final String NOT_EXIST_PET_ID = "Pet does not exist."; // 강아지가 존재하지 않을 때 반환 메시지
 
-
-
 }
