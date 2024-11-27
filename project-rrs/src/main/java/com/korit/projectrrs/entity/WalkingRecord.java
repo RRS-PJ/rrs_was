@@ -1,14 +1,18 @@
 package com.korit.projectrrs.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "WalkingRecords")
@@ -26,19 +30,23 @@ public class WalkingRecord {
     @JsonBackReference
     private PetProfile petProfile;
 
-    @Column(nullable = false, columnDefinition = "CHAR(1) DEFAULT '0'")
-    private Character walkingRecordWeatherState;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "DEFAULT 'SUNNY'")
+    private WalkingRecordWeatherState walkingRecordWeatherState;
 
     @Column(nullable = false)
-    private int walkingRecordDistance;
+    private Integer walkingRecordDistance;
 
     @Column(nullable = false)
-    private LocalTime walkingRecordWalkingTime;
+    private Duration walkingRecordWalkingTime;
 
     @Column(nullable = false)
-    private LocalDateTime walkingRecordCreateAt;
+    private LocalDate walkingRecordCreateAt;
 
     private String walkingRecordMemo;
 
-    private String walkingRecordImageUrl;
+    @Builder.Default
+    @JsonManagedReference
+    @OneToMany(mappedBy = "walkingRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WalkingRecordAttachment> walkingRecordAttachments = new ArrayList<>();
 }

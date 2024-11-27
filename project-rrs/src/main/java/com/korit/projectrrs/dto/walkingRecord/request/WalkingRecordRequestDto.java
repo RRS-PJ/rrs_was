@@ -1,18 +1,15 @@
 package com.korit.projectrrs.dto.walkingRecord.request;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.korit.projectrrs.entity.PetProfile;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.korit.projectrrs.entity.WalkingRecordWeatherState;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,16 +17,14 @@ public class WalkingRecordRequestDto {
     @NotBlank
     private PetProfile petProfile;
     @NotBlank
-    private Character walkingRecordWeatherState;
+    private WalkingRecordWeatherState walkingRecordWeatherState;
     @NotBlank
-    private int walkingRecordDistance;
+    private Integer walkingRecordDistance;
     @NotBlank
     private LocalTime walkingRecordWalkingTime;
     @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime walkingRecordCreateAt;
-
+    private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
-
-    private String walkingRecordImageUrl;
+    private List<String> walkingRecordAttachments;
 }
