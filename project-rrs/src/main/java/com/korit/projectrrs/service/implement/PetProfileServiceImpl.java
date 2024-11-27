@@ -56,7 +56,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         if (petProfileImageUrl != null && !petProfileImageUrl.isEmpty() &&
-                !petProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !petProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -180,7 +180,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         if (petProfileImageUrl != null && !petProfileImageUrl.isEmpty() &&
-                !petProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !petProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -233,11 +233,21 @@ public class PetProfileServiceImpl implements PetProfileService {
     @Override
     public ResponseDto<Void> deletePetProfile(String userId, Long petProfileId) {
         try {
+            Optional<User> optionalUser = userRepository.findByUserId(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
             Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
 
             if (optionalPetProfile.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
             }
+
+            PetProfile petProfile = optionalPetProfile.get();
+            petProfileRepository.delete(petProfile);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);

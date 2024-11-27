@@ -1,8 +1,12 @@
 package com.korit.projectrrs.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "petProfiles")
@@ -38,4 +42,9 @@ public class PetProfile {
     private String petProfileAddInfo;
 
     private Character petProfileNeutralityYn;
+
+    @Builder.Default
+    @JsonManagedReference
+    @OneToMany(mappedBy = "petProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WalkingRecord> walkingRecords = new ArrayList<>();
 }

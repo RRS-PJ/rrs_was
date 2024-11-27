@@ -22,8 +22,8 @@ public class PetProfileController {
 
     private final PetProfileService petProfileService;
 
-    private static final String PET_PUT = "/{petProfileId}";
     private static final String PET_GET_BY_ID = "/{petProfileId}";
+    private static final String PET_PUT = "/{petProfileId}";
     private static final String PET_DELETE = "/{petProfileId}";
 
     @PostMapping
