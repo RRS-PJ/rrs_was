@@ -14,7 +14,7 @@ import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                     .customerSupportContent(content)
                     .customerSupportCategory(category)
                     .customerSupportStatus('0')
-                    .customerSupportCreateAt(LocalDate.now())
+                    .customerSupportCreateAt(LocalDateTime.now())
                     .build();
             customerSupportRepository.save(customerSupport);
             data = new CustomerSupportPostResponseDto(customerSupport);

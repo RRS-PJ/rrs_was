@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class ReviewPostResponseDto {
     private int reviewScore;
     private String reviewContent;
-    private LocalDate reviewCreateAt;
+    private LocalDateTime reviewCreateAt;
 
     public ReviewPostResponseDto (Review review) {
         this.reviewScore = review.getReviewScore();

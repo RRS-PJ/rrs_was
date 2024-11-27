@@ -3,7 +3,7 @@ package com.korit.projectrrs.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class Review {
     private Provider provider;
 
     @Column(name = "REVIEW_CREATE_AT")
-    private LocalDate reviewCreateAt;
+    private LocalDateTime reviewCreateAt;
 
     @Builder.Default
     @Column(name = "REVIEW_SCORE")

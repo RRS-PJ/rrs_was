@@ -3,7 +3,7 @@ package com.korit.projectrrs.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CUSTOMER_SUPPORTS")
@@ -30,7 +30,7 @@ public class CustomerSupport {
     private char customerSupportStatus;
 
     @Column(nullable = false)
-    private LocalDate customerSupportCreateAt;
+    private LocalDateTime customerSupportCreateAt;
 
     @Column(nullable = false)
     private char customerSupportCategory;

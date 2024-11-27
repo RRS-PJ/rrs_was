@@ -3,12 +3,12 @@ package com.korit.projectrrs.dto.todo.response;
 import com.korit.projectrrs.entity.Todo;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class TodoUpdateResponseDto {
     private String todoPreparationContent;
-    private LocalDateTime todoCreateAt;
+    private LocalDate todoCreateAt;
 
     public TodoUpdateResponseDto(Todo todo){
         this.todoPreparationContent = todo.getTodoPreparationContent();

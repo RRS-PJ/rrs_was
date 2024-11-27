@@ -3,14 +3,14 @@ package com.korit.projectrrs.dto.customerSupport.response;
 import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class CustomerSupportPutResponseDto {
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportStatus;
-    private LocalDate customerSupportCreateAt;
+    private LocalDateTime customerSupportCreateAt;
     private char customerSupportCategory;
     private String customerSupportStatusMessage;
 

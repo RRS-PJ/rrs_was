@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewPutResponseDto {
     private Long reviewId;
-    private LocalDate reviewCreateAt;
+    private LocalDateTime reviewCreateAt;
     private int reviewScore;
     private String reviewContent;
 
