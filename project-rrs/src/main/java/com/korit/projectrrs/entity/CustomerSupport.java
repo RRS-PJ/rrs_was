@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER_SUPPORTS")
@@ -34,4 +35,7 @@ public class CustomerSupport {
 
     @Column(nullable = false)
     private char customerSupportCategory;
+
+    @OneToMany(mappedBy = "customerSupport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomerSupportAttachment> attachments;
 }
