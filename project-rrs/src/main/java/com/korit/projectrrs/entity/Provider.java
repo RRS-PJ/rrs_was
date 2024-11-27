@@ -28,27 +28,6 @@ public class Provider {
     @Column(name = "PROVIDER_PROVISION_YN", nullable = false)
     private char providerProvisionYN;
 
-    @Column(name = "MON", nullable = false)
-    private char mon;
-
-    @Column(name = "TUE", nullable = false)
-    private char tue;
-
-    @Column(name = "WED", nullable = false)
-    private char wed;
-
-    @Column(name = "THU", nullable = false)
-    private char thu;
-
-    @Column(name = "FRI", nullable = false)
-    private char fri;
-
-    @Column(name = "SAT", nullable = false)
-    private char sat;
-
-    @Column(name = "SUN", nullable = false)
-    private char sun;
-
     @Builder.Default
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();

@@ -27,8 +27,8 @@ public class CustomerSupportAttachmentController {
     private final String POST_CUSTOMER_SUPPORT_ATTACHMENT = "customer-support/{customerSupportId}";
     private final String DELETE_CUSTOMER_SUPPORT_ATTACHMENT = "customer-support/customerSupportAttachment/{customerSupportAttachmentId}";
 
-//    @Value("${file.upload-dir}")
-//    private String uploadDir;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @PostMapping(POST_CUSTOMER_SUPPORT_ATTACHMENT)
     private ResponseEntity<ResponseDto<List<CustomerSupportAttachment>>> saveAttachments (
