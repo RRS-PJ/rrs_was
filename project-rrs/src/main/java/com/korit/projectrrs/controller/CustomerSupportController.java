@@ -41,7 +41,7 @@ public class CustomerSupportController {
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId
     ) {
-        ResponseDto<CustomerSupportGetResponseDto> response = customerSupportService.getCustomerSupportByUserId(userId, customerSupportId);
+        ResponseDto<CustomerSupportGetResponseDto> response = customerSupportService.getCustomerSupportByUserIdAndCustomerId(userId, customerSupportId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

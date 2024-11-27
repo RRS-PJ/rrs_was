@@ -63,7 +63,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId) {
+    public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(String userId, Long customerSupportId) {
         CustomerSupportGetResponseDto data = null;
         try {
             if (!userRepository.existsByUserId(userId)) {
@@ -74,6 +74,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
 
             if (optionalCustomerSupport.isPresent()) {
+                // 유저 아이디 불일치 시
+                if (!userId.equals(optionalCustomerSupport.get().getUser().getUserId())) {
+                    return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+                }
                 data = new CustomerSupportGetResponseDto(optionalCustomerSupport.get());
             } else {
                 // 고객센터 포스트가 존재하지 않음
@@ -96,6 +100,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
             Optional<List<CustomerSupport>> optionalCustomerServices = customerSupportRepository.findAllByUserId(userId);
+
             if(optionalCustomerServices.isPresent()){
                 data = optionalCustomerServices.get()
                         .stream().map(CustomerSupportGetResponseDto::new)
@@ -132,6 +137,11 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 CustomerSupport responsedCustomerSupport = optionalCustomerSupport.get();
                 responsedCustomerSupport.setCustomerSupportTitle(title);
                 responsedCustomerSupport.setCustomerSupportContent(content);
+
+                // 유저 아이디 불일치 시
+                if (userId.equals(optionalCustomerSupport.get().getUser().getUserId())) {
+                    return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+                }
 
                 data = new CustomerSupportPutResponseDto(responsedCustomerSupport);
 

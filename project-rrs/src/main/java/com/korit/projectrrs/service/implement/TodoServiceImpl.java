@@ -30,6 +30,7 @@ public class TodoServiceImpl implements TodoService {
     public ResponseDto<TodoPostResponseDto> createTodo(String userId, TodoPostRequestDto dto) {
         TodoPostResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
+        LocalDate todoCreateAt = dto.getTodoCreateAt();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
             // Todo 내용 공백
@@ -50,7 +51,7 @@ public class TodoServiceImpl implements TodoService {
             Todo todo = Todo.builder()
                     .user(user)
                     .todoPreparationContent(todoContent)
-                    .todoCreateAt(LocalDate.now())
+                    .todoCreateAt(todoCreateAt)
                     .build();
             todoRepository.save(todo);
             data = new TodoPostResponseDto(todo);

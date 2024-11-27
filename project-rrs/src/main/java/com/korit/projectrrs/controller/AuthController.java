@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     private static final String SING_UP_PATH= "/sign-up";
-    private static final String LOGIN_PATH= "/sign-in";
+    private static final String LOGIN_PATH= "/login";
 
     @PostMapping(SING_UP_PATH)
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto dto) {

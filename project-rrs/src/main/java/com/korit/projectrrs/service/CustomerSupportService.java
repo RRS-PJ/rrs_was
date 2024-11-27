@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CustomerSupportService {
     ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(String userId, CustomerSupportPostRequestDto dto);
-    ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserId(String userId, Long customerSupportId);
+    ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(String userId, Long customerSupportId);
     ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId);
     ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportPutRequestDto dto);
     ResponseDto<Void> deleteCustomerService(Long customerSupportId);

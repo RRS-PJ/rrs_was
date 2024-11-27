@@ -19,5 +19,6 @@ public class CustomerSupportPostResponseDto {
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
+        this.customerSupportStatus = customerSupport.getCustomerSupportStatus();
     }
 }
