@@ -23,11 +23,13 @@ import java.util.List;
 public class CustomerSupportAttachmentController {
 
     private final CustomerSupportAttachmentService customerSupportAttachmentService;
+    private final String UPLOAD_ATTACHMENT = "/customer-support/{customerSupportId}";
+    private final String DELETE_ATTACHMENT = "/customer-support-attachment/{customerSupportAttachmentId}";
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @PostMapping("/customer-support/{customerSupportId}")
+    @PostMapping(UPLOAD_ATTACHMENT)
     public ResponseEntity<ResponseDto<List<CustomerSupportAttachmentResponseDto>>> saveAttachments(
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportId,
@@ -40,7 +42,7 @@ public class CustomerSupportAttachmentController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping("/customer-support-attachment/{customerSupportAttachmentId}")
+    @DeleteMapping(DELETE_ATTACHMENT)
     public ResponseEntity<ResponseDto<Void>> deleteAttachments(
             @AuthenticationPrincipal String userId,
             @PathVariable Long customerSupportAttachmentId

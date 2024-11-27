@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class CustomerSupportAttachment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_SUPPORT_ID", nullable = false)
+    @JsonBackReference // 순환 참조 방지
     private CustomerSupport customerSupport;
 
     @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_FILE")
