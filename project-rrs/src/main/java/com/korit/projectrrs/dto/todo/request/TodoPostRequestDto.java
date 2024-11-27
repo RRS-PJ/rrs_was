@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class TodoPostRequestDto {
     private String todoPreparationContent;
+    private Local
 }
