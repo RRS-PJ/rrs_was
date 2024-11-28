@@ -7,7 +7,10 @@ import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPostResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPutResponseDto;
+import com.korit.projectrrs.entity.PetProfile;
+import com.korit.projectrrs.entity.Provider;
 import com.korit.projectrrs.entity.Reservation;
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.AvailableDateOfWeekRepository;
 import com.korit.projectrrs.repositoiry.ProviderRepository;
 import com.korit.projectrrs.repositoiry.ReservationRepository;
@@ -27,6 +30,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ProviderRepository providerRepository;
     private final UserRepository userRepository;
     private final AvailableDateOfWeekRepository availableDateOfWeekRepository;
+    private final PetprofileRepository petprofileRepository;
 
     @Override
     public ResponseDto<ReservationPostResponseDto> createReservation(String userId, ReservationPostRequestDto dto) {
@@ -34,18 +38,33 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDate startDate = dto.getReservationStartDate();
         LocalDate endDate = dto.getReservationEndDate();
         String memo = dto.getReservationMemo();
+        Long chosenProviderId = dto.getChosenProviderId();
 
-        List<Long> providersIds = providerRepository.findProviderIdByAvailableDate(startDate, endDate)
-                .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.BAD_REQUEST));
+        Provider chosenProvider = providerRepository.findById(chosenProviderId)
+                .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
+
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException(ResponseMessage.NOT_EXIST_USER_ID));
+
+        List<PetProfile> pets = petprofileRepository.findByUserId(user.getUserId());
 
         Reservation reservation = Reservation.builder()
             .reservationMemo(memo)
             .reservationStartDate(startDate)
             .reservationEndDate(endDate)
+            .provider(chosenProvider)
+            .user(user)
             .build();
 
-    return null;
-}
+        data = new ReservationPostResponseDto(reservation);
+
+        data = data.toBuilder()
+                .userPhone(user.getUserPhone())
+                .pets(pets)
+                .build();
+
+        return null;
+    }
 
     @Override
     public ResponseDto<List<ReservationGetResponseDto>> getAllReservationByUserId(String userId) {
