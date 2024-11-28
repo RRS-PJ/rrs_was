@@ -3,6 +3,7 @@ package com.korit.projectrrs.service.implement;
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
+import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
@@ -133,7 +134,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutResponseDto dto) {
+    public ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutRequestDto dto) {
         ReviewPutResponseDto data = null;
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
@@ -155,7 +156,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewPutResponseDto> deleteReview(Long reviewId) {
+    public ResponseDto<Void> deleteReview(Long reviewId) {
         try {
             if(!reviewRepository.existsById(reviewId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
             reviewRepository.deleteById(reviewId);

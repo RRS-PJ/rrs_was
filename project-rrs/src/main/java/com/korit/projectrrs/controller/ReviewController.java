@@ -3,6 +3,7 @@ package com.korit.projectrrs.controller;
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
+import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
@@ -69,7 +70,7 @@ public class ReviewController {
     @PutMapping(REVIEW)
     private ResponseEntity<ResponseDto<ReviewPutResponseDto>> updateReview (
             @AuthenticationPrincipal String userId,
-            @RequestBody ReviewPutResponseDto dto
+            @RequestBody ReviewPutRequestDto dto
     ){
         ResponseDto<ReviewPutResponseDto> response = reviewService.updateReview(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
@@ -81,7 +82,7 @@ public class ReviewController {
             @AuthenticationPrincipal String userId,
             @PathVariable Long reviewId
     ){
-        ResponseDto<ReviewPutResponseDto> response = reviewService.deleteReview(reviewId);
+        ResponseDto<Void> response = reviewService.deleteReview(reviewId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(null);
     }

@@ -2,6 +2,7 @@ package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
+import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
@@ -14,7 +15,7 @@ public interface ReviewService {
     ResponseDto<List<ReviewGetResponseDto>> getReviewsByProvider(Long providerId);
     ResponseDto<ReviewAvgScoreResponseDto> getAverageReviewScoreByProvider(Long providerId);
     ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId);
-    ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutResponseDto dto);
-    ResponseDto<ReviewPutResponseDto> deleteReview(Long reviewId);
+    ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutRequestDto dto);
+    ResponseDto<Void> deleteReview(Long reviewId);
 
 }

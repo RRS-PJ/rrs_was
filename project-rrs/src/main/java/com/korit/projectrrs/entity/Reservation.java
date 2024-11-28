@@ -1,10 +1,18 @@
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +32,10 @@ public class Reservation {
     @Column(name = "RESERVATION_END_DATE")
     private LocalDate reservationEndDate;
 
+    @Column(name = "RESERVATION_MEMO")
+    private String reservationMemo;
+
     @Column(name = "RESERVATION_STATE", nullable = false)
-    private char reservationState;
+    @Builder.Default
+    private char reservationState = '0';
 }

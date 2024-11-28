@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AvailableDateOfWeek{
-    @EmbeddedId
-    private AvailableDateOfWeekId id;
-
-    @Column(name = "IS_AVAILABLE", nullable = false)
-    private String isAvailable;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long availableDateOfWeekId;
+    private String availableDate;
+    private Long providerId;
 }
