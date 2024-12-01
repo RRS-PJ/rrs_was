@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,7 +15,7 @@ public class UpdateWalkingRecordRequestDto {
     private PetProfile petProfile;
     private WalkingRecordWeatherState walkingRecordWeatherState;
     private Integer walkingRecordDistance;
-    private LocalTime walkingRecordWalkingTime;
+    private Integer walkingRecordWalkingTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;

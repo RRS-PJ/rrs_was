@@ -17,7 +17,7 @@ import java.util.List;
 public class PetProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long petProfileId;
+    private long petProfileId;
 
     @JoinColumn(name = "ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)

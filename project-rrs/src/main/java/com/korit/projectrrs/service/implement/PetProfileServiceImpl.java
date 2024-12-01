@@ -100,19 +100,13 @@ public class PetProfileServiceImpl implements PetProfileService {
         List<PetProfileListResponseDto> data = new ArrayList<>();
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            List<PetProfile> petProfiles = petProfileRepository.findAllPetByUserId(userId);
 
-            if (optionalUser.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
-            }
-
-            Optional<List<PetProfile>> optionalPetProfiles = petProfileRepository.findAllPetByUserId(userId);
-
-            if (optionalPetProfiles.isEmpty() || optionalPetProfiles.get().isEmpty()) {
+            if (petProfiles.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
             }
 
-            data = optionalPetProfiles.get().stream()
+            data = petProfiles.stream()
                     .map(PetProfileListResponseDto::new)
                     .collect(Collectors.toList());
 
@@ -124,16 +118,10 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<PetProfileResponseDto> getPetProfileInfo(String userId, Long petProfileId) {
+    public ResponseDto<PetProfileResponseDto> getPetProfileInfo(String userId, long petProfileId) {
         PetProfileResponseDto data = null;
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
-
-            if (optionalUser.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
-            }
-
             Optional<PetProfile> optionalPetProfiles = petProfileRepository.findPetByUserId(userId, petProfileId);
 
             if (optionalPetProfiles.isEmpty()) {
@@ -152,7 +140,7 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<PetProfileResponseDto> updatePetProfile(String userId, Long petProfileId, @Valid UpdatePetProfileRequestDto dto) {
+    public ResponseDto<PetProfileResponseDto> updatePetProfile(String userId, long petProfileId, @Valid UpdatePetProfileRequestDto dto) {
         String petProfileName = dto.getPetProfileName();
         Character petProfileGender = dto.getPetProfileGender();
         String petProfileBirthDate = dto.getPetProfileBirthDate();
@@ -189,12 +177,6 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
-
-            if (optionalUser.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
-            }
-
             Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
 
             if (optionalPetProfile.isEmpty()) {
@@ -231,14 +213,8 @@ public class PetProfileServiceImpl implements PetProfileService {
     }
 
     @Override
-    public ResponseDto<Void> deletePetProfile(String userId, Long petProfileId) {
+    public ResponseDto<Void> deletePetProfile(String userId, long petProfileId) {
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
-
-            if (optionalUser.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
-            }
-
             Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
 
             if (optionalPetProfile.isEmpty()) {

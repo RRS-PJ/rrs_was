@@ -8,9 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class WalkingRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long walkingRecordId;
+    private long walkingRecordId;
 
     @JoinColumn(name = "petProfileId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,14 +29,14 @@ public class WalkingRecord {
     private PetProfile petProfile;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "DEFAULT 'SUNNY'")
-    private WalkingRecordWeatherState walkingRecordWeatherState;
+    @Column(nullable = false)
+    private WalkingRecordWeatherState walkingRecordWeatherState = WalkingRecordWeatherState.SUNNY;
 
     @Column(nullable = false)
     private Integer walkingRecordDistance;
 
     @Column(nullable = false)
-    private Duration walkingRecordWalkingTime;
+    private Integer walkingRecordWalkingTime;
 
     @Column(nullable = false)
     private LocalDate walkingRecordCreateAt;
@@ -46,7 +44,6 @@ public class WalkingRecord {
     private String walkingRecordMemo;
 
     @Builder.Default
-    @JsonManagedReference
-    @OneToMany(mappedBy = "walkingRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "walkingRecordId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WalkingRecordAttachment> walkingRecordAttachments = new ArrayList<>();
 }

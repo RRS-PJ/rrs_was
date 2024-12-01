@@ -15,10 +15,10 @@ public interface PetProfileRepository extends JpaRepository<PetProfile, Long> {
             "FROM PetProfile p " +
             "WHERE p.user.userId = :userId " +
             "AND p.petProfileId = :petProfileId")
-    Optional<PetProfile> findPetByUserId(@Param("userId") String userId, @Param("petProfileId") Long petProfileId);
+    Optional<PetProfile> findPetByUserId(@Param("userId") String userId, @Param("petProfileId") long petProfileId);
 
     @Query("SELECT p " +
             "FROM PetProfile p " +
             "WHERE p.user.userId = :userId ")
-    Optional<List<PetProfile>> findAllPetByUserId(@Param("userId") String userId);
+    List<PetProfile> findAllPetByUserId(@Param("userId") String userId);
 }

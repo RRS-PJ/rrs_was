@@ -48,7 +48,7 @@ public class PetProfileController {
     @GetMapping(PET_GET_BY_ID)
     public ResponseEntity<ResponseDto<PetProfileResponseDto>> getPetProfileInfo(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long petProfileId
+            @PathVariable long petProfileId
     ) {
         ResponseDto<PetProfileResponseDto> response = petProfileService.getPetProfileInfo(userId, petProfileId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
@@ -58,7 +58,7 @@ public class PetProfileController {
     @PutMapping(PET_PUT)
     public ResponseEntity<ResponseDto<PetProfileResponseDto>> updatePetProfile(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long petProfileId,
+            @PathVariable long petProfileId,
             @RequestBody UpdatePetProfileRequestDto dto
     ) {
         ResponseDto<PetProfileResponseDto> response = petProfileService.updatePetProfile(userId, petProfileId, dto);
@@ -69,7 +69,7 @@ public class PetProfileController {
     @DeleteMapping(PET_DELETE)
     public ResponseEntity<ResponseDto<Void>> deletePetProfile(
             @AuthenticationPrincipal String userId,
-            @PathVariable Long petProfileId
+            @PathVariable long petProfileId
     ) {
         ResponseDto<Void> response = petProfileService.deletePetProfile(userId, petProfileId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
