@@ -25,8 +25,8 @@ public class WalkingRecordController {
     private final WalkingRecordService walkingRecordService;
 
     private static final String WALKING_RECORD_POST= "/petProfileId/{petProfileId}";
-    private static final String WALKING_RECORD_GET_BY_ID = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_GET_LIST = "/petProfileId/{petProfileId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
+    private static final String WALKING_RECORD_GET_BY_ID = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_PUT = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_DELETE = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_ATTACHMENT_POST = "/walkingRecordId/{walkingRecordId}/attachments";
@@ -67,10 +67,11 @@ public class WalkingRecordController {
     @PutMapping(WALKING_RECORD_PUT)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> updateWalkingRecord(
             @AuthenticationPrincipal String userId,
+            @PathVariable long petProfileId,
             @PathVariable long walkingRecordId,
             @RequestBody UpdateWalkingRecordRequestDto dto
     ) {
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.updateWalkingRecord(userId, walkingRecordId, dto);
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.updateWalkingRecord(userId, petProfileId, walkingRecordId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
@@ -78,9 +79,10 @@ public class WalkingRecordController {
     @DeleteMapping(WALKING_RECORD_DELETE)
     public ResponseEntity<ResponseDto<Void>> deleteWalkingRecord(
             @AuthenticationPrincipal String userId,
+            @PathVariable long petProfileId,
             @PathVariable long walkingRecordId
     ) {
-        ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, walkingRecordId);
+        ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, petProfileId, walkingRecordId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
