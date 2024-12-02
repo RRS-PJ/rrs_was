@@ -124,12 +124,17 @@ public class ResponseMessage {
     public static final String NOT_EXIST_PET_ID = "Pet does not exist."; // 강아지가 존재하지 않을 때 반환 메시지
 
     // 산책기록 유효성 검사
-    public static final String INVALID_WALKING_RECORD_WEATHER_STATE = "Invalid Weather input."; // 유효하지 않은 산책기록 날씨 형식
-    public static final String INVALID_WALKING_RECORD_DISTANCE = "Invalid Distance input."; // 유효하지 않은 산책기록 거리 형식
-    public static final String INVALID_WALKING_RECORD_TIME = "Invalid hours or minutes input."; // 유효하지 않은 산책기록 산책시간 형식
+    public static final String INVALID_WALKING_RECORD_WEATHER_STATE = "Invalid Weather format."; // 유효하지 않은 산책기록 날씨 형식
+    public static final String INVALID_WALKING_RECORD_DISTANCE = "Invalid Distance format."; // 유효하지 않은 산책기록 거리 형식
+    public static final String INVALID_WALKING_RECORD_TIME = "Invalid hours or minutes format."; // 유효하지 않은 산책기록 산책시간 형식
     public static final String INVALID_WALKING_RECORD_CREATE_AT = "Invalid walking record createAt format."; // 유효하지 않은 산책기록 작성일 형식
     public static final String TIME_IN_FUTURE_NOT_ALLOWED = "Future time cannot be selected."; // 미래 시간 선택 불가
+    public static final String INVALID_FILE = "Invalid file format."; // 유효하지 않은 파일 형식
+    public static final String FILE_UPLOAD_ERROR = "An error occurred while uploading the file."; // 파일 업로드 에러
 
     // 존재하지 않는 산책기록 id
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
+
+
+
 }

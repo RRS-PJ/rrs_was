@@ -8,5 +8,5 @@ public class ApiMappingPattern {
     public static final String ARTICLE = "/api/v1/articles";
     public static final String COMMENT = "/api/v1/commemts";
     public static final String WALKING_RECORD = "/api/v1/walking-record";
-    public static final String WALKING_RECORD_ATTACHMENT = "/api/v1/walking-record/walkingRecordId/{walkingRecordId}/attachments";
+    public static final String WALKING_RECORD_ATTACHMENT = "/api/v1/walking-record/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}/attachments";
 }

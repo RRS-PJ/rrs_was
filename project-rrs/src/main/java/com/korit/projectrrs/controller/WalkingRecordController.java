@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,15 +30,15 @@ public class WalkingRecordController {
     private static final String WALKING_RECORD_GET_BY_ID = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_PUT = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_DELETE = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_ATTACHMENT_POST = "/walkingRecordId/{walkingRecordId}/attachments";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
             @AuthenticationPrincipal String userId,
             @PathVariable long petProfileId,
-            @RequestBody WalkingRecordRequestDto dto
+            @RequestBody WalkingRecordRequestDto dto,
+            @RequestParam(required = false) List<MultipartFile> files
     ) {
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petProfileId, dto);
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petProfileId, dto, files);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

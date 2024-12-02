@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "WalkingRecordsAttachments")
+@Table(name = "walkingRecordAttachments")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -2,18 +2,24 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.petProfile.response.PetProfileResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
+import com.korit.projectrrs.dto.walkingRecordAttachment.response.WalkingRecordAttachmentResponseDto;
 import com.korit.projectrrs.entity.*;
 import com.korit.projectrrs.repositoiry.PetProfileRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordAttachmentRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordRepository;
 import com.korit.projectrrs.service.WalkingRecordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +35,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     private final WalkingRecordRepository walkingRecordRepository;
     private final WalkingRecordAttachmentRepository walkingRecordAttachmentRepository;
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @Override
-    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto) {
+    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto, List<MultipartFile> files) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState() != null
                 ? dto.getWalkingRecordWeatherState()
                 : WalkingRecordWeatherState.SUNNY;
@@ -39,7 +48,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         Integer minutes = dto.getWalkingRecordWalkingMinutes();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
-        List<WalkingRecordAttachment> walkingRecordAttachments = dto.getWalkingRecordAttachments();
 
         WalkingRecordResponseDto data = null;
 
@@ -84,12 +92,58 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                     .walkingRecordWalkingTime(totalMinutes)
                     .walkingRecordCreateAt(walkingRecordCreateAt)
                     .walkingRecordMemo(walkingRecordMemo)
-                    .walkingRecordAttachments(walkingRecordAttachments)
                     .build();
 
             walkingRecordRepository.save(walkingRecord);
 
-            data = new WalkingRecordResponseDto(walkingRecord);
+            if (files != null && !files.isEmpty()) {
+                List<WalkingRecordAttachmentResponseDto> attachmentResponseList = new ArrayList<>();
+
+                for (MultipartFile file : files) {
+                    String originalFileName = file.getOriginalFilename();
+                    System.out.println("Original Filedddddddddddddddddddddddddddddddddddddddddddddddddddd Name: " + originalFileName);
+
+                    if (originalFileName != null && !originalFileName.isEmpty()) {
+                        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+
+                        if (!fileExtension.equals("png") && !fileExtension.equals("jpg")) {
+                            return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
+                        }
+
+                        String sanitizedFileName = originalFileName.replaceAll("[\\x00-\\x1F\\x7F]", "_");
+                        String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
+
+                        Path path = Paths.get(uploadDir, fileName);
+                        Files.copy(file.getInputStream(), path);
+
+                        WalkingRecordAttachment walkingRecordAttachment = WalkingRecordAttachment.builder()
+                                .walkingRecordId(walkingRecord.getWalkingRecordId())
+                                .walkingRecordAttachmentFile(path.toString())
+                                .build();
+
+                        walkingRecordAttachmentRepository.save(walkingRecordAttachment);
+
+                        WalkingRecordAttachmentResponseDto attachmentResponseDto = WalkingRecordAttachmentResponseDto.builder()
+                                .fileName(Paths.get(walkingRecordAttachment.getWalkingRecordAttachmentFile()).getFileName().toString())
+                                .fileUrl(walkingRecordAttachment.getWalkingRecordAttachmentFile())
+                                .build();
+
+                        attachmentResponseList.add(attachmentResponseDto);
+                    }
+                }
+
+                data.setAttachments(attachmentResponseList);
+            }
+
+//            if (attachmentIdsToDelete != null && !attachmentIdsToDelete.isEmpty()) {
+//                for (Long attachmentId : attachmentIdsToDelete) {
+//                    Optional<WalkingRecordAttachment> attachment = walkingRecordAttachmentRepository.findById(attachmentId);
+//                    attachment.ifPresent(att -> walkingRecordAttachmentRepository.delete(att));
+//                }
+//            }
+//
+//            data.setWalkingRecord(new WalkingRecordResponseDto(walkingRecord));
+//            return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
 
         } catch (Exception e) {
             e.printStackTrace();

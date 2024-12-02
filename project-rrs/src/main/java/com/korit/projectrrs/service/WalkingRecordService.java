@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WalkingRecordService {
-    ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto);
+    ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto, List<MultipartFile> files);
     ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(String userId, long petProfileId, LocalDate walkingRecordCreateAt);
     ResponseDto<WalkingRecordResponseDto> getWalkingRecord(String userId, long petProfileId, long walkingRecordId);
     ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(String userId, long petProfileId, long walkingRecordId, UpdateWalkingRecordRequestDto dto);
