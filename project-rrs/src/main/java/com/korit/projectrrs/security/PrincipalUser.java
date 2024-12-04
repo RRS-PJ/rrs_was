@@ -16,7 +16,7 @@ public class PrincipalUser implements UserDetails {
     private String password;
     private String name;
     private String email;
-    private String roles;   //ROLE_USER,ROLE_PROVIDER
+    private String roles;  //ROLE_USER,ROLE_PROVIDER
 
     public PrincipalUser(Long userId, String username, String roles) {
         this.userId = userId;
