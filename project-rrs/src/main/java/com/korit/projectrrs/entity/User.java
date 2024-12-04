@@ -23,34 +23,34 @@ public class User {
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
-    @Column(name = "NAME", nullable = false, length = 50)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "USERNAME", nullable = false, length = 50, unique = true)
+    @Column(name = "USERNAME", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false, length = 50)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "NICKNAME", nullable = false, length = 50, unique = true)
+    @Column(name = "NICKNAME", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "PHONE", nullable = false, length = 20, unique = true)
+    @Column(name = "PHONE", nullable = false, unique = true)
     private String phone;
 
-    @Column(name = "ADDRESS", nullable = false, length = 255)
+    @Column(name = "ADDRESS", nullable = false)
     private String address;
 
-    @Column(name = "ADDRESS_DETAIL", nullable = false, length = 255)
+    @Column(name = "ADDRESS_DETAIL", nullable = false)
     private String addressDetail;
 
-    @Column(name = "EMAIL", nullable = false, length = 255, unique = true)
+    @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "PROFILE_IMAGE_URL", length = 255)
+    @Column(name = "PROFILE_IMAGE_URL")
     private String profileImageUrl;
 
-    @Column(name = "ROLE", length = 255)
+    @Column(name = "ROLE")
     private String role;
 
     @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")

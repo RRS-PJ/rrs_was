@@ -114,8 +114,8 @@ public class AuthServiceImpl implements AuthService {
                         .address(address)
                         .addressDetail(addressDetail)
                         .email(email)
+                        .role("ROLE_USER")
                         .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
-                        .role("USER")
                         .build();
 
             userRepository.save(user);

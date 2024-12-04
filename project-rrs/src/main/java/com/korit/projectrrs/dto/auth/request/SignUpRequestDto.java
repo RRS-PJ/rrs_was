@@ -40,8 +40,7 @@ public class SignUpRequestDto {
 
     private String profileImageUrl;
 
-    @Builder.Default
-    private String role = "ROLE_USER";
+    private String role;
 
     private String providerIntroduction;
 }
