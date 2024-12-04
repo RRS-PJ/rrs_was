@@ -6,11 +6,11 @@ import lombok.Data;
 @Builder
 @Data
 public class UpdateUserRequestDto {
-    private String userName;
-    private String userPassword;
+    private String name;
+    private String password;
     private String confirmPassword;
-    private String userPhone;
-    private String userAddress;
-    private String userAddressDetail;
-    private String userProfileImageUrl;
+    private String phone;
+    private String address;
+    private String addressDetail;
+    private String profileImageUrl;
 }

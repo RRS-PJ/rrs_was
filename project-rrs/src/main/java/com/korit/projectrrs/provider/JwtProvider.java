@@ -31,7 +31,7 @@ public class JwtProvider {
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
-    public String generateJwtToken(String userId) {
+    public String generateJwtToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
@@ -40,13 +40,25 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateEmailValidToken(String username) {
+    public String generateEmailValidToken(String email) {
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 5)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // JWT에서 username 추출
+    public String getUsernameFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("username", String.class);
+    }
+
+    // JWT에서 roles 추출
+    public String getRolesFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("roles", String.class);
     }
 
     public String removeBearer(String bearerToken) {
@@ -56,9 +68,9 @@ public class JwtProvider {
         return bearerToken.substring("Bearer ".length());
     }
 
-    public String getUserIdFromJwt(String token) {
+    public Long getUserIdFromJwt(String token) {
         Claims claims = getClaims(token);
-        return claims.get("userId", String.class);
+        return claims.get("userId", Long.class);
     }
 
     public boolean isValidToken(String token) {

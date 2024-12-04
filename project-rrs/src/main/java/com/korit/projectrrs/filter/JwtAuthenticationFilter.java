@@ -1,6 +1,7 @@
 package com.korit.projectrrs.filter;
 
 import com.korit.projectrrs.provider.JwtProvider;
+import com.korit.projectrrs.security.PrincipalUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -39,9 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            String userId = jwtProvider.getUserIdFromJwt(token);
+            Long userId = jwtProvider.getUserIdFromJwt(token);
+            String username = jwtProvider.getUsernameFromJwt(token);
+            String roles = jwtProvider.getRolesFromJwt(token);
 
-            setAuthenticationContext(request, userId);
+            setAuthenticationContext(request, userId, username, roles);
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -50,10 +52,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, String userId) {
+    private void setAuthenticationContext(HttpServletRequest request, Long userId, String username, String roles) {
+        PrincipalUser principalUser = new PrincipalUser(userId, username, roles);
 
         AbstractAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
+                = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

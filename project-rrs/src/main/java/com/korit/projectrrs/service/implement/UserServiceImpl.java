@@ -21,12 +21,12 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
 
     @Override
-    public ResponseDto<UserResponseDto> getUserInfo(String userId) {
+    public ResponseDto<UserResponseDto> getUserInfo(Long userId) {
 
         UserResponseDto data = null;
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            Optional<User> optionalUser = userRepository.findById(userId);
 
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
@@ -44,46 +44,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<UserResponseDto> updateUser(String userId, UpdateUserRequestDto dto) {
-        String userName = dto.getUserName();
-        String userPassword = dto.getUserPassword();
+    public ResponseDto<UserResponseDto> updateUser(Long userId, UpdateUserRequestDto dto) {
+        String name = dto.getName();
+        String password = dto.getPassword();
         String confirmPassword = dto.getConfirmPassword();
-        String userPhone = dto.getUserPhone();
-        String userAddress = dto.getUserAddress();
-        String userAddressDetail = dto.getUserAddressDetail();
-        String userProfileImageUrl = dto.getUserProfileImageUrl();
+        String phone = dto.getPhone();
+        String address = dto.getAddress();
+        String addressDetail = dto.getAddressDetail();
+        String profileImageUrl = dto.getProfileImageUrl();
 
         UserResponseDto data = null;
 
-        if (userName != null && !userName.isEmpty() && !userName.matches("^[가-힣]+$")) {
+        if (name != null && !name.isEmpty() && !name.matches("^[가-힣]+$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (userPassword != null && !userPassword.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
-            if (!userPassword.equals(confirmPassword)) {
+        if (password != null && !password.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
+            if (!password.equals(confirmPassword)) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
 
-            if (!userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+            if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
         }
 
-        if (userPhone != null && !userPhone.isEmpty() && !userPhone.matches("^[0-9]{11}$")) {
+        if (phone != null && !phone.isEmpty() && !phone.matches("^[0-9]{11}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
-        if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
+        if (profileImageUrl != null && !profileImageUrl.isEmpty() &&
+                !profileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
-        if (userRepository.existsByUserPhone(userPhone)) {
+        if (userRepository.existsByPhone(phone)) {
             return ResponseDto.setFailed(ResponseMessage.EXIST_USER_PHONE);
         }
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            Optional<User> optionalUser = userRepository.findById(userId);
 
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
@@ -91,30 +91,28 @@ public class UserServiceImpl implements UserService {
 
             User user = optionalUser.get();
 
-            String encodedUserPassword = user.getUserPassword();
+            String encodedPassword = user.getPassword();
 
-            if (userPassword != null && !userPassword.isEmpty()) {
-                encodedUserPassword = bCryptpasswordEncoder.encode(userPassword);
+            if (password != null && !password.isEmpty()) {
+                encodedPassword = bCryptpasswordEncoder.encode(password);
             }
 
             user = user.toBuilder()
-                    .userName(userName != null ? userName : user.getUserName())
-                    .userPassword(encodedUserPassword)
-                    .userPhone(userPhone != null ? userPhone : user.getUserPhone())
-                    .userAddress(userAddress != null ? userAddress : user.getUserAddress())
-                    .userAddressDetail(userAddressDetail != null ? userAddressDetail : user.getUserAddressDetail())
-                    .userProfileImageUrl(
-                            // 새로운 이미지 URL이 있을 때
-                            (userProfileImageUrl != null && !userProfileImageUrl.isEmpty())
-                                    ? userProfileImageUrl  // 새로운 이미지 URL로 설정
-                                    : (userProfileImageUrl == null && user.getUserProfileImageUrl() != null)
-                                    ? user.getUserProfileImageUrl() // null이면 기존 이미지 유지
-                                    : "example.jpg"   // 빈 문자열("")일 경우 기본 이미지로 설정
+                    .name(name != null ? name : user.getName())
+                    .password(encodedPassword)
+                    .phone(phone != null ? phone : user.getPhone())
+                    .address(address != null ? address : user.getAddress())
+                    .addressDetail(addressDetail != null ? addressDetail : user.getAddressDetail())
+                    .profileImageUrl(
+                            (profileImageUrl != null && !profileImageUrl.isEmpty())
+                                    ? profileImageUrl
+                                    : (profileImageUrl == null && user.getProfileImageUrl() != null)
+                                    ? user.getProfileImageUrl()
+                                    : "example.jpg"
                     )
                     .build();
 
             userRepository.save(user);
-
             data = new UserResponseDto(user);
 
         } catch (Exception e) {
@@ -125,23 +123,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(String userId) {
-
+    public ResponseDto<Void> deleteUser(Long userId) {
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
-
+            Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
-
             User user = optionalUser.get();
             userRepository.delete(user);
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }

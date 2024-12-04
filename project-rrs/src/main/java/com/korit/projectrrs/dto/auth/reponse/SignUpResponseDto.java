@@ -6,11 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class SignUpResponseDto {
-    private Long id;
-    private String userNickName;
+    private String nickname;
 
     public SignUpResponseDto(User user) {
-        this.id = user.getId();
-        this.userNickName = user.getUserNickName();
+        this.nickname = user.getNickname();
     }
 }
