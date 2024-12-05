@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class User {
     @Column(name = "USERNAME", nullable = false, unique = true)
     private String username;
 
+    @JsonIgnoreProperties
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
@@ -46,7 +48,7 @@ public class User {
     private String profileImageUrl;
 
     @Column(name = "ROLES")
-    private String roles = "";
+    private String roles;
 
     @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")
     private String providerIntroduction;

@@ -1,5 +1,7 @@
 package com.korit.projectrrs.security;
 
+import com.korit.projectrrs.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,24 +12,25 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Getter
+@AllArgsConstructor
 public class PrincipalUser implements UserDetails {
-    private Long userId;
-    private String username;
-    private String password;
-    private String name;
-    private String email;
-    private String roles; //USER, PROVIDER
-
-    public PrincipalUser(Long userId, String roles) {
-        this.userId = userId;
-        this.roles = roles;
-    }
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(roles.split(","))
+        return Arrays.stream(user.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
     }
 
     @Override

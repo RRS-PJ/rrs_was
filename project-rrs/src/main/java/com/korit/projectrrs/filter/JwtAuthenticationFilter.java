@@ -1,6 +1,8 @@
 package com.korit.projectrrs.filter;
 
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.provider.JwtProvider;
+import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.security.PrincipalUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -40,10 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
             Long userId = jwtProvider.getUserIdFromJwt(token);
-            String username = jwtProvider.getUsernameFromJwt(token);
-            String roles = jwtProvider.getRolesFromJwt(token);
-
-            setAuthenticationContext(request, userId, roles);
+            setAuthenticationContext(request, userId);
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -52,17 +52,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, Long userId, String roles) {
-        PrincipalUser principalUser = new PrincipalUser(userId, roles);
+    private void setAuthenticationContext(HttpServletRequest request, Long userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            PrincipalUser principalUser = new PrincipalUser(user);
 
-        AbstractAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
+            AbstractAuthenticationToken authenticationToken
+                    = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
 
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authenticationToken);
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authenticationToken);
 
-        SecurityContextHolder.setContext(securityContext);
+            SecurityContextHolder.setContext(securityContext);
+        });
+
     }
 }

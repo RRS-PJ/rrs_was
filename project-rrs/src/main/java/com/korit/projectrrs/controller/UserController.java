@@ -23,7 +23,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
-        Long userId = principalUser.getUserId();
+        Long userId = principalUser.getUser().getUserId();;
         ResponseDto<UserResponseDto> response = userService.getUserInfo(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
@@ -34,7 +34,7 @@ public class UserController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody UpdateUserRequestDto dto
     ) {
-        Long userId = principalUser.getUserId();
+        Long userId = principalUser.getUser().getUserId();
         ResponseDto<UserResponseDto> response = userService.updateUser(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
@@ -44,7 +44,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<Void>> deleteUser(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
-        Long userId = principalUser.getUserId();
+        Long userId = principalUser.getUser().getUserId();
         ResponseDto<Void> response = userService.deleteUser(userId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
