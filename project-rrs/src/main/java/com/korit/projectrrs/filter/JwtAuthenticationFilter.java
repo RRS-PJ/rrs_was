@@ -1,6 +1,5 @@
 package com.korit.projectrrs.filter;
 
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.provider.JwtProvider;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.security.PrincipalUser;
