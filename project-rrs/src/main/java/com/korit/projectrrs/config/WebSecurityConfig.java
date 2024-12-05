@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                                 )
                         .permitAll()
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/v1/auth/**")
+                                new AntPathRequestMatcher("/api/v1/provider/**")
                         )
                         .hasRole("PROVIDER")
                         .anyRequest().authenticated())
@@ -73,9 +73,7 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(BCryptPasswordEncoder bCryptpasswordEncoder) throws Exception {
 
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setPasswordEncoder(bCryptpasswordEncoder);
-
         return new ProviderManager(List.of(authProvider));
     }
 

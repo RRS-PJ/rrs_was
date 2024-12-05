@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = jwtProvider.getUsernameFromJwt(token);
             String roles = jwtProvider.getRolesFromJwt(token);
 
-            setAuthenticationContext(request, userId, username, roles);
+            setAuthenticationContext(request, userId, roles);
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -52,8 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, Long userId, String username, String roles) {
-        PrincipalUser principalUser = new PrincipalUser(userId, username, roles);
+    private void setAuthenticationContext(HttpServletRequest request, Long userId, String roles) {
+        PrincipalUser principalUser = new PrincipalUser(userId, roles);
 
         AbstractAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());

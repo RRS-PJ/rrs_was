@@ -27,7 +27,6 @@ public class JwtProvider {
     public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs) {
 
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
@@ -49,6 +48,16 @@ public class JwtProvider {
                 .compact();
     }
 
+    public String generateJwtToken(Long userId, String roles) {
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("roles", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();  // JWT 생성
+    }
+
     // JWT에서 username 추출
     public String getUsernameFromJwt(String token) {
         Claims claims = getClaims(token);
@@ -61,16 +70,16 @@ public class JwtProvider {
         return claims.get("roles", String.class);
     }
 
+    public Long getUserIdFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("userId", Long.class);
+    }
+
     public String removeBearer(String bearerToken) {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             throw new RuntimeException("Invalid JWT token format");
         }
         return bearerToken.substring("Bearer ".length());
-    }
-
-    public Long getUserIdFromJwt(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("userId", Long.class);
     }
 
     public boolean isValidToken(String token) {

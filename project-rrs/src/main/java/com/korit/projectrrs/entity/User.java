@@ -1,4 +1,3 @@
-
 package com.korit.projectrrs.entity;
 
 import jakarta.persistence.*;
@@ -6,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -50,8 +45,8 @@ public class User {
     @Column(name = "PROFILE_IMAGE_URL")
     private String profileImageUrl;
 
-    @Column(name = "ROLE")
-    private String role;
+    @Column(name = "ROLES")
+    private String roles = "";
 
     @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")
     private String providerIntroduction;

@@ -114,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
                         .address(address)
                         .addressDetail(addressDetail)
                         .email(email)
-                        .role("ROLE_USER")
+                        .roles("USER")
                         .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
                         .build();
 
@@ -163,7 +163,7 @@ public class AuthServiceImpl implements AuthService {
             }
 
             // 4. 토큰 생성 //
-            String token = jwtProvider.generateJwtToken(user.getUserId());
+            String token = jwtProvider.generateJwtToken(user.getUserId(), user.getRoles());
             int exprTime = jwtProvider.getExpiration();
 
             // 5. 응답 데이터 생성 //

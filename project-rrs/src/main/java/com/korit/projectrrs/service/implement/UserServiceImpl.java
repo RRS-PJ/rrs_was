@@ -7,6 +7,7 @@ import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<UserResponseDto> updateUser(Long userId, UpdateUserRequestDto dto) {
+    public ResponseDto<UserResponseDto> updateUser(Long userId,@Valid UpdateUserRequestDto dto) {
         String name = dto.getName();
         String password = dto.getPassword();
         String confirmPassword = dto.getConfirmPassword();

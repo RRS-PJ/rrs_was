@@ -16,17 +16,18 @@ public class PrincipalUser implements UserDetails {
     private String password;
     private String name;
     private String email;
-    private String roles;  //ROLE_USER,ROLE_PROVIDER
+    private String roles; //USER, PROVIDER
 
-    public PrincipalUser(Long userId, String username, String roles) {
+    public PrincipalUser(Long userId, String roles) {
         this.userId = userId;
-        this.username = username;
         this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(roles.split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return Arrays.stream(roles.split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
