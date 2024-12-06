@@ -22,7 +22,6 @@ public class PrincipalUser implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-
     @Override
     public String getPassword() {
         return user.getPassword();

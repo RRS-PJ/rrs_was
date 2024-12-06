@@ -2,8 +2,7 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
-import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
+import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
 import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
 import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
@@ -32,7 +31,7 @@ public class TodoController {
     @PostMapping
     private ResponseEntity<ResponseDto<TodoPostResponseDto>> createTodo(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @Valid @RequestBody TodoPostRequestDto dto
+            @Valid @RequestBody TodoRequestDto dto
     ) {
         ResponseDto<TodoPostResponseDto> response = todoService.createTodo(principalUser, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
@@ -55,7 +54,7 @@ public class TodoController {
             @PathVariable Long todoId,
             @Valid @RequestBody TodoUpdateRequestDto dto
     ) {
-        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(principalUser, todoId, dto);
+        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(todoId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

@@ -2,14 +2,17 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
+import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
+import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
 import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
+import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
 import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.TodoRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,7 @@ public class TodoServiceImpl implements TodoService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<TodoPostResponseDto> createTodo(PrincipalUser principalUser, TodoPostRequestDto dto) {
+    public ResponseDto<TodoPostResponseDto> createTodo(PrincipalUser principalUser, @Valid TodoRequestDto dto) {
         TodoPostResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
         LocalDate todoCreateAt = dto.getTodoCreateAt();
@@ -63,7 +66,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<List<TodoGetResponseDto>> getAllTodosByUserIdAndDay(String userId, LocalDate day) {
+    public ResponseDto<List<TodoGetResponseDto>> getAllTodosByUserIdAndDay(PrincipalUser principalUser, LocalDate day) {
+        Long userId = principalUser.getUser().getUserId();
         List<TodoGetResponseDto> data = null;
         try {
             Optional<List<Todo>> Optionaltodos = todoRepository.findTodosByUserIdAndDay(userId, day);
@@ -122,7 +126,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<Void> deleteTodo(String userId, Long todoId) {
+    public ResponseDto<Void> deleteTodo(PrincipalUser principalUser, Long todoId) {
         try {
             if(!todoRepository.existsById(todoId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
             todoRepository.deleteById(todoId);
