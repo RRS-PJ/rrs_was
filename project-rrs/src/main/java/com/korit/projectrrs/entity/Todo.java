@@ -18,5 +18,7 @@ public class Todo {
     @Column(name = "TODO_ID", nullable = false)
     private Long todoId;
 
+    @
+    private User user;
 
 }

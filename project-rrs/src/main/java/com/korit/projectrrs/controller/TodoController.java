@@ -1,10 +1,5 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
-import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
-import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
 import com.korit.projectrrs.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

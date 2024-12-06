@@ -1,11 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
-import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
-import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
 import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.repositoiry.TodoRepository;
 import com.korit.projectrrs.service.TodoService;
