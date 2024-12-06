@@ -25,13 +25,11 @@ public class JwtProvider {
     }
 
     public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs) {
-
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
-    public String generateJwtToken(String userId) {
+    public String generateJwtToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
@@ -40,13 +38,40 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateEmailValidToken(String username) {
+    public String generateEmailValidToken(String email) {
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 5)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String generateJwtToken(Long userId, String roles) {
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("roles", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();  // JWT 생성
+    }
+
+    // JWT에서 username 추출
+    public String getUsernameFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("username", String.class);
+    }
+
+    // JWT에서 roles 추출
+    public String getRolesFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("roles", String.class);
+    }
+
+    public Long getUserIdFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("userId", Long.class);
     }
 
     public String removeBearer(String bearerToken) {
@@ -54,11 +79,6 @@ public class JwtProvider {
             throw new RuntimeException("Invalid JWT token format");
         }
         return bearerToken.substring("Bearer ".length());
-    }
-
-    public String getUserIdFromJwt(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("userId", String.class);
     }
 
     public boolean isValidToken(String token) {

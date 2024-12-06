@@ -60,6 +60,10 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/api/v1/auth/**")
                                 )
                         .permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/v1/provider/**") // 예시 링크
+                        )
+                        .hasRole("PROVIDER")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -69,9 +73,7 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(BCryptPasswordEncoder bCryptpasswordEncoder) throws Exception {
 
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setPasswordEncoder(bCryptpasswordEncoder);
-
         return new ProviderManager(List.of(authProvider));
     }
 

@@ -1,6 +1,8 @@
 package com.korit.projectrrs.filter;
 
 import com.korit.projectrrs.provider.JwtProvider;
+import com.korit.projectrrs.repositoiry.UserRepository;
+import com.korit.projectrrs.security.PrincipalUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -39,8 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            String userId = jwtProvider.getUserIdFromJwt(token);
-
+            Long userId = jwtProvider.getUserIdFromJwt(token);
             setAuthenticationContext(request, userId);
 
         } catch(Exception e) {
@@ -50,16 +51,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, String userId) {
+    private void setAuthenticationContext(HttpServletRequest request, Long userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            PrincipalUser principalUser = new PrincipalUser(user);
 
-        AbstractAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
+            AbstractAuthenticationToken authenticationToken
+                    = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
 
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authenticationToken);
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authenticationToken);
 
-        SecurityContextHolder.setContext(securityContext);
+            SecurityContextHolder.setContext(securityContext);
+        });
     }
 }

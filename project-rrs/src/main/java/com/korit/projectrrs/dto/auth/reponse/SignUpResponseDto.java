@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class SignUpResponseDto {
-    private String userNickName;
+    private String nickname;
 
     public SignUpResponseDto(User user) {
-        this.userNickName = user.getUserNickName();
+        this.nickname = user.getNickname();
     }
 }

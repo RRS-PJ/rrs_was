@@ -9,26 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDto {
+    private String name;
     private String userName;
-    private String userId;
-    private String userPassword;
-    private String userNickName;
-    private String userPhone;
-    private String userAddress;
-    private String userAddressDetail;
-    private String userEmail;
-    private String userProfileImageUrl;
+    private String password;
+    private String nickName;
+    private String phone;
+    private String address;
+    private String addressDetail;
+    private String email;
+    private String profileImageUrl;
 
     public UserResponseDto(User user) {
-        this.userName = user.getUserName();
-        this.userId = user.getUserId();
-        this.userPassword = user.getUserPassword();
-        this.userNickName = user.getUserNickName();
-        this.userPhone = user.getUserPhone();
-        this.userAddress = user.getUserAddress();
-        this.userAddressDetail = user.getUserAddressDetail();
-        this.userEmail = user.getUserEmail();
-        this.userProfileImageUrl = user.getUserProfileImageUrl();
+        this.name = user.getName();
+        this.userName = user.getUsername();
+        this.password = user.getPassword();
+        this.nickName = user.getNickname();
+        this.phone = user.getPhone();
+        this.address = user.getAddress();
+        this.addressDetail = user.getAddressDetail();
+        this.email = user.getEmail();
+        this.profileImageUrl = user.getProfileImageUrl();
     }
-
 }

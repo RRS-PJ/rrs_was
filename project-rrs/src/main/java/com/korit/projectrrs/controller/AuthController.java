@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping(SING_UP_PATH)
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto dto) {
-        ResponseDto<SignUpResponseDto> response = authService.singUp(dto);
+        ResponseDto<SignUpResponseDto> response = authService.signUp(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

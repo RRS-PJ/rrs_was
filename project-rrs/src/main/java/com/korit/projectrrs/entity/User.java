@@ -1,16 +1,14 @@
-
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
@@ -18,33 +16,40 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "USER_ID", nullable = false)
+    private Long userId;
 
-    @Column(name = "USER_NAME", nullable = false)
-    private String userName;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
-    @Column(name = "USER_ID", nullable = false, unique = true)
-    private String userId;
+    @Column(name = "USERNAME", nullable = false, unique = true)
+    private String username;
 
-    @Column(name = "USER_PASSWORD", nullable = false)
-    private String userPassword;
+    @JsonIgnoreProperties
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
-    @Column(name = "USER_NICK_NAME", nullable = false, unique = true)
-    private String userNickName;
+    @Column(name = "NICKNAME", nullable = false, unique = true)
+    private String nickname;
 
-    @Column(name = "USER_PHONE", nullable = false, unique = true)
-    private String userPhone;
+    @Column(name = "PHONE", nullable = false, unique = true)
+    private String phone;
 
-    @Column(name = "USER_ADDRESS", nullable = false)
-    private String userAddress;
+    @Column(name = "ADDRESS", nullable = false)
+    private String address;
 
-    @Column(name = "USER_ADDRESS_DETAIL", nullable = false)
-    private String userAddressDetail;
+    @Column(name = "ADDRESS_DETAIL", nullable = false)
+    private String addressDetail;
 
-    @Column(name = "USER_EMAIL", nullable = false, unique = true)
-    private String userEmail;
+    @Column(name = "EMAIL", nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'example.jpg'")
-    private String userProfileImageUrl;
+    @Column(name = "PROFILE_IMAGE_URL")
+    private String profileImageUrl;
+
+    @Column(name = "ROLES")
+    private String roles;
+
+    @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")
+    private String providerIntroduction;
 }
