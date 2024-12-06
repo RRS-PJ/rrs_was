@@ -101,7 +101,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
                 for (MultipartFile file : files) {
                     String originalFileName = file.getOriginalFilename();
-                    System.out.println("Original Filedddddddddddddddddddddddddddddddddddddddddddddddddddd Name: " + originalFileName);
+                    System.out.println("Original FileName: " + originalFileName);
 
                     if (originalFileName != null && !originalFileName.isEmpty()) {
                         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
