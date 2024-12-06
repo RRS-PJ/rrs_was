@@ -1,5 +1,13 @@
 package com.korit.projectrrs.controller;
 
+import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
+import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
+import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
+import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
+import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,41 +31,41 @@ public class TodoController {
 
     @PostMapping
     private ResponseEntity<ResponseDto<TodoPostResponseDto>> createTodo(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @RequestBody TodoPostRequestDto dto
     ) {
-        ResponseDto<TodoPostResponseDto> response = todoService.createTodo(userId, dto);
+        ResponseDto<TodoPostResponseDto> response = todoService.createTodo(principalUser, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(TODO_GET)
     private ResponseEntity<ResponseDto<List<TodoGetResponseDto>>> getAllTodosByUserIdAndDay(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestParam LocalDate day
     ) {
-        ResponseDto<List<TodoGetResponseDto>> response = todoService.getAllTodosByUserIdAndDay(userId, day);
+        ResponseDto<List<TodoGetResponseDto>> response = todoService.getAllTodosByUserIdAndDay(principalUser, day);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @PutMapping(TODO_UPDATE)
     private ResponseEntity<ResponseDto<TodoUpdateResponseDto>> updateTodo(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequestDto dto
+            @Valid @RequestBody TodoUpdateRequestDto dto
     ) {
-        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(todoId, dto);
+        ResponseDto<TodoUpdateResponseDto> response = todoService.updateTodo(principalUser, todoId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(TODO_DELETE)
     private ResponseEntity<ResponseDto<Void>> deleteTodo(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long todoId
     ) {
-        ResponseDto<Void> response = todoService.deleteTodo(userId, todoId);
+        ResponseDto<Void> response = todoService.deleteTodo(principalUser, todoId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }

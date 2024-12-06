@@ -6,18 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Table(name = "CUSTOMER_SUPPORT_ATTACHMENTS")
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerAttachment {
+public class CustomerSupportAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_ID", nullable = false)
-    private Long reviewId;
+    private Long customerSupportAttachmentId;
 
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "CUSTOMER_SUPPORT_ID", nullable = false)
+    private CustomerSupport customerSupport;
 
+    @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_FILE", nullable = false)
+    private String CUSTOMER_SUPPORT_ATTACHMENT_FILE;
 }

@@ -1,5 +1,7 @@
 package com.korit.projectrrs.controller;
 
+import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;

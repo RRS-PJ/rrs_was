@@ -2,7 +2,6 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.customerSupportAttachment.response.CustomerSupportAttachmentResponseDto;
-import com.korit.projectrrs.service.CustomerSupportAttachmentService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -6,7 +6,6 @@ import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.entity.CustomerSupportAttachment;
 import com.korit.projectrrs.repositoiry.CustomerSupportAttachmentRepository;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
-import com.korit.projectrrs.service.CustomerSupportAttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

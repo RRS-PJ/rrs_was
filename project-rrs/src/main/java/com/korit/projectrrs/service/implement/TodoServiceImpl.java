@@ -1,8 +1,14 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
+import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
 import com.korit.projectrrs.entity.Todo;
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.TodoRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +25,11 @@ public class TodoServiceImpl implements TodoService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<TodoPostResponseDto> createTodo(String userId, TodoPostRequestDto dto) {
+    public ResponseDto<TodoPostResponseDto> createTodo(PrincipalUser principalUser, TodoPostRequestDto dto) {
         TodoPostResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
         LocalDate todoCreateAt = dto.getTodoCreateAt();
+        Long userId = principalUser.getUser().getUserId();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
             // Todo 내용 공백
@@ -35,7 +42,7 @@ public class TodoServiceImpl implements TodoService {
         }
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
@@ -45,6 +52,7 @@ public class TodoServiceImpl implements TodoService {
                     .todoPreparationContent(todoContent)
                     .todoCreateAt(todoCreateAt)
                     .build();
+
             todoRepository.save(todo);
             data = new TodoPostResponseDto(todo);
         } catch (Exception e) {

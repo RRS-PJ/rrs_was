@@ -1,11 +1,14 @@
 package com.korit.projectrrs.controller;
 
+import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,17 +30,17 @@ public class ReviewController {
 
     @PostMapping
     private ResponseEntity<ResponseDto<ReviewPostResponseDto>> createReview (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReviewPostRequestDto dto
             ){
-        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(userId, dto);
+        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(PROVIDER)
     private ResponseEntity<ResponseDto<List<ReviewGetResponseDto>>> getReviewsByProvider (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long providerId
     ) {
         ResponseDto<List<ReviewGetResponseDto>> response = reviewService.getReviewsByProvider(providerId);
@@ -47,7 +50,7 @@ public class ReviewController {
 
     @GetMapping(PROVIDER_AVG)
     private ResponseEntity<ResponseDto<ReviewAvgScoreResponseDto>> getAverageReviewScoreByProvider (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long providerId
     ) {
         ResponseDto<ReviewAvgScoreResponseDto> response = reviewService.getAverageReviewScoreByProvider(providerId);
@@ -57,7 +60,7 @@ public class ReviewController {
 
     @GetMapping(REVIEW)
     private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getByReviewId (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId
     ) {
         ResponseDto<ReviewGetResponseDto> response = reviewService.getByReviewId(reviewId);
@@ -67,7 +70,7 @@ public class ReviewController {
 
     @PutMapping(REVIEW)
     private ResponseEntity<ResponseDto<ReviewPutResponseDto>> updateReview (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReviewPutRequestDto dto
     ){
         ResponseDto<ReviewPutResponseDto> response = reviewService.updateReview(dto);
@@ -77,7 +80,7 @@ public class ReviewController {
 
     @DeleteMapping(REVIEW)
     ResponseEntity<ResponseDto<Void>> deleteReview (
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId
     ){
         ResponseDto<Void> response = reviewService.deleteReview(reviewId);
