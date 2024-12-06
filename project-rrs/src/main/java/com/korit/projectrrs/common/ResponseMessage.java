@@ -112,6 +112,7 @@ public class ResponseMessage {
     // 인증 관련 메시지
     public static final String IMAGE_AUTHORIZATION_FAIL = "Image authorization failed."; // 이미지 인증 실패
 
+<<<<<<< HEAD
     // 강아지 프로필 유효성 검사
     public static final String INVALID_PET_NAME = "Invalid pet name format."; // 유효하지 않은 강아지 이름 형식
     public static final String INVALID_PET_GENDER = "Invalid pet gender format."; // 유효하지 않은 강아지 성별 형식
@@ -137,4 +138,24 @@ public class ResponseMessage {
 
 
 
+=======
+    // Todo 관련 메세지
+    public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
+    public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
+
+    // 고객센터 관련 메세지
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
+
+    // 리뷰 관련 메세지
+    public static final String REVIEW_TOO_lONG =  "Review Content is too long.";
+    public static final String REVIEW_SCORE_NUMBER_VALIDATION =  "The review score is too long or too short";
+
+    // 댕시터 관련 메세지
+    public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";
+    public static final String NOT_REGISTERED_PROVIDER = "Provider is not registered";
+
+    // 첨부파일 관련 메세지
+    public static final String FILE_UPLOAD_ERROR = "File upload is failed";
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
+>>>>>>> develop
 }

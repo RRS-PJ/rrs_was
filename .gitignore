@@ -69,3 +69,6 @@ log/
 *.env
 *.swp
 *.swo
+
+# Exclude application.properties
+application.properties
