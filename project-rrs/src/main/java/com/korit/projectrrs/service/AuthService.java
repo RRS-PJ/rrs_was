@@ -6,7 +6,6 @@ import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 
-
 public interface AuthService{
 
     ResponseDto<SignUpResponseDto> signUp(SignUpRequestDto dto);
