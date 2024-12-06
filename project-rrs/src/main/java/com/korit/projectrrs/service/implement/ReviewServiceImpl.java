@@ -1,6 +1,7 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
@@ -8,10 +9,14 @@ import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
 import com.korit.projectrrs.entity.Review;
-import com.korit.projectrrs.repositoiry.ProviderRepository;
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,11 +28,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ProviderRepository providerRepository;
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<ReviewPostResponseDto> createReview(String userId, ReviewPostRequestDto dto) {
+    public ResponseDto<ReviewPostResponseDto> createReview(Long userId, @Valid ReviewPostRequestDto dto)  {
         ReviewPostResponseDto data = null;
         Long providerId = dto.getProviderId();
         int score = dto.getReviewScore();
@@ -40,21 +44,13 @@ public class ReviewServiceImpl implements ReviewService {
         if (score > 5 || score < 0) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_SCORE_NUMBER_VALIDATION);
         }
-
-        try {
-            // Provider 조회
-            Optional<Provider> optionalProvider = providerRepository.findById(providerId);
-            if (optionalProvider.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
-            }
-            // Provider 등록여부 확인
-            Provider provider = optionalProvider.get();
-            if (provider.getProviderProvisionYN() == '0') {
-                return ResponseDto.setFailed(ResponseMessage.NOT_REGISTERED_PROVIDER);
-            }
+        try{
+            // Provider 등록 여부 확인
+            User provider = userRepository.findProviderById(providerId)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
 
             // User 조회
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
@@ -66,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .provider(provider)
                     .reviewScore(score)
                     .reviewContent(content)
-                    .reviewCreateAt(LocalDateTime.now())
+                    .reviewCreatedAt(LocalDateTime.now())
                     .build();
 
             reviewRepository.save(review);
@@ -103,7 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewAvgScoreResponseDto data = null;
         try {
             Double avgScore = reviewRepository.findAverageReviewScoreByProvider(providerId);
-            if (!providerRepository.existsById(providerId)) {
+            if (!userRepository.existsById(providerId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
             }
             data = new ReviewAvgScoreResponseDto(avgScore);

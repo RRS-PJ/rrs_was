@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CUSTOMER_SUPPORTS")
@@ -34,7 +34,7 @@ public class CustomerSupport {
     private char customerSupportStatus; // 0: 미처리, 1: 처리완료
 
     @Column(name = "CUSTOMER_SUPPORT_CREATE_AT", nullable = false)
-    private LocalDate customerSupportCreateAt;
+    private LocalDateTime customerSupportCreateAt;
 
     @Column(name= "CUSTOMER_SUPPORT_CATEGORY", nullable = false)
     private char customerSupportCategory; // '0: 신고 / 1:문의'

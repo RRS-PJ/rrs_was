@@ -32,7 +32,7 @@ public class Review {
     private LocalDateTime reviewCreatedAt;
 
     @Column(name = "REVIEW_SCORE", nullable = false)
-    private Short reviewScore; // 별점 (SmallInt로 정의됨)
+    private int reviewScore; // 별점 (SmallInt로 정의됨)
 
     @Column(name = "REVIEW_CONTENT", nullable = false)
     private String reviewContent; // 리뷰 내용

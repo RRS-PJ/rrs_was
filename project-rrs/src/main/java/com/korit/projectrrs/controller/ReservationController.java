@@ -32,7 +32,8 @@ public class ReservationController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReservationPostRequestDto dto
             ) {
-        ResponseDto<ReservationPostResponseDto> response = reservationService.createReservation(dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<ReservationPostResponseDto> response = reservationService.createReservation(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

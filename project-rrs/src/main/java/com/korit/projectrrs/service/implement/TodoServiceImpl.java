@@ -3,9 +3,7 @@ package com.korit.projectrrs.service.implement;
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
-import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoPostResponseDto;
-import com.korit.projectrrs.dto.todo.response.TodoUpdateResponseDto;
+import com.korit.projectrrs.dto.todo.response.TodoResponseDto;
 import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.TodoRepository;
@@ -28,11 +26,10 @@ public class TodoServiceImpl implements TodoService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<TodoPostResponseDto> createTodo(PrincipalUser principalUser, @Valid TodoRequestDto dto) {
-        TodoPostResponseDto data = null;
+    public ResponseDto<TodoResponseDto> createTodo(Long userId, @Valid TodoRequestDto dto) {
+        TodoResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
         LocalDate todoCreateAt = dto.getTodoCreateAt();
-        Long userId = principalUser.getUser().getUserId();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
             // Todo 내용 공백
@@ -57,7 +54,7 @@ public class TodoServiceImpl implements TodoService {
                     .build();
 
             todoRepository.save(todo);
-            data = new TodoPostResponseDto(todo);
+            data = new TodoResponseDto(todo);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -66,15 +63,14 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<List<TodoGetResponseDto>> getAllTodosByUserIdAndDay(PrincipalUser principalUser, LocalDate day) {
-        Long userId = principalUser.getUser().getUserId();
-        List<TodoGetResponseDto> data = null;
+    public ResponseDto<List<TodoResponseDto>> getAllTodosByUserIdAndDay(Long userId,LocalDate day) {
+        List<TodoResponseDto> data = null;
         try {
             Optional<List<Todo>> Optionaltodos = todoRepository.findTodosByUserIdAndDay(userId, day);
             if (Optionaltodos.isPresent()) {
                 List<Todo> todos = Optionaltodos.get();
                 data = todos.stream()
-                        .map(todo -> new TodoGetResponseDto(todo))
+                        .map(todo -> new TodoResponseDto(todo))
                         .collect(Collectors.toList());
             } else {
                 return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -87,8 +83,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<TodoUpdateResponseDto> updateTodo(Long todoId, TodoUpdateRequestDto dto) {
-        TodoUpdateResponseDto data = null;
+    public ResponseDto<TodoResponseDto> updateTodo(Long todoId, @Valid TodoRequestDto dto) {
+        TodoResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
@@ -116,7 +112,7 @@ public class TodoServiceImpl implements TodoService {
 
             todoRepository.save(updateTodo);
 
-            data = new TodoUpdateResponseDto(updateTodo);
+            data = new TodoResponseDto(updateTodo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,7 +122,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<Void> deleteTodo(PrincipalUser principalUser, Long todoId) {
+    public ResponseDto<Void> deleteTodo(Long todoId) {
         try {
             if(!todoRepository.existsById(todoId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
             todoRepository.deleteById(todoId);

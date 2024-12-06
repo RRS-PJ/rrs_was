@@ -11,9 +11,9 @@ import com.korit.projectrrs.security.PrincipalUser;
 import java.util.List;
 
 public interface CustomerSupportService {
-    ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(PrincipalUser principalUser, CustomerSupportPostRequestDto dto);
-    ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(PrincipalUser principalUser, Long customerSupportId);
-    ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(PrincipalUser principalUser);
-    ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(PrincipalUser principalUser, Long customerSupportId, CustomerSupportPutRequestDto dto);
+    ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(Long userId, CustomerSupportPostRequestDto dto);
+    ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(Long userId, Long customerSupportId);
+    ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(Long userId);
+    ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(Long userId, Long customerSupportId, CustomerSupportPutRequestDto dto);
     ResponseDto<Void> deleteCustomerService(Long customerSupportId);
 }

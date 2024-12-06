@@ -11,9 +11,9 @@ import com.korit.projectrrs.security.PrincipalUser;
 import java.util.List;
 
 public interface ReservationService {
-    ResponseDto<ReservationPostResponseDto> createReservation(PrincipalUser principalUser, ReservationPostRequestDto dto);
-    ResponseDto<List<ReservationGetResponseDto>> getAllReservationByUserId(PrincipalUser principalUser);
-    ResponseDto<ReservationGetResponseDto> getReservationByReservationId(PrincipalUser principalUser);
+    ResponseDto<ReservationPostResponseDto> createReservation(Long userId, ReservationPostRequestDto dto);
+    ResponseDto<List<ReservationGetResponseDto>> getAllReservationByUserId(Long userId);
+    ResponseDto<ReservationGetResponseDto> getReservationByReservationId(Long userId);
     ResponseDto<ReservationPutResponseDto> putReservationByReservationId(ReservationPutRequestDto dto);
     ResponseDto<Void> deleteReview(Long reservationId);
 }

@@ -12,9 +12,9 @@ import com.korit.projectrrs.security.PrincipalUser;
 import java.util.List;
 
 public interface ReviewService {
-    ResponseDto<ReviewPostResponseDto> createReview(PrincipalUser principalUser, ReviewPostRequestDto dto);
-    ResponseDto<List<ReviewGetResponseDto>> getReviewsByProvider(PrincipalUser principalUser);
-    ResponseDto<ReviewAvgScoreResponseDto> getAverageReviewScoreByProvider(PrincipalUser principalUser);
+    ResponseDto<ReviewPostResponseDto> createReview(Long userId, ReviewPostRequestDto dto);
+    ResponseDto<List<ReviewGetResponseDto>> getReviewsByProvider(Long providerId);
+    ResponseDto<ReviewAvgScoreResponseDto> getAverageReviewScoreByProvider(Long userId);
     ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId);
     ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutRequestDto dto);
     ResponseDto<Void> deleteReview(Long reviewId);

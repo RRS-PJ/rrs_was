@@ -33,7 +33,7 @@ public class ReviewController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReviewPostRequestDto dto
             ){
-        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(dto);
+        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(principalUser, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

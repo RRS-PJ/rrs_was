@@ -1,6 +1,7 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
@@ -8,6 +9,7 @@ import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResp
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(String userId, CustomerSupportPostRequestDto dto) {
+    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(Long userId, CustomerSupportPostRequestDto dto) {
         CustomerSupportPostResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
@@ -43,13 +45,14 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
-                    .user(userRepository.findByUserId(userId).get())
+                    .user(userRepository.findById(userId).get())
                     .customerSupportTitle(title)
                     .customerSupportContent(content)
                     .customerSupportCategory(category)
                     .customerSupportStatus('0')
                     .customerSupportCreateAt(LocalDateTime.now())
                     .build();
+
             customerSupportRepository.save(customerSupport);
             data = new CustomerSupportPostResponseDto(customerSupport);
 
@@ -61,10 +64,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(String userId, Long customerSupportId) {
+    public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(Long userId, Long customerSupportId) {
         CustomerSupportGetResponseDto data = null;
         try {
-            if (!userRepository.existsByUserId(userId)) {
+            if (!userRepository.existsById(userId)) {
                 // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
@@ -90,10 +93,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(String userId) {
+    public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(Long userId) {
         List<CustomerSupportGetResponseDto> data = null;
         try {
-            if (!userRepository.existsByUserId(userId)) {
+            if (!userRepository.existsById(userId)) {
                 // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
@@ -115,7 +118,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(String userId, Long customerSupportId, CustomerSupportPutRequestDto dto) {
+    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(Long userId, Long customerSupportId, CustomerSupportPutRequestDto dto) {
         CustomerSupportPutResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();

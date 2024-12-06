@@ -6,11 +6,11 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class TodoUpdateResponseDto {
+public class TodoResponseDto {
     private String todoPreparationContent;
     private LocalDate todoCreateAt;
 
-    public TodoUpdateResponseDto(Todo todo){
+    public TodoResponseDto(Todo todo){
         this.todoPreparationContent = todo.getTodoPreparationContent();
         this.todoCreateAt = todo.getTodoCreateAt();
     }
