@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (phone != null && !phone.isEmpty() && !phone.matches("^[0-9]{11}$")) {
+        if (phone != null && (phone.isEmpty() || !phone.matches("^[0-9]{11}$"))) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
