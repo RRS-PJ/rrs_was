@@ -7,7 +7,9 @@ import com.korit.projectrrs.dto.petProfile.request.UpdatePetProfileRequestDto;
 import com.korit.projectrrs.dto.petProfile.response.PetProfileListResponseDto;
 import com.korit.projectrrs.dto.petProfile.response.PetProfileResponseDto;
 import com.korit.projectrrs.entity.PetProfile;
+import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.PetProfileRepository;
+import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.PetProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +65,7 @@ public class PetProfileServiceImpl implements PetProfileService {
         }
 
         try {
-            Optional<User> optionalUser = userRepository.findByUserId(userId);
+            Optional<User> optionalUser = userRepository.findUserByUsername(userId);
 
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
