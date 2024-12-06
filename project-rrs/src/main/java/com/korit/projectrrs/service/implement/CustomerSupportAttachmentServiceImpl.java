@@ -1,7 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupportAttachment.response.CustomerSupportAttachmentResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.entity.CustomerSupportAttachment;

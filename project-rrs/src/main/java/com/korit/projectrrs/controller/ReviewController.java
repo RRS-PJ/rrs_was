@@ -1,7 +1,5 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;

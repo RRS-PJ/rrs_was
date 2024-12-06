@@ -1,7 +1,6 @@
 package com.korit.projectrrs.dto.reservation.response;
 
 import com.korit.projectrrs.entity.PetProfile;
-import com.korit.projectrrs.entity.Provider;
 import com.korit.projectrrs.entity.Reservation;
 import lombok.Builder;
 import lombok.Data;

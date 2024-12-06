@@ -1,7 +1,5 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
 import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;

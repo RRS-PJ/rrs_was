@@ -1,19 +1,15 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
 import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
-import com.korit.projectrrs.entity.Provider;
 import com.korit.projectrrs.entity.Review;
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.ProviderRepository;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
-import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

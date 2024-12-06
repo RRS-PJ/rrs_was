@@ -1,13 +1,10 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPostResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPutResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

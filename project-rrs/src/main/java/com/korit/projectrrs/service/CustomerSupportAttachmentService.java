@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service;
 
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupportAttachment.response.CustomerSupportAttachmentResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 

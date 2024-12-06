@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service;
 
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoPostRequestDto;
 import com.korit.projectrrs.dto.todo.request.TodoUpdateRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoGetResponseDto;

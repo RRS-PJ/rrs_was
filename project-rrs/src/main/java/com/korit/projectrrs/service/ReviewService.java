@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service;
 
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
 import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
 import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;

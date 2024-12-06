@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service;
 
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;

@@ -1,27 +1,22 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPostResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPutResponseDto;
 import com.korit.projectrrs.entity.PetProfile;
-import com.korit.projectrrs.entity.Provider;
 import com.korit.projectrrs.entity.Reservation;
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.AvailableDateOfWeekRepository;
 import com.korit.projectrrs.repositoiry.ProviderRepository;
 import com.korit.projectrrs.repositoiry.ReservationRepository;
-import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service;
 
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;

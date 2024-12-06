@@ -1,7 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
@@ -9,7 +8,6 @@ import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResp
 import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
-import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
