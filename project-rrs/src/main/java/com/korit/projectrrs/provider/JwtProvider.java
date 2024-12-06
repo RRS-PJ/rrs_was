@@ -31,7 +31,7 @@ public class JwtProvider {
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
-    public String generateJwtToken(String userId) {
+    public String generateJwtToken(Long userId) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
@@ -40,9 +40,9 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateEmailValidToken(String username) {
+    public String generateEmailValidToken(String userName) {
         return Jwts.builder()
-                .claim("username", username)
+                .claim("userName", userName)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 5)))
                 .signWith(key, SignatureAlgorithm.HS256)

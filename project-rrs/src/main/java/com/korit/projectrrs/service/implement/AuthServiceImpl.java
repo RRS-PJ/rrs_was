@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -26,9 +25,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseDto<SignUpResponseDto> singUp(@Valid SignUpRequestDto dto) {
-        String userName = dto.getUserName();
-        String userId = dto.getUserId();
-        String userPassword = dto.getUserPassword();
+        String name = dto.getName();
+        String userName = dto.getUserName(); // 사용자 실제 id
+        String password = dto.getPassword();
         String confirmPassword = dto.getConfirmUserPassword();
         String userNickName = dto.getUserNickName();
         String userPhone = dto.getUserPhone();
@@ -41,24 +40,24 @@ public class AuthServiceImpl implements AuthService {
         SignUpResponseDto data = null;
 
         // 1. 유효성 검사 //
-        if (userName == null || userName.isEmpty() || !userName.matches("^[가-힣]+$")) {
+        if (name == null || name.isEmpty() || !name.matches("^[가-힣]+$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_NAME);
+        }
+
+        if (userName == null || userName.isEmpty() || !userName.matches("^[a-zA-Z0-9]{5,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
-        }
-
-        if (userPassword == null || userPassword.isEmpty() || confirmPassword == null || confirmPassword.isEmpty()) {
+        if (password == null || password.isEmpty() || confirmPassword == null || confirmPassword.isEmpty()) {
             // INVALID_PASSWORD
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
-        if (!userPassword.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_CONFIRM_PASSWORD);
         }
 
-        if (!userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+        if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
@@ -79,18 +78,18 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (userEmail == null || userEmail.isEmpty() || !EmailValidator.getInstance().isValid(userEmail)
-            || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                || !userEmail.matches("^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             return ResponseDto.setFailed((ResponseMessage.INVALID_USER_EMAIL));
         }
 
         if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
+                !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
         // 2. 중복 체크 //
-        if (userRepository.existsByUserId(userId)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_ID);
+        if (userRepository.existsByUserName(userName)) {
+            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_NAME);
         }
 
         if (userRepository.existsByUserNickName(userNickName)) {
@@ -106,11 +105,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         try {
-            String encodedUserPassword = bCryptpasswordEncoder.encode(userPassword);
+            String encodedPassword = bCryptpasswordEncoder.encode(password);
             User user = User.builder()
-                    .userName(userName)
-                    .userId(userId)
-                    .userPassword(encodedUserPassword)
+                    .name(name)
+                    .userName(userName) // 사용자 실제 id
+                    .password(encodedPassword)
                     .userNickName(userNickName)
                     .userPhone(userPhone)
                     .userAddress(userAddress)
@@ -133,37 +132,37 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseDto<LoginResponseDto> login(@Valid LoginRequestDto dto) {
         // 1. 입력값 추출 //
-        String userId = dto.getUserId();
-        String userPassword = dto.getUserPassword();
+        String userName = dto.getUserName(); // 실제 사용자 id
+        String password = dto.getPassword();
 
         LoginResponseDto data = null;
 
         // 2. 유효성 검사 //
-        if (userId == null || userId.isEmpty() || !userId.matches("^[a-zA-Z0-9]{5,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
+        if (userName == null || userName.isEmpty() || !userName.matches("^[a-zA-Z0-9]{5,15}$")) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (userPassword == null || userPassword.isEmpty() ||
-                userPassword.length() < 8 ||
-                !userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+        if (password == null || password.isEmpty() ||
+                password.length() < 8 ||
+                !password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
         }
 
         try {
             // 3. 사용자 인증 //
-            User user = userRepository.findByUserId(userId)
+            User user = userRepository.findByUserName(userName)
                     .orElse(null);
 
             if (user == null) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_NAME);
             }
 
-            if (!bCryptpasswordEncoder.matches(userPassword, user.getUserPassword())) {
+            if (!bCryptpasswordEncoder.matches(password, user.getPassword())) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
             }
 
             // 4. 토큰 생성 //
-            String token = jwtProvider.generateJwtToken(userId);
+            String token = jwtProvider.generateJwtToken(user.getUserId());
             int exprTime = jwtProvider.getExpiration();
 
             // 5. 응답 데이터 생성 //

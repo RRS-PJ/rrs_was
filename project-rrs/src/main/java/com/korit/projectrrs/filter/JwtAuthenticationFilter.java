@@ -1,6 +1,7 @@
 package com.korit.projectrrs.filter;
 
 import com.korit.projectrrs.provider.JwtProvider;
+import com.korit.projectrrs.security.PrincipalUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            String userId = jwtProvider.getUserIdFromJwt(token);
+            Long userId = Long.valueOf(jwtProvider.getUserIdFromJwt(token));
 
             setAuthenticationContext(request, userId);
 
@@ -50,10 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, String userId) {
+    private void setAuthenticationContext(HttpServletRequest request, Long userId) {
 
         AbstractAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
+                = new UsernamePasswordAuthenticationToken(new PrincipalUser(), null, AuthorityUtils.NO_AUTHORITIES);
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
 
     @Override
-    public ResponseDto<UserResponseDto> getUserInfo(String userId) {
+    public ResponseDto<UserResponseDto> getUserInfo(Long userId) {
 
         UserResponseDto data = null;
 
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> optionalUser = userRepository.findByUserId(userId);
 
             if (optionalUser.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_NAME);
             }
 
             User user = optionalUser.get();
@@ -44,9 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<UserResponseDto> updateUser(String userId, UpdateUserRequestDto dto) {
+    public ResponseDto<UserResponseDto> updateUser(Long userId, UpdateUserRequestDto dto) {
         String userName = dto.getUserName();
-        String userPassword = dto.getUserPassword();
+        String password = dto.getPassword();
         String confirmPassword = dto.getConfirmPassword();
         String userPhone = dto.getUserPhone();
         String userAddress = dto.getUserAddress();
@@ -59,12 +59,12 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (userPassword != null && !userPassword.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
-            if (!userPassword.equals(confirmPassword)) {
+        if (password != null && !password.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
+            if (!password.equals(confirmPassword)) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
 
-            if (!userPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+            if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
         }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (userProfileImageUrl != null && !userProfileImageUrl.isEmpty() &&
-                !userProfileImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
+                !userProfileImageUrl.matches(".*\\.(jpg|png)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -91,15 +91,15 @@ public class UserServiceImpl implements UserService {
 
             User user = optionalUser.get();
 
-            String encodedUserPassword = user.getUserPassword();
+            String encodedUserPassword = user.getPassword();
 
-            if (userPassword != null && !userPassword.isEmpty()) {
-                encodedUserPassword = bCryptpasswordEncoder.encode(userPassword);
+            if (password != null && !password.isEmpty()) {
+                encodedUserPassword = bCryptpasswordEncoder.encode(password);
             }
 
             user = user.toBuilder()
-                    .userName(userName != null ? userName : user.getUserName())
-                    .userPassword(encodedUserPassword)
+                    .name(userName != null ? userName : user.getName())
+                    .password(encodedUserPassword)
                     .userPhone(userPhone != null ? userPhone : user.getUserPhone())
                     .userAddress(userAddress != null ? userAddress : user.getUserAddress())
                     .userAddressDetail(userAddressDetail != null ? userAddressDetail : user.getUserAddressDetail())
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(String userId) {
+    public ResponseDto<Void> deleteUser(Long userId) {
 
         try {
             Optional<User> optionalUser = userRepository.findByUserId(userId);
@@ -145,4 +145,3 @@ public class UserServiceImpl implements UserService {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
 }
-

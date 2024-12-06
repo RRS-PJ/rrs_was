@@ -58,8 +58,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/v1/auth/**")
-                                )
+                        )
                         .permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/v1/auth/**")
+                        )
+                        .hasRole("PROVIDER")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

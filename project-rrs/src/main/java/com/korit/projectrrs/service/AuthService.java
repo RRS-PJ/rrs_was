@@ -8,7 +8,6 @@ import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 
 
 public interface AuthService{
-
     ResponseDto<SignUpResponseDto> singUp(SignUpRequestDto dto);
     ResponseDto<LoginResponseDto> login(LoginRequestDto dto);
 }

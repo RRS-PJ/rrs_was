@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal Long userId
     ) {
         ResponseDto<UserResponseDto> response = userService.getUserInfo(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
@@ -29,7 +29,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal Long userId,
             @RequestBody UpdateUserRequestDto dto
     ) {
         ResponseDto<UserResponseDto> response = userService.updateUser(userId, dto);
@@ -39,7 +39,7 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<ResponseDto<Void>> deleteUser(
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal Long userId
     ) {
         ResponseDto<Void> response = userService.deleteUser(userId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;

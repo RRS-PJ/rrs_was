@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDto {
+    private String name;
     private String userName;
-    private String userId;
-    private String userPassword;
+    private String password;
     private String userNickName;
     private String userPhone;
     private String userAddress;
@@ -20,9 +20,9 @@ public class UserResponseDto {
     private String userProfileImageUrl;
 
     public UserResponseDto(User user) {
+        this.name = user.getName();
         this.userName = user.getUserName();
-        this.userId = user.getUserId();
-        this.userPassword = user.getUserPassword();
+        this.password = user.getPassword();
         this.userNickName = user.getUserNickName();
         this.userPhone = user.getUserPhone();
         this.userAddress = user.getUserAddress();

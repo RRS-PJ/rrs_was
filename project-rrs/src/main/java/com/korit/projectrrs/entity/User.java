@@ -7,10 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
@@ -18,17 +16,17 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "USER_ID")
+    private Long userId;
 
-    @Column(name = "USER_NAME", nullable = false)
+    @Column(name = "NAME", nullable = false)
+    private String name;
+
+    @Column(name = "USERNAME", nullable = false, unique = true)
     private String userName;
 
-    @Column(name = "USER_ID", nullable = false, unique = true)
-    private String userId;
-
-    @Column(name = "USER_PASSWORD", nullable = false)
-    private String userPassword;
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
     @Column(name = "USER_NICK_NAME", nullable = false, unique = true)
     private String userNickName;
@@ -45,6 +43,7 @@ public class User {
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'example.jpg'")
+    @Column(name = "USER_PROFILE_IMAGE_URL", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'example.jpg'")
     private String userProfileImageUrl;
+
 }
