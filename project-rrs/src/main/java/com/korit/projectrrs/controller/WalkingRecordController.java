@@ -6,6 +6,7 @@ import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequest
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.WalkingRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,57 +34,62 @@ public class WalkingRecordController {
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
-            @AuthenticationPrincipal String userId,
-            @PathVariable long petProfileId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long petId,
             @RequestBody WalkingRecordRequestDto dto,
             @RequestParam(required = false) List<MultipartFile> files
     ) {
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petProfileId, dto, files);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petId, dto, files);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(WALKING_RECORD_GET_LIST)
     public ResponseEntity<ResponseDto<List<WalkingRecordListResponseDto>>> getWalkingRecordList(
-            @AuthenticationPrincipal String userId,
-            @PathVariable long petProfileId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long petId,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate walkingRecordCreateAt
     ) {
-        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petProfileId, walkingRecordCreateAt);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petId, walkingRecordCreateAt);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(WALKING_RECORD_GET_BY_ID)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> getWalkingRecord(
-            @AuthenticationPrincipal String userId,
-            @PathVariable long petProfileId,
-            @PathVariable long walkingRecordId
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long petId,
+            @PathVariable Long walkingRecordId
     ) {
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.getWalkingRecord(userId, petProfileId, walkingRecordId);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.getWalkingRecord(userId, petId, walkingRecordId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @PutMapping(WALKING_RECORD_PUT)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> updateWalkingRecord(
-            @AuthenticationPrincipal String userId,
-            @PathVariable long petProfileId,
-            @PathVariable long walkingRecordId,
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long petId,
+            @PathVariable Long walkingRecordId,
             @RequestBody UpdateWalkingRecordRequestDto dto
     ) {
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.updateWalkingRecord(userId, petProfileId, walkingRecordId, dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.updateWalkingRecord(userId, petId, walkingRecordId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(WALKING_RECORD_DELETE)
     public ResponseEntity<ResponseDto<Void>> deleteWalkingRecord(
-            @AuthenticationPrincipal String userId,
-            @PathVariable long petProfileId,
-            @PathVariable long walkingRecordId
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long petId,
+            @PathVariable Long walkingRecordId
     ) {
-        ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, petProfileId, walkingRecordId);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, petId, walkingRecordId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

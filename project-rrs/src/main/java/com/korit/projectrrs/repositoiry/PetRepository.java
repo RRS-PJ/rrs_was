@@ -1,6 +1,7 @@
 package com.korit.projectrrs.repositoiry;
 
-import com.korit.projectrrs.entity.PetProfile;
+import com.korit.projectrrs.entity.Pet;
+import com.korit.projectrrs.security.PrincipalUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,15 +11,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PetProfileRepository extends JpaRepository<PetProfile, Long> {
+public interface PetRepository extends JpaRepository<Pet, Long> {
     @Query("SELECT p " +
-            "FROM PetProfile p " +
+            "FROM Pet p " +
             "WHERE p.user.userId = :userId " +
-            "AND p.petProfileId = :petProfileId")
-    Optional<PetProfile> findPetByUserId(@Param("userId") String userId, @Param("petProfileId") long petProfileId);
+            "AND p.petId = :petId")
+    Optional<Pet> findPetByUserId(@Param("userId") Long userId, @Param("petProfileId") Long petId);
+
 
     @Query("SELECT p " +
-            "FROM PetProfile p " +
+            "FROM Pet p " +
             "WHERE p.user.userId = :userId ")
-    List<PetProfile> findAllPetByUserId(@Param("userId") String userId);
+    List<Pet> findAllPetByUserId(@Param("userId") Long userId);
 }

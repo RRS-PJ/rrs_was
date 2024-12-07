@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WalkingRecordListResponseDto {
-    private String petProfileImageUrl;
+    private String petImageUrl;
     private Integer walkingRecordDistance;
     private Integer walkingRecordWalkingTime;
 
     public WalkingRecordListResponseDto(WalkingRecord walkingRecord) {
-        this.petProfileImageUrl = walkingRecord.getPetProfile().getPetProfileImageUrl();
+        this.petImageUrl = walkingRecord.getPet().getPetImageUrl();
         this.walkingRecordDistance = walkingRecord.getWalkingRecordDistance();
         this.walkingRecordWalkingTime = walkingRecord.getWalkingRecordWalkingTime();
     }

@@ -11,9 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WalkingRecordService {
-    ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto, List<MultipartFile> files);
-    ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(String userId, long petProfileId, LocalDate walkingRecordCreateAt);
-    ResponseDto<WalkingRecordResponseDto> getWalkingRecord(String userId, long petProfileId, long walkingRecordId);
-    ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(String userId, long petProfileId, long walkingRecordId, UpdateWalkingRecordRequestDto dto);
-    ResponseDto<Void> deleteWalkingRecord(String userId, long petProfileId, long walkingRecordId);
+    ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto, List<MultipartFile> files);
+    ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate walkingRecordCreateAt);
+    ResponseDto<WalkingRecordResponseDto> getWalkingRecord(Long userId, Long petId, Long walkingRecordId);
+    ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto);
+    ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId);
 }

@@ -8,6 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface WalkingRecordAttachmentService {
-    ResponseDto<List<WalkingRecordAttachmentResponseDto>> createWalkingRecordAttachment(String userId, long petProfileId, long walkingRecordId, List<MultipartFile> file);
-    ResponseDto<Void> deleteWalkingRecord(String userId, @PathVariable long petProfileId, long walkingRecordId);
+    ResponseDto<List<WalkingRecordAttachmentResponseDto>> createWalkingRecordAttachment(Long userId, Long petId, Long walkingRecordId, List<MultipartFile> file);
+    ResponseDto<Void> deleteWalkingRecord(Long userId, Long petProfileId, Long walkingRecordId);
 }

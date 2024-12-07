@@ -32,7 +32,7 @@ public class WalkingRecordAttachmentServiceImpl implements WalkingRecordAttachme
     private String uploadDir;
 
     @Override
-    public ResponseDto<List<WalkingRecordAttachmentResponseDto>> createWalkingRecordAttachment(String userId, long petProfileId, long walkingRecordId, List<MultipartFile> files) {
+    public ResponseDto<List<WalkingRecordAttachmentResponseDto>> createWalkingRecordAttachment(Long userId, Long petId, Long walkingRecordId, List<MultipartFile> files) {
         List<WalkingRecordAttachmentResponseDto> data = new ArrayList<>();
 
         if (files == null || files.isEmpty()) {
@@ -40,7 +40,7 @@ public class WalkingRecordAttachmentServiceImpl implements WalkingRecordAttachme
         }
 
         try {
-            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 
             if (optionalWalkingRecord.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -89,9 +89,8 @@ public class WalkingRecordAttachmentServiceImpl implements WalkingRecordAttachme
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
-
     @Override
-    public ResponseDto<Void> deleteWalkingRecord(String userId, long petProfileId, long walkingRecordId) {
+    public ResponseDto<Void> deleteWalkingRecord(Long userId, Long petProfileId, Long walkingRecordId) {
         return null;
     }
 }

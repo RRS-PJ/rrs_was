@@ -8,7 +8,7 @@ import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponse
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.dto.walkingRecordAttachment.response.WalkingRecordAttachmentResponseDto;
 import com.korit.projectrrs.entity.*;
-import com.korit.projectrrs.repositoiry.PetProfileRepository;
+import com.korit.projectrrs.repositoiry.PetRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordAttachmentRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordRepository;
 import com.korit.projectrrs.service.WalkingRecordService;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WalkingRecordServiceImpl implements WalkingRecordService {
 
-    private final PetProfileRepository petProfileRepository;
+    private final PetRepository petRepository;
     private final WalkingRecordRepository walkingRecordRepository;
     private final WalkingRecordAttachmentRepository walkingRecordAttachmentRepository;
 
@@ -39,7 +39,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     private String uploadDir;
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto, List<MultipartFile> files) {
+    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto, List<MultipartFile> files) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState() != null
                 ? dto.getWalkingRecordWeatherState()
                 : WalkingRecordWeatherState.SUNNY;
@@ -77,16 +77,16 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         }
 
         try {
-            Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
+            Optional<Pet> optionalPetProfile = petRepository.findPetByUserId(userId, petId);
 
             if (optionalPetProfile.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
             }
 
-            PetProfile petProfile = optionalPetProfile.get();
+            Pet pet = optionalPetProfile.get();
 
             WalkingRecord walkingRecord = WalkingRecord.builder()
-                    .petProfile(petProfile)
+                    .pet(pet)
                     .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
                     .walkingRecordDistance(walkingRecordDistance)
                     .walkingRecordWalkingTime(totalMinutes)
@@ -153,11 +153,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(String userId, long petProfileId, LocalDate walkingRecordCreateAt) {
+    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate walkingRecordCreateAt) {
         List<WalkingRecordListResponseDto> data = new ArrayList<>();
 
         try {
-            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petProfileId, walkingRecordCreateAt);
+            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petId, walkingRecordCreateAt);
 
             if (walkingRecords.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -175,11 +175,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> getWalkingRecord(String userId, long petProfileId, long walkingRecordId) {
+    public ResponseDto<WalkingRecordResponseDto> getWalkingRecord(Long userId, Long petId, Long walkingRecordId) {
         WalkingRecordResponseDto data = null;
 
         try {
-            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 
             if (optionalWalkingRecord.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -197,7 +197,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(String userId, long petProfileId, long walkingRecordId, UpdateWalkingRecordRequestDto dto) {
+    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState();
         Integer walkingRecordDistance = dto.getWalkingRecordDistance();
         Integer hours = dto.getWalkingRecordWalkingHours();
@@ -223,7 +223,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         }
 
         try {
-            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 
             if (optionalWalkingRecord.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -254,9 +254,9 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<Void> deleteWalkingRecord(String userId, long petProfileId, long walkingRecordId) {
+    public ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId) {
         try {
-            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 
             if (optionalWalkingRecord.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);

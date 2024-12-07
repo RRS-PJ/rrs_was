@@ -6,11 +6,11 @@
 //import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 //import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 //import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
-//import com.korit.projectrrs.entity.PetProfile;
+//import com.korit.projectrrs.entity.Pet;
 //import com.korit.projectrrs.entity.WalkingRecord;
 //import com.korit.projectrrs.entity.WalkingRecordAttachment;
 //import com.korit.projectrrs.entity.WalkingRecordWeatherState;
-//import com.korit.projectrrs.repositoiry.PetProfileRepository;
+//import com.korit.projectrrs.repositoiry.PetRepository;
 //import com.korit.projectrrs.repositoiry.WalkingRecordRepository;
 //import com.korit.projectrrs.service.WalkingRecordService;
 //import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@
 //@RequiredArgsConstructor
 //public class WalkingRecordServiceImpl2 implements WalkingRecordService {
 //
-//    private final PetProfileRepository petProfileRepository;
+//    private final PetRepository petProfileRepository;
 //    private final WalkingRecordRepository walkingRecordRepository;
 //
 //    @Override
@@ -70,16 +70,16 @@
 //        }
 //
 //        try {
-//            Optional<PetProfile> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
+//            Optional<Pet> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
 //
 //            if (optionalPetProfile.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
 //            }
 //
-//            PetProfile petProfile = optionalPetProfile.get();
+//            Pet pet = optionalPetProfile.get();
 //
 //            WalkingRecord walkingRecord = WalkingRecord.builder()
-//                    .petProfile(petProfile)
+//                    .pet(pet)
 //                    .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
 //                    .walkingRecordDistance(walkingRecordDistance)
 //                    .walkingRecordWalkingTime(totalMinutes)

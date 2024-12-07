@@ -23,7 +23,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
-        Long userId = principalUser.getUser().getUserId();;
+        Long userId = principalUser.getUser().getUserId();
         ResponseDto<UserResponseDto> response = userService.getUserInfo(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);

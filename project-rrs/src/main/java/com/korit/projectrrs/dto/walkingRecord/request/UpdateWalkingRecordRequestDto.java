@@ -1,6 +1,5 @@
 package com.korit.projectrrs.dto.walkingRecord.request;
 
-import com.korit.projectrrs.entity.PetProfile;
 import com.korit.projectrrs.entity.WalkingRecordAttachment;
 import com.korit.projectrrs.entity.WalkingRecordWeatherState;
 import lombok.Data;

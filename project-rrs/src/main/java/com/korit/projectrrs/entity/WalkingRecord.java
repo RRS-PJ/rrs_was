@@ -1,7 +1,6 @@
 package com.korit.projectrrs.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +25,7 @@ public class WalkingRecord {
     @JoinColumn(name = "petProfileId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    private PetProfile petProfile;
+    private Pet pet;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

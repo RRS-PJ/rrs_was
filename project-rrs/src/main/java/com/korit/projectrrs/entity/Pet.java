@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "petProfiles")
+@Table(name = "pet")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class PetProfile {
+public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long petProfileId;
+    private long petId;
 
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,23 +25,23 @@ public class PetProfile {
     private User user;
 
     @Column(nullable = false)
-    private String petProfileName;
+    private String petName;
 
     @Column(nullable = false)
-    private Character petProfileGender;
+    private Character petGender;
 
     @Column(nullable = false)
-    private String petProfileBirthDate;
+    private String petBirthDate;
 
     @Column(nullable = false)
-    private Integer petProfileWeight;
+    private Integer petWeight;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'petExample.jpg'")
-    private String petProfileImageUrl;
+    private String petImageUrl;
 
-    private String petProfileAddInfo;
+    private String petAddInfo;
 
-    private Character petProfileNeutralityYn;
+    private Character petNeutralityYn;
 
     @Builder.Default
     @JsonManagedReference
