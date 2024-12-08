@@ -16,6 +16,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -114,8 +116,8 @@ public class AuthServiceImpl implements AuthService {
                         .address(address)
                         .addressDetail(addressDetail)
                         .email(email)
-                        .roles("ROLE_USER")
                         .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
+                        .roles("ROLE_USER")
                         .build();
 
             userRepository.save(user);

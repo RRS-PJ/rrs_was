@@ -32,8 +32,4 @@ public class WalkingRecordResponseDto {
         this.walkingRecordMemo = walkingRecord.getWalkingRecordMemo();
         this.walkingRecordAttachments = walkingRecord.getWalkingRecordAttachments();
     }
-
-    public void setAttachments(List<WalkingRecordAttachmentResponseDto> attachmentResponseList) {
-        this.walkingRecordAttachments = new ArrayList<>();
-    }
 }

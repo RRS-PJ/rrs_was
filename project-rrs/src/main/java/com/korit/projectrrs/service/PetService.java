@@ -10,9 +10,9 @@ import com.korit.projectrrs.security.PrincipalUser;
 import java.util.List;
 
 public interface PetService {
-    ResponseDto<PetResponseDto> createPetProfile(Long userId, PetRequestDto dto);
-    ResponseDto<List<PetListResponseDto>> getPetProfileList(Long userId);
-    ResponseDto<PetResponseDto> getPetProfileInfo(Long userId, Long petId);
-    ResponseDto<PetResponseDto> updatePetProfile(Long userId, Long petId, UpdatePetRequestDto dto);
-    ResponseDto<Void> deletePetProfile(Long userId, Long petId);
+    ResponseDto<PetResponseDto> createPet(Long userId, PetRequestDto dto);
+    ResponseDto<List<PetListResponseDto>> getPetList(Long userId);
+    ResponseDto<PetResponseDto> getPetInfo(Long userId, Long petId);
+    ResponseDto<PetResponseDto> updatePet(Long userId, Long petId, UpdatePetRequestDto dto);
+    ResponseDto<Void> deletePet(Long userId, Long petId);
 }

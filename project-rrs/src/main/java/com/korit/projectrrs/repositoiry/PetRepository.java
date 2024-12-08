@@ -16,7 +16,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "FROM Pet p " +
             "WHERE p.user.userId = :userId " +
             "AND p.petId = :petId")
-    Optional<Pet> findPetByUserId(@Param("userId") Long userId, @Param("petProfileId") Long petId);
+    Optional<Pet> findPetByUserId(@Param("userId") Long userId, @Param("petId") Long petId);
 
 
     @Query("SELECT p " +

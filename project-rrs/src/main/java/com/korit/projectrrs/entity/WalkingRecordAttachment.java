@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 public class WalkingRecordAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long walkingRecordAttachmentId;
+    private Long walkingRecordAttachmentId;
 
     @JoinColumn(name = "walkingRecordId", referencedColumnName = "walkingRecordId", nullable = false)
 //    @ManyToOne(fetch = FetchType.LAZY)
-    private long walkingRecordId;
+    private Long walkingRecordId;
 
     private String walkingRecordAttachmentFile;
 }

@@ -25,11 +25,11 @@
 //    @PostMapping
 //    public ResponseEntity<ResponseDto<List<WalkingRecordAttachmentResponseDto>>> createWalkingRecordAttachment(
 //            @AuthenticationPrincipal String userId,
-//            @PathVariable long petProfileId,
-//            @PathVariable long walkingRecordId,
+//            @PathVariable Long petId,
+//            @PathVariable Long walkingRecordId,
 //            @RequestPart("file") List<MultipartFile> files
 //    ) {
-//        ResponseDto<List<WalkingRecordAttachmentResponseDto>> response = walkingRecordAttachmentService.createWalkingRecordAttachment(userId, petProfileId, walkingRecordId, files);
+//        ResponseDto<List<WalkingRecordAttachmentResponseDto>> response = walkingRecordAttachmentService.createWalkingRecordAttachment(userId, petId, walkingRecordId, files);
 //        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 //        return ResponseEntity.status(status).body(response);
 //    }
@@ -37,10 +37,10 @@
 //    @DeleteMapping(WALKING_RECORD_ATTACHMENT_DELETE)
 //    public ResponseEntity<ResponseDto<Void>> deleteWalkingRecord(
 //            @AuthenticationPrincipal String userId,
-//            @PathVariable long petProfileId,
-//            @PathVariable long walkingRecordId
+//            @PathVariable Long petId,
+//            @PathVariable Long walkingRecordId
 //    ) {
-//        ResponseDto<Void> response = walkingRecordAttachmentService.deleteWalkingRecord(userId, petProfileId, walkingRecordId);
+//        ResponseDto<Void> response = walkingRecordAttachmentService.deleteWalkingRecord(userId, petId, walkingRecordId);
 //        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
 //        return ResponseEntity.status(status).body(response);
 //    }

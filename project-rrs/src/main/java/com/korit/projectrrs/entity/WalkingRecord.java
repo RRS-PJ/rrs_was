@@ -20,9 +20,9 @@ import java.util.List;
 public class WalkingRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long walkingRecordId;
+    private Long walkingRecordId;
 
-    @JoinColumn(name = "petProfileId", nullable = false)
+    @JoinColumn(name = "petId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private Pet pet;

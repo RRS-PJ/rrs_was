@@ -9,6 +9,7 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -138,4 +139,27 @@ public class UserServiceImpl implements UserService {
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
+
+//    public ResponseDto<Void> enableProviderRole(Long userId) {
+//        try {
+//            Optional<User> optionalUser = userRepository.findById(userId);
+//
+//            if (optionalUser.isEmpty()) {
+//                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+//            }
+//
+//            User user = optionalUser.get();
+//
+//            if (!user.getRoles().contains("ROLE_PROVIDER")) {
+//                user.setRoles("ROLE_PROVIDER");
+//                userRepository.save(user);
+//            } else {
+//                return ResponseDto.setFailed(ResponseMessage.EXIST_ROLE_PROVIDER);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+//        }
+//        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
+//    }
 }

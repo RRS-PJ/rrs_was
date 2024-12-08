@@ -29,7 +29,7 @@ public class PetServiceImpl implements PetService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<PetResponseDto> createPetProfile(Long userId, @Valid PetRequestDto dto) {
+    public ResponseDto<PetResponseDto> createPet(Long userId, @Valid PetRequestDto dto) {
         String petName = dto.getPetName();
         Character petGender = dto.getPetGender();
         String petBirthDate = dto.getPetBirthDate();
@@ -97,7 +97,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public ResponseDto<List<PetListResponseDto>> getPetProfileList(Long userId) {
+    public ResponseDto<List<PetListResponseDto>> getPetList(Long userId) {
         List<PetListResponseDto> data = new ArrayList<>();
 
         try {
@@ -119,7 +119,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public ResponseDto<PetResponseDto> getPetProfileInfo(Long userId, Long petId) {
+    public ResponseDto<PetResponseDto> getPetInfo(Long userId, Long petId) {
         PetResponseDto data = null;
 
         try {
@@ -141,7 +141,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public ResponseDto<PetResponseDto> updatePetProfile(Long userId, Long petId, @Valid UpdatePetRequestDto dto) {
+    public ResponseDto<PetResponseDto> updatePet(Long userId, Long petId, @Valid UpdatePetRequestDto dto) {
         String petName = dto.getPetName();
         Character petGender = dto.getPetGender();
         String petBirthDate = dto.getPetBirthDate();
@@ -214,7 +214,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public ResponseDto<Void> deletePetProfile(Long userId, Long petId) {
+    public ResponseDto<Void> deletePet(Long userId, Long petId) {
         try {
             Optional<Pet> optionalPet = petRepository.findPetByUserId(userId, petId);
 

@@ -134,4 +134,7 @@ public class ResponseMessage {
 
     // 존재하지 않는 산책기록 id
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
+
+    // PROVIDER 권한 메시지
+    public static final String EXIST_ROLE_PROVIDER = "The provider role has already been assigned..";   // PROVIDER 권한이 이미 존재하는 경우
 }

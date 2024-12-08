@@ -23,61 +23,61 @@ public class PetController {
 
     private final PetService petService;
 
-    private static final String PET_GET_BY_ID = "/{petProfileId}";
-    private static final String PET_PUT = "/{petProfileId}";
-    private static final String PET_DELETE = "/{petProfileId}";
+    private static final String PET_GET_BY_ID = "/{petId}";
+    private static final String PET_PUT = "/{petId}";
+    private static final String PET_DELETE = "/{petId}";
 
     @PostMapping
-    public ResponseEntity<ResponseDto<PetResponseDto>> createPetProfile(
+    public ResponseEntity<ResponseDto<PetResponseDto>> createPet(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody PetRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<PetResponseDto> response = petService.createPetProfile(userId, dto);
+        ResponseDto<PetResponseDto> response = petService.createPet(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto<List<PetListResponseDto>>> getPetProfileList(
+    public ResponseEntity<ResponseDto<List<PetListResponseDto>>> getPetList(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<PetListResponseDto>> response = petService.getPetProfileList(userId);
+        ResponseDto<List<PetListResponseDto>> response = petService.getPetList(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(PET_GET_BY_ID)
-    public ResponseEntity<ResponseDto<PetResponseDto>> getPetProfileInfo(
+    public ResponseEntity<ResponseDto<PetResponseDto>> getPetInfo(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable long petProfileId
+            @PathVariable Long petId
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<PetResponseDto> response = petService.getPetProfileInfo(userId, petProfileId);
+        ResponseDto<PetResponseDto> response = petService.getPetInfo(userId, petId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @PutMapping(PET_PUT)
-    public ResponseEntity<ResponseDto<PetResponseDto>> updatePetProfile(
+    public ResponseEntity<ResponseDto<PetResponseDto>> updatePet(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable long petProfileId,
+            @PathVariable Long petId,
             @RequestBody UpdatePetRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<PetResponseDto> response = petService.updatePetProfile(userId, petProfileId, dto);
+        ResponseDto<PetResponseDto> response = petService.updatePet(userId, petId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(PET_DELETE)
-    public ResponseEntity<ResponseDto<Void>> deletePetProfile(
+    public ResponseEntity<ResponseDto<Void>> deletePetP(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable long petProfileId
+            @PathVariable Long petId
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Void> response = petService.deletePetProfile(userId, petProfileId);
+        ResponseDto<Void> response = petService.deletePet(userId, petId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

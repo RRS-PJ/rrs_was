@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface WalkingRecordAttachmentService {
     ResponseDto<List<WalkingRecordAttachmentResponseDto>> createWalkingRecordAttachment(Long userId, Long petId, Long walkingRecordId, List<MultipartFile> file);
-    ResponseDto<Void> deleteWalkingRecord(Long userId, Long petProfileId, Long walkingRecordId);
+    ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId);
 }

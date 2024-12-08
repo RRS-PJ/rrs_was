@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "pet")
+@Table(name = "pets")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +17,7 @@ import java.util.List;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long petId;
+    private Long petId;
 
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,6 +45,6 @@ public class Pet {
 
     @Builder.Default
     @JsonManagedReference
-    @OneToMany(mappedBy = "petProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WalkingRecord> walkingRecords = new ArrayList<>();
 }

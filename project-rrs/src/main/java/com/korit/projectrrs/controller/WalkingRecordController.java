@@ -26,21 +26,25 @@ public class WalkingRecordController {
 
     private final WalkingRecordService walkingRecordService;
 
-    private static final String WALKING_RECORD_POST= "/petProfileId/{petProfileId}";
-    private static final String WALKING_RECORD_GET_LIST = "/petProfileId/{petProfileId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
-    private static final String WALKING_RECORD_GET_BY_ID = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_PUT = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_DELETE = "/petProfileId/{petProfileId}/walkingRecordId/{walkingRecordId}";
+    private static final String WALKING_RECORD_POST= "/petId/{petId}";
+    private static final String WALKING_RECORD_GET_LIST = "/petId/{petId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
+    private static final String WALKING_RECORD_GET_BY_ID = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
+    private static final String WALKING_RECORD_PUT = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
+    private static final String WALKING_RECORD_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
-            @RequestBody WalkingRecordRequestDto dto,
-            @RequestParam(required = false) List<MultipartFile> files
+            @RequestParam("files") List<MultipartFile> files,  // 파일을 받는 파라미터
+            @ModelAttribute WalkingRecordRequestDto dto
     ) {
+        if (files != null && !files.isEmpty()) {
+            dto.setFiles(files);
+        }
+
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petId, dto, files);
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

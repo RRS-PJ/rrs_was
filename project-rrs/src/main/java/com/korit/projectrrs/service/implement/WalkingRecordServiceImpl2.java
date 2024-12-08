@@ -12,8 +12,10 @@
 //import com.korit.projectrrs.entity.WalkingRecordWeatherState;
 //import com.korit.projectrrs.repositoiry.PetRepository;
 //import com.korit.projectrrs.repositoiry.WalkingRecordRepository;
+//import com.korit.projectrrs.service.Attachment;
 //import com.korit.projectrrs.service.WalkingRecordService;
 //import lombok.RequiredArgsConstructor;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
 //
 //import java.time.LocalDate;
@@ -27,11 +29,14 @@
 //@RequiredArgsConstructor
 //public class WalkingRecordServiceImpl2 implements WalkingRecordService {
 //
-//    private final PetRepository petProfileRepository;
+//    private final PetRepository petRepository;
 //    private final WalkingRecordRepository walkingRecordRepository;
 //
+//    @Autowired
+//    private AttachmentServiceImpl attachmentServiceImpl;
+//
 //    @Override
-//    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(String userId, long petProfileId, WalkingRecordRequestDto dto) {
+//    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto) {
 //        WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState() != null
 //                ? dto.getWalkingRecordWeatherState()
 //                : WalkingRecordWeatherState.SUNNY;
@@ -40,7 +45,6 @@
 //        Integer minutes = dto.getWalkingRecordWalkingMinutes();
 //        LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
 //        String walkingRecordMemo = dto.getWalkingRecordMemo();
-//        List<WalkingRecordAttachment> walkingRecordAttachments = dto.getWalkingRecordAttachments();
 //
 //        WalkingRecordResponseDto data = null;
 //
@@ -70,13 +74,16 @@
 //        }
 //
 //        try {
-//            Optional<Pet> optionalPetProfile = petProfileRepository.findPetByUserId(userId, petProfileId);
+//            Optional<Pet> optionalPet = petRepository.findPetByUserId(userId, petId);
 //
-//            if (optionalPetProfile.isEmpty()) {
+//            if (optionalPet.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
 //            }
 //
-//            Pet pet = optionalPetProfile.get();
+//            Pet pet = optionalPet.get();
+//
+//            List<String> WalkingImgList = new ArrayList<>();
+//            dto.getFiles().forEach(img -> WalkingImgList.add(attachmentServiceImpl.uploadFile(img)));
 //
 //            WalkingRecord walkingRecord = WalkingRecord.builder()
 //                    .pet(pet)
@@ -85,7 +92,7 @@
 //                    .walkingRecordWalkingTime(totalMinutes)
 //                    .walkingRecordCreateAt(walkingRecordCreateAt)
 //                    .walkingRecordMemo(walkingRecordMemo)
-//                    .walkingRecordAttachments(walkingRecordAttachments)
+//                    .walkingRecordAttachments(String.join(",", WalkingImgList))
 //                    .build();
 //
 //            walkingRecordRepository.save(walkingRecord);
@@ -100,11 +107,11 @@
 //    }
 //
 //    @Override
-//    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(String userId, long petProfileId, LocalDate walkingRecordCreateAt) {
+//    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate walkingRecordCreateAt) {
 //        List<WalkingRecordListResponseDto> data = new ArrayList<>();
 //
 //        try {
-//            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petProfileId, walkingRecordCreateAt);
+//            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petId, walkingRecordCreateAt);
 //
 //            if (walkingRecords.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -122,11 +129,11 @@
 //    }
 //
 //    @Override
-//    public ResponseDto<WalkingRecordResponseDto> getWalkingRecord(String userId, long petProfileId, long walkingRecordId) {
+//    public ResponseDto<WalkingRecordResponseDto> getWalkingRecord(Long userId, Long petId, Long walkingRecordId) {
 //        WalkingRecordResponseDto data = null;
 //
 //        try {
-//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 //
 //            if (optionalWalkingRecord.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -144,7 +151,7 @@
 //    }
 //
 //    @Override
-//    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(String userId, long petProfileId, long walkingRecordId, UpdateWalkingRecordRequestDto dto) {
+//    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto) {
 //        WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState();
 //        Integer walkingRecordDistance = dto.getWalkingRecordDistance();
 //        Integer hours = dto.getWalkingRecordWalkingHours();
@@ -170,7 +177,7 @@
 //        }
 //
 //        try {
-//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 //
 //            if (optionalWalkingRecord.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
@@ -186,7 +193,6 @@
 //                    .walkingRecordWalkingTime(totalMinutes)
 //                    .walkingRecordCreateAt(walkingRecordCreateAt != null ? walkingRecordCreateAt : walkingRecord.getWalkingRecordCreateAt())
 //                    .walkingRecordMemo(walkingRecordMemo != null ? walkingRecordMemo : walkingRecord.getWalkingRecordMemo())
-//                    .walkingRecordAttachments(walkingRecordAttachments != null ? walkingRecordAttachments :walkingRecord.getWalkingRecordAttachments())
 //                    .build();
 //
 //            walkingRecordRepository.save(walkingRecord);
@@ -201,9 +207,9 @@
 //    }
 //
 //    @Override
-//    public ResponseDto<Void> deleteWalkingRecord(String userId, long petProfileId, long walkingRecordId) {
+//    public ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId) {
 //        try {
-//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytProfileIdAndWalkingRecordId(userId, petProfileId, walkingRecordId);
+//            Optional<WalkingRecord> optionalWalkingRecord = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
 //
 //            if (optionalWalkingRecord.isEmpty()) {
 //                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);

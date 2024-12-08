@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     private String uploadDir;
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto, List<MultipartFile> files) {
+    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState() != null
                 ? dto.getWalkingRecordWeatherState()
                 : WalkingRecordWeatherState.SUNNY;
@@ -77,13 +78,13 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         }
 
         try {
-            Optional<Pet> optionalPetProfile = petRepository.findPetByUserId(userId, petId);
+            Optional<Pet> optionalPet = petRepository.findPetByUserId(userId, petId);
 
-            if (optionalPetProfile.isEmpty()) {
+            if (optionalPet.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
             }
 
-            Pet pet = optionalPetProfile.get();
+            Pet pet = optionalPet.get();
 
             WalkingRecord walkingRecord = WalkingRecord.builder()
                     .pet(pet)
@@ -96,45 +97,49 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             walkingRecordRepository.save(walkingRecord);
 
-            if (files != null && !files.isEmpty()) {
-                List<WalkingRecordAttachmentResponseDto> attachmentResponseList = new ArrayList<>();
-
-                for (MultipartFile file : files) {
-                    String originalFileName = file.getOriginalFilename();
-                    System.out.println("Original FileName: " + originalFileName);
-
-                    if (originalFileName != null && !originalFileName.isEmpty()) {
-                        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
-
-                        if (!fileExtension.equals("png") && !fileExtension.equals("jpg")) {
-                            return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
-                        }
-
-                        String sanitizedFileName = originalFileName.replaceAll("[\\x00-\\x1F\\x7F]", "_");
-                        String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
-
-                        Path path = Paths.get(uploadDir, fileName);
-                        Files.copy(file.getInputStream(), path);
-
-                        WalkingRecordAttachment walkingRecordAttachment = WalkingRecordAttachment.builder()
-                                .walkingRecordId(walkingRecord.getWalkingRecordId())
-                                .walkingRecordAttachmentFile(path.toString())
-                                .build();
-
-                        walkingRecordAttachmentRepository.save(walkingRecordAttachment);
-
-                        WalkingRecordAttachmentResponseDto attachmentResponseDto = WalkingRecordAttachmentResponseDto.builder()
-                                .fileName(Paths.get(walkingRecordAttachment.getWalkingRecordAttachmentFile()).getFileName().toString())
-                                .fileUrl(walkingRecordAttachment.getWalkingRecordAttachmentFile())
-                                .build();
-
-                        attachmentResponseList.add(attachmentResponseDto);
-                    }
-                }
-
-                data.setAttachments(attachmentResponseList);
-            }
-
+//            if (files != null && !files.isEmpty()) {
+//                List<WalkingRecordAttachmentResponseDto> attachmentResponseList = new ArrayList<>();
+//
+//                for (MultipartFile file : files) {
+//                    String originalFileName = file.getOriginalFilename();
+//                    System.out.println("Original FileName: " + originalFileName);
+//
+//                    if (originalFileName != null && !originalFileName.isEmpty()) {
+//                        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
+//
+//                        if (!fileExtension.equals("png") && !fileExtension.equals("jpg")) {
+//                            return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
+//                        }
+//
+//                        String sanitizedFileName = originalFileName.replaceAll("[\\x00-\\x1F\\x7F]", "_");
+//                        String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
+//
+//                        Path path = Paths.get(uploadDir, fileName);
+//
+//                        try {
+//                            Files.copy(file.getInputStream(), path);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            return ResponseDto.setFailed(ResponseMessage.FILE_UPLOAD_ERROR);
+//                        }
+//
+//                        WalkingRecordAttachment walkingRecordAttachment = WalkingRecordAttachment.builder()
+//                                .walkingRecordId(walkingRecord.getWalkingRecordId())
+//                                .walkingRecordAttachmentFile(path.toString())
+//                                .build();
+//
+//                        walkingRecordAttachmentRepository.save(walkingRecordAttachment);
+//
+//                        WalkingRecordAttachmentResponseDto attachmentResponseDto = WalkingRecordAttachmentResponseDto.builder()
+//                                .fileName(Paths.get(walkingRecordAttachment.getWalkingRecordAttachmentFile()).getFileName().toString())
+//                                .fileUrl(walkingRecordAttachment.getWalkingRecordAttachmentFile())
+//                                .build();
+//
+//                        attachmentResponseList.add(attachmentResponseDto);
+//                    }
+//                }
+//                data.setAttachments(attachmentResponseList);
+//            }
 //            if (attachmentIdsToDelete != null && !attachmentIdsToDelete.isEmpty()) {
 //                for (Long attachmentId : attachmentIdsToDelete) {
 //                    Optional<WalkingRecordAttachment> attachment = walkingRecordAttachmentRepository.findById(attachmentId);
