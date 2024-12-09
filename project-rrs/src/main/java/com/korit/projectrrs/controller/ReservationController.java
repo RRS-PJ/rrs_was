@@ -38,7 +38,6 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-
     @GetMapping
     private ResponseEntity<ResponseDto<List<ReservationGetResponseDto>>> getAllReservationByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
