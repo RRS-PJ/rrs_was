@@ -12,6 +12,7 @@ import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         String content = dto.getCustomerSupportContent();
         char category =  dto.getCustomerSupportCategory();
 
-        // 요효성 검사
+        // 유효성 검사
         if (title == null || title.isEmpty() || title.length() > 20) {
             return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
         }
@@ -45,7 +46,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
         try {
             CustomerSupport customerSupport =  CustomerSupport.builder()
-                    .user(userRepository.findById(userId).get())
+                    .user(userRepository.findById(userId)
+                            .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID)))
                     .customerSupportTitle(title)
                     .customerSupportContent(content)
                     .customerSupportCategory(category)
@@ -100,10 +102,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
-            Optional<List<CustomerSupport>> optionalCustomerServices = customerSupportRepository.findAllByUserId(userId);
+            List<CustomerSupport> customerServices = customerSupportRepository.findAllByUserId(userId);
 
-            if(optionalCustomerServices.isPresent()){
-                data = optionalCustomerServices.get()
+            if(!customerServices.isEmpty()){
+                data = customerServices
                         .stream().map(CustomerSupportGetResponseDto::new)
                         .collect(Collectors.toList());
             } else {
@@ -118,7 +120,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(Long userId, Long customerSupportId, CustomerSupportPutRequestDto dto) {
+    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(Long customerSupportId, CustomerSupportPutRequestDto dto) {
         CustomerSupportPutResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
@@ -132,7 +134,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         }
 
         try {
-            Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findByUserIdAndCustomerSupportId(userId, customerSupportId);
+            Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
             if (optionalCustomerSupport.isPresent()) {
 
                 CustomerSupport responsedCustomerSupport = optionalCustomerSupport.get();

@@ -3,9 +3,11 @@ package com.korit.projectrrs.service.implement;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
+import com.korit.projectrrs.dto.reservation.request.findProviderByDateRequestDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPostResponseDto;
 import com.korit.projectrrs.dto.reservation.response.ReservationPutResponseDto;
+import com.korit.projectrrs.dto.reservation.response.findProviderByDateResponseDto;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ResponseDto<Void> deleteReview(Long reservationId) {
+        return null;
+    }
+
+    @Override
+    public ResponseDto<findProviderByDateResponseDto> findProviderByDate(findProviderByDateRequestDto dto) {
         return null;
     }
 }

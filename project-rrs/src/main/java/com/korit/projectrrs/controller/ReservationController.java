@@ -4,9 +4,9 @@ import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
-import com.korit.projectrrs.dto.reservation.response.ReservationGetResponseDto;
-import com.korit.projectrrs.dto.reservation.response.ReservationPostResponseDto;
-import com.korit.projectrrs.dto.reservation.response.ReservationPutResponseDto;
+import com.korit.projectrrs.dto.reservation.request.findProviderByDateRequestDto;
+import com.korit.projectrrs.dto.reservation.request.getReservationByProviderIdRequestDto;
+import com.korit.projectrrs.dto.reservation.response.*;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -38,31 +38,23 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
+
     @GetMapping
     private ResponseEntity<ResponseDto<List<ReservationGetResponseDto>>> getAllReservationByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
             ) {
-        ResponseDto<List<ReservationGetResponseDto>> response = reservationService.getAllReservationByUserId();
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<List<ReservationGetResponseDto>> response = reservationService.getAllReservationByUserId(userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-//    @GetMapping
-//    private ResponseEntity<ResponseDto<List<ReservationGetResponseDto>>> getAllReservationByProviderId (
-//            @AuthenticationPrincipal String userId,
-//            @PathVariable Long providerId
-//    ) {
-//        ResponseDto<List<ReservationGetResponseDto>> response = reservationService.getAllReservationByProviderId(userId, providerId);
-//        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-//        return ResponseEntity.status(status).body(response);
-//    }
-
-    @GetMapping
+    @GetMapping()
     private ResponseEntity<ResponseDto<ReservationGetResponseDto>> getReservationByReservationId (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable Long reservationId
+            @RequestParam Long reservationId
     ) {
-        ResponseDto<ReservationGetResponseDto> response = reservationService.getReservationByReservationId();
+        ResponseDto<ReservationGetResponseDto> response = reservationService.getReservationByReservationId(reservationId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
@@ -85,5 +77,26 @@ public class ReservationController {
         ResponseDto<Void> response = reservationService.deleteReview(reservationId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(null);
+    }
+
+    @PostMapping
+    private ResponseEntity<ResponseDto<findProviderByDateResponseDto>> findProviderByDate (
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody findProviderByDateRequestDto dto
+    ) {
+        ResponseDto<findProviderByDateResponseDto> response = reservationService.findProviderByDate(dto);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping
+    private ResponseEntity<ResponseDto<getReservationByProviderIdResponseDto>> getAllReservationByProviderId (
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody getReservationByProviderIdRequestDto dto
+    ) {
+        Long providerId = principalUser.getUser().getUserId();
+        ResponseDto<getReservationByProviderIdResponseDto> response = reservationService.getReservationByProviderId(providerId, dto);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
     }
 }

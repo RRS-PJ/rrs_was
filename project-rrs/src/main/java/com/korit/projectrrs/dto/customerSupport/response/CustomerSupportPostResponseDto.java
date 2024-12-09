@@ -1,9 +1,11 @@
 package com.korit.projectrrs.dto.customerSupport.response;
 
 import com.korit.projectrrs.entity.CustomerSupport;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class CustomerSupportPostResponseDto {
     private String customerSupportTitle;
     private String customerSupportContent;
