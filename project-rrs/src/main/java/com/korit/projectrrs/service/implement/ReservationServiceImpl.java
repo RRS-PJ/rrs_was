@@ -7,6 +7,8 @@ import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
 import com.korit.projectrrs.dto.reservation.request.FindProviderByDateRequestDto;
 import com.korit.projectrrs.dto.reservation.request.GetReservationByProviderIdRequestDto;
 import com.korit.projectrrs.dto.reservation.response.*;
+import com.korit.projectrrs.entity.Reservation;
+import com.korit.projectrrs.entity.ReservationStatus;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.ReservationRepository;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
@@ -31,7 +33,31 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ResponseDto<ReservationPostResponseDto> createReservation(Long userId, ReservationPostRequestDto dto) {
-        return null;
+        ReservationPostResponseDto data = null;
+        LocalDate startDate = dto.getReservationStartDate();
+        LocalDate endDate = dto.getReservationEndDate();
+
+        // 유저가 있는지 확인
+        User user = userRepository.findById(userId)
+                        .orElseThrow(()-> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
+        // 댕시터가 있는지 확인
+        User provider = userRepository.findProviderById(dto.getProviderId())
+                .orElseThrow(()-> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
+
+        Reservation newReservation = Reservation.builder()
+                .user(user)
+                .provider(provider)
+                .reservationStartDate(startDate)
+                .reservationEndDate(endDate)
+                .reservationStatus(ReservationStatus.PENDING)
+                .build();
+
+        reservationRepository.save(newReservation);
+        data = new ReservationPostResponseDto(newReservation, reviewRepository.findAverageReviewScoreByProvider(provider.getUserId())
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID))
+                );
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
