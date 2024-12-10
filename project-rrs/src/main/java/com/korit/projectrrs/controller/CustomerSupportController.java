@@ -65,8 +65,7 @@ public class CustomerSupportController {
             @PathVariable Long customerSupportId,
             @RequestBody CustomerSupportPutRequestDto dto
     ) {
-        Long userId = principalUser.getUser().getUserId();
-        ResponseDto<CustomerSupportPutResponseDto> response = customerSupportService.updateCustomerSupport(userId, customerSupportId, dto);
+        ResponseDto<CustomerSupportPutResponseDto> response = customerSupportService.updateCustomerSupport(customerSupportId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

@@ -3,5 +3,5 @@ package com.korit.projectrrs.dto.reservation.request;
 import lombok.Data;
 
 @Data
-public class getReservationByProviderIdRequestDto {
+public class GetReservationByProviderIdRequestDto {
 }

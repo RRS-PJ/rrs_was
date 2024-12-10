@@ -66,11 +66,11 @@ public class TodoServiceImpl implements TodoService {
     public ResponseDto<List<TodoResponseDto>> getAllTodosByUserIdAndDay(Long userId,LocalDate day) {
         List<TodoResponseDto> data = null;
         try {
-            Optional<List<Todo>> Optionaltodos = todoRepository.findTodosByUserIdAndDay(userId, day);
-            if (Optionaltodos.isPresent()) {
-                List<Todo> todos = Optionaltodos.get();
+            Optional<List<Todo>> optionaltodos = todoRepository.findTodosByUserIdAndDay(userId, day);
+            if (optionaltodos.isPresent()) {
+                List<Todo> todos = optionaltodos.get();
                 data = todos.stream()
-                        .map(todo -> new TodoResponseDto(todo))
+                        .map(TodoResponseDto::new)
                         .collect(Collectors.toList());
             } else {
                 return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);

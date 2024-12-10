@@ -1,5 +1,6 @@
 package com.korit.projectrrs.repositoiry;
 
+import com.korit.projectrrs.dto.reservation.response.FindProviderByDateResponseDto;
 import com.korit.projectrrs.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -25,14 +27,14 @@ WHERE
 
     // 제공자 닉네임으로 평균 리뷰 조회
     @Query(value = """
-SELECT 
-    AVG(r.reviewScores) 
-FROM 
+SELECT
+    AVG(r.reviewScores)
+FROM
     REVIEWS R
 INNER JOIN USERS U ON U.USER_ID = R.PROVIDER_ID
-WHERE 
+WHERE
     R.PROVIDER_ID = :providerId
     AND U.ROLES LIKE '%, ROLE_PROVIDER%'
 """, nativeQuery = true)
-    Double findAverageReviewScoreByProvider(@Param("providerId") Long providerId);
+    Optional<Double> findAverageReviewScoreByProvider(@Param("providerId") Long providerId);
 }

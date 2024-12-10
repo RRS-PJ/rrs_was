@@ -4,8 +4,8 @@ import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
 import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
-import com.korit.projectrrs.dto.reservation.request.findProviderByDateRequestDto;
-import com.korit.projectrrs.dto.reservation.request.getReservationByProviderIdRequestDto;
+import com.korit.projectrrs.dto.reservation.request.FindProviderByDateRequestDto;
+import com.korit.projectrrs.dto.reservation.request.GetReservationByProviderIdRequestDto;
 import com.korit.projectrrs.dto.reservation.response.*;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReservationService;
@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,22 +80,22 @@ public class ReservationController {
     }
 
     @PostMapping
-    private ResponseEntity<ResponseDto<findProviderByDateResponseDto>> findProviderByDate (
+    private ResponseEntity<ResponseDto<Set<FindProviderByDateResponseDto>>> findProviderByDate (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody findProviderByDateRequestDto dto
+            @RequestBody FindProviderByDateRequestDto dto
     ) {
-        ResponseDto<findProviderByDateResponseDto> response = reservationService.findProviderByDate(dto);
+        ResponseDto<Set<FindProviderByDateResponseDto>> response = reservationService.findProviderByDate(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping
-    private ResponseEntity<ResponseDto<getReservationByProviderIdResponseDto>> getAllReservationByProviderId (
+    private ResponseEntity<ResponseDto<List<getReservationByProviderIdResponseDto>>> getAllReservationByProviderId (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody getReservationByProviderIdRequestDto dto
+            @RequestBody GetReservationByProviderIdRequestDto dto
     ) {
         Long providerId = principalUser.getUser().getUserId();
-        ResponseDto<getReservationByProviderIdResponseDto> response = reservationService.getReservationByProviderId(providerId, dto);
+        ResponseDto<List<getReservationByProviderIdResponseDto>> response = reservationService.getReservationByProviderId(providerId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

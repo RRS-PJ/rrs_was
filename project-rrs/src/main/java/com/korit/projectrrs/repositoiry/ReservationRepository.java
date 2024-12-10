@@ -7,10 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     @Query(value = """
-SELECT DISTINCT u.USER_ID
+SELECT DISTINCT u.USER_ID,
 FROM USERS u
 JOIN AVAILABLE_DATE_OF_WEEK adw ON u.USER_ID = adw.PROVIDER_ID
 WHERE adw.AVAILABLE_DATE BETWEEN :startDate AND :endDate
@@ -31,5 +32,5 @@ HAVING NOT EXISTS (
     )
 );
 """, nativeQuery = true)
-    List<Long> findProviderByDate(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+    Set<Long> findProviderByDate(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
 }
