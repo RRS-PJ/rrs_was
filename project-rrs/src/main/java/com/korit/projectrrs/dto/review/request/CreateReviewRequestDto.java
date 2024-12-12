@@ -3,8 +3,8 @@ package com.korit.projectrrs.dto.review.request;
 import lombok.Data;
 
 @Data
-public class ReviewPutRequestDto {
-    private Long reviewId;
+public class CreateReviewRequestDto {
+    private Long providerId;
     private int reviewScore;
     private String reviewContent;
 }

@@ -8,11 +8,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class ReviewPutResponseDto {
+public class UpdateReviewResponseDto {
     private int reviewScore;
     private String reviewContent;
 
-    public ReviewPutResponseDto(Review review){
+    public UpdateReviewResponseDto(Review review){
         this.reviewScore = review.getReviewScore();
         this.reviewContent = review.getReviewContent();
     }

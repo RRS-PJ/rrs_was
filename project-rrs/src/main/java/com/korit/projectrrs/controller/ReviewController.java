@@ -2,12 +2,12 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
-import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
-import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
+import com.korit.projectrrs.dto.review.request.CreateReviewRequestDto;
+import com.korit.projectrrs.dto.review.request.UpdateReviewRequestDto;
+import com.korit.projectrrs.dto.review.response.GetAvgReviewScoreResponseDto;
+import com.korit.projectrrs.dto.review.response.GetReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.CreateReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.UpdateReviewResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -29,51 +29,52 @@ public class ReviewController {
 
 
     @PostMapping
-    private ResponseEntity<ResponseDto<ReviewPostResponseDto>> createReview (
+    private ResponseEntity<ResponseDto<CreateReviewResponseDto>> createReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody ReviewPostRequestDto dto
+            @RequestBody CreateReviewRequestDto dto
             ){
-        ResponseDto<ReviewPostResponseDto> response = reviewService.createReview(principalUser, dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<CreateReviewResponseDto> response = reviewService.createReview(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(PROVIDER)
-    private ResponseEntity<ResponseDto<List<ReviewGetResponseDto>>> getReviewsByProvider (
+    private ResponseEntity<ResponseDto<List<GetReviewResponseDto>>> getReviewsByProvider (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long providerId
     ) {
-        ResponseDto<List<ReviewGetResponseDto>> response = reviewService.getReviewsByProvider(providerId);
+        ResponseDto<List<GetReviewResponseDto>> response = reviewService.getReviewsByProvider(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(PROVIDER_AVG)
-    private ResponseEntity<ResponseDto<ReviewAvgScoreResponseDto>> getAverageReviewScoreByProvider (
+    private ResponseEntity<ResponseDto<GetAvgReviewScoreResponseDto>> getAverageReviewScoreByProvider (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long providerId
     ) {
-        ResponseDto<ReviewAvgScoreResponseDto> response = reviewService.getAverageReviewScoreByProvider(providerId);
+        ResponseDto<GetAvgReviewScoreResponseDto> response = reviewService.getAverageReviewScoreByProvider(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(REVIEW)
-    private ResponseEntity<ResponseDto<ReviewGetResponseDto>> getByReviewId (
+    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getByReviewId (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId
     ) {
-        ResponseDto<ReviewGetResponseDto> response = reviewService.getByReviewId(reviewId);
+        ResponseDto<GetReviewResponseDto> response = reviewService.getByReviewId(reviewId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @PutMapping(REVIEW)
-    private ResponseEntity<ResponseDto<ReviewPutResponseDto>> updateReview (
+    private ResponseEntity<ResponseDto<UpdateReviewResponseDto>> updateReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody ReviewPutRequestDto dto
+            @RequestBody UpdateReviewRequestDto dto
     ){
-        ResponseDto<ReviewPutResponseDto> response = reviewService.updateReview(dto);
+        ResponseDto<UpdateReviewResponseDto> response = reviewService.updateReview(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

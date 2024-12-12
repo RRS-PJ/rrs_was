@@ -2,10 +2,7 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
-import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
-import com.korit.projectrrs.dto.reservation.request.FindProviderByDateRequestDto;
-import com.korit.projectrrs.dto.reservation.request.GetReservationByProviderIdRequestDto;
+import com.korit.projectrrs.dto.reservation.request.*;
 import com.korit.projectrrs.dto.reservation.response.*;
 import com.korit.projectrrs.entity.Reservation;
 import com.korit.projectrrs.entity.ReservationStatus;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,8 +30,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public ResponseDto<ReservationPostResponseDto> createReservation(Long userId, ReservationPostRequestDto dto) {
-        ReservationPostResponseDto data = null;
+    public ResponseDto<CreateReservationResponseDto> createReservation(Long userId, CreateReservationRequestDto dto) {
+        CreateReservationResponseDto data = null;
         LocalDate startDate = dto.getReservationStartDate();
         LocalDate endDate = dto.getReservationEndDate();
 
@@ -53,37 +51,80 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
 
         reservationRepository.save(newReservation);
-        data = new ReservationPostResponseDto(newReservation, reviewRepository.findAverageReviewScoreByProvider(provider.getUserId())
-                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID))
+        data = new CreateReservationResponseDto(newReservation, reviewRepository.findAverageReviewScoreByProvider(provider.getUserId())
+                .orElse(0.0)
                 );
 
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<List<ReservationGetResponseDto>> getAllReservationByUserId(Long userId) {
-        return null;
+    public ResponseDto<List<GetReservationResponseDto>> getAllReservationByUserId(Long userId) {
+        List<GetReservationResponseDto> data = null;
+        List<Reservation> reservations = reservationRepository.findAllByUserId(userId);
+
+        Map<Long, Double> providerAverageReviewScores = reviewRepository.findAverageReviewScoresByProviders(
+                reservations.stream()
+                        .map(reservation -> reservation.getProvider().getUserId())
+                        .collect(Collectors.toSet())
+        );
+
+        data = reservations.stream()
+                .map(reservation -> {
+                    Long providerUserId = reservation.getProvider().getUserId();
+                    Double averageReviewScore = providerAverageReviewScores.get(providerUserId);
+                    return new GetReservationResponseDto(reservation, averageReviewScore);
+                })
+                .collect(Collectors.toList());
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<ReservationGetResponseDto> getReservationByReservationId(Long userId) {
-        return null;
+    public ResponseDto<List<GetByProviderResponseDto>> getReservationByProviderId(Long providerId, GetByProviderRequestDto dto) {
+        List<GetByProviderResponseDto> data = null;
+        List<Reservation> reservations = reservationRepository.findAllByProviderId(providerId);
+
+        data = reservations.stream()
+                .map(GetByProviderResponseDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<ReservationPutResponseDto> putReservationByReservationId(ReservationPutRequestDto dto) {
-        return null;
+    public ResponseDto<GetReservationResponseDto> getReservationByReservationId(Long reservationId) {
+        GetReservationResponseDto data = null;
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+
+        double avgReviewScore = reviewRepository.findAverageReviewScoreByProvider(reservation.getProvider().getUserId())
+                .orElse(0.0);
+
+        data = new GetReservationResponseDto(reservation, avgReviewScore);
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<Void> deleteReview(Long reservationId) {
-        return null;
+    public ResponseDto<UpdateReservationResponseDto> putReservationByReservationId(ReservationUpdateRequestDto dto) {
+        UpdateReservationResponseDto data = null;
+        Long reservationId = dto.getReservationId();
+        String memo = dto.getReservationMemo();
+        Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+        reservation = reservation.toBuilder()
+                .reservationMemo(memo)
+                .build();
+
+        reservationRepository.save(reservation);
+        data = new UpdateReservationResponseDto(reservation);
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
-
     @Override
-    public ResponseDto<Set<FindProviderByDateResponseDto>> findProviderByDate(FindProviderByDateRequestDto dto) {
-        Set<FindProviderByDateResponseDto> data = null;
+    public ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(GetProviderByDateRequestDto dto) {
+        Set<GetProviderByDateResponseDto> data = null;
         LocalDate startDate = dto.getStartDate();
         LocalDate endDate = dto.getEndDate();
         try {
@@ -98,7 +139,7 @@ public class ReservationServiceImpl implements ReservationService {
                                 .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
                         double avgScore = reviewRepository.findAverageReviewScoreByProvider(providerId)
                                 .orElse(0.0);
-                        return new FindProviderByDateResponseDto(provider, avgScore);
+                        return new GetProviderByDateResponseDto(provider, avgScore);
                     })
                     .collect(Collectors.toSet());
 
@@ -110,7 +151,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ResponseDto<List<getReservationByProviderIdResponseDto>> getReservationByProviderId(Long providerId, GetReservationByProviderIdRequestDto dto) {
-        return null;
+    public ResponseDto<UpdateStatusResponseDto> updateReservationStatus(UpdateStatusRequestDto dto) {
+        UpdateStatusResponseDto data = null;
+        Reservation cancledReservation = reservationRepository.findById(dto.getReservationId())
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+        cancledReservation = cancledReservation.toBuilder()
+                .reservationStatus(dto.getReservationStatus())
+                .build();
+        reservationRepository.save(cancledReservation);
+
+        data = new UpdateStatusResponseDto(cancledReservation.getReservationStatus());
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }

@@ -33,4 +33,25 @@ HAVING NOT EXISTS (
 );
 """, nativeQuery = true)
     Set<Long> findProviderByDate(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+
+    @Query(value = """
+SELECT
+    *
+FROM 
+    RESERVATIONS R
+WHERE
+    R.USER_ID = :userId
+""", nativeQuery = true)
+    List<Reservation> findAllByUserId(@Param("userId") Long userId);
+
+    @Query(value = """
+SELECT
+    *
+FROM 
+    RESERVATIONS R
+WHERE
+    R.USER_ID = :providerId
+    AND U.ROLES LIKE '%, ROLE_PROVIDER%'
+""", nativeQuery = true)
+    List<Reservation> findAllByProviderId(@Param("providerId") Long providerId);
 }

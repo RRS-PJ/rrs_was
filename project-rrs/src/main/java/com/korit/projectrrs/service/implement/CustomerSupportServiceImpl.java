@@ -2,11 +2,11 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
+import com.korit.projectrrs.dto.customerSupport.request.CreateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.GetCSResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
@@ -27,8 +27,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<CustomerSupportPostResponseDto> createCustomerSupport(Long userId, CustomerSupportPostRequestDto dto) {
-        CustomerSupportPostResponseDto data = null;
+    public ResponseDto<CreateCSResponseDto> createCustomerSupport(Long userId, CreateCSRequestDto dto) {
+        CreateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
         char category =  dto.getCustomerSupportCategory();
@@ -56,7 +56,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                     .build();
 
             customerSupportRepository.save(customerSupport);
-            data = new CustomerSupportPostResponseDto(customerSupport);
+            data = new CreateCSResponseDto(customerSupport);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +66,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportGetResponseDto> getCustomerSupportByUserIdAndCustomerId(Long userId, Long customerSupportId) {
-        CustomerSupportGetResponseDto data = null;
+    public ResponseDto<GetCSResponseDto> getCustomerSupportByUserIdAndCustomerId(Long userId, Long customerSupportId) {
+        GetCSResponseDto data = null;
         try {
             if (!userRepository.existsById(userId)) {
                 // 유저 아이디가 존재하지 않음
@@ -81,7 +81,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 if (!userId.equals(optionalCustomerSupport.get().getUser().getUserId())) {
                     return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
                 }
-                data = new CustomerSupportGetResponseDto(optionalCustomerSupport.get());
+                data = new GetCSResponseDto(optionalCustomerSupport.get());
             } else {
                 // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
@@ -95,8 +95,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<List<CustomerSupportGetResponseDto>> getAllCustomerSupportByUserId(Long userId) {
-        List<CustomerSupportGetResponseDto> data = null;
+    public ResponseDto<List<GetCSResponseDto>> getAllCustomerSupportByUserId(Long userId) {
+        List<GetCSResponseDto> data = null;
         try {
             if (!userRepository.existsById(userId)) {
                 // 유저 아이디가 존재하지 않음
@@ -106,7 +106,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
             if(!customerServices.isEmpty()){
                 data = customerServices
-                        .stream().map(CustomerSupportGetResponseDto::new)
+                        .stream().map(GetCSResponseDto::new)
                         .collect(Collectors.toList());
             } else {
                 // 고객센터 포스트가 존재하지 않음
@@ -120,8 +120,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<CustomerSupportPutResponseDto> updateCustomerSupport(Long customerSupportId, CustomerSupportPutRequestDto dto) {
-        CustomerSupportPutResponseDto data = null;
+    public ResponseDto<UpdateCSResponseDto> updateCustomerSupport(Long customerSupportId, UpdateCSRequestDto dto) {
+        UpdateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
 
@@ -141,7 +141,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 responsedCustomerSupport.setCustomerSupportTitle(title);
                 responsedCustomerSupport.setCustomerSupportContent(content);
 
-                data = new CustomerSupportPutResponseDto(responsedCustomerSupport);
+                data = new UpdateCSResponseDto(responsedCustomerSupport);
 
             } else {
                 // 고객센터 포스트가 존재하지 않음

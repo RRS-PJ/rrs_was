@@ -6,14 +6,14 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CustomerSupportPutResponseDto {
+public class GetCSResponseDto {
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportCategory;
     private LocalDateTime customerSupportCreateAt;
     private char customerSupportStatus;
 
-    public CustomerSupportPutResponseDto(CustomerSupport customerSupport){
+    public GetCSResponseDto(CustomerSupport customerSupport){
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();

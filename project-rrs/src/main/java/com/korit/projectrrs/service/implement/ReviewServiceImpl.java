@@ -2,17 +2,16 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
-import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
-import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
+import com.korit.projectrrs.dto.review.request.CreateReviewRequestDto;
+import com.korit.projectrrs.dto.review.request.UpdateReviewRequestDto;
+import com.korit.projectrrs.dto.review.response.GetAvgReviewScoreResponseDto;
+import com.korit.projectrrs.dto.review.response.GetReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.CreateReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.UpdateReviewResponseDto;
 import com.korit.projectrrs.entity.Review;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
-import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseDto<ReviewPostResponseDto> createReview(Long userId, @Valid ReviewPostRequestDto dto)  {
-        ReviewPostResponseDto data = null;
+    public ResponseDto<CreateReviewResponseDto> createReview(Long userId, @Valid CreateReviewRequestDto dto)  {
+        CreateReviewResponseDto data = null;
         Long providerId = dto.getProviderId();
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
@@ -68,7 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
             reviewRepository.save(review);
 
             // 성공 응답 데이터 생성
-            data = new ReviewPostResponseDto(review);
+            data = new CreateReviewResponseDto(review);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,13 +77,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<List<ReviewGetResponseDto>> getReviewsByProvider(Long providerId) {
-        List<ReviewGetResponseDto> data = null;
+    public ResponseDto<List<GetReviewResponseDto>> getReviewsByProvider(Long providerId) {
+        List<GetReviewResponseDto> data = null;
         try {
             Optional<List<Review>> reviews = reviewRepository.findReviewsByProvider(providerId);
             if (reviews.isPresent()) {
                 data = reviews.get().stream()
-                        .map(ReviewGetResponseDto::new)
+                        .map(GetReviewResponseDto::new)
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
@@ -95,14 +94,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewAvgScoreResponseDto> getAverageReviewScoreByProvider(Long providerId) {
-        ReviewAvgScoreResponseDto data = null;
+    public ResponseDto<GetAvgReviewScoreResponseDto> getAverageReviewScoreByProvider(Long providerId) {
+        GetAvgReviewScoreResponseDto data = null;
         try {
-            Double avgScore = reviewRepository.findAverageReviewScoreByProvider(providerId);
+            Double avgScore = reviewRepository.findAverageReviewScoreByProvider(providerId)
+                    .orElse(0.0);
             if (!userRepository.existsById(providerId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
             }
-            data = new ReviewAvgScoreResponseDto(avgScore);
+            data = new GetAvgReviewScoreResponseDto(avgScore);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -111,12 +111,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId) {
-        ReviewGetResponseDto data = null;
+    public ResponseDto<GetReviewResponseDto> getByReviewId(Long reviewId) {
+        GetReviewResponseDto data = null;
         try {
             Optional<Review> optionalReview = reviewRepository.findById(reviewId);
             if (optionalReview.isPresent()) {
-                data = new ReviewGetResponseDto(optionalReview.get());
+                data = new GetReviewResponseDto(optionalReview.get());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,8 +126,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutRequestDto dto) {
-        ReviewPutResponseDto data = null;
+    public ResponseDto<UpdateReviewResponseDto> updateReview(UpdateReviewRequestDto dto) {
+        UpdateReviewResponseDto data = null;
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
         try {
@@ -138,7 +138,7 @@ public class ReviewServiceImpl implements ReviewService {
                         .reviewContent(content)
                         .build();
                 reviewRepository.save(respondedReview);
-                data = new ReviewPutResponseDto(respondedReview);
+                data = new UpdateReviewResponseDto(respondedReview);
             }
         } catch (Exception e) {
             e.printStackTrace();

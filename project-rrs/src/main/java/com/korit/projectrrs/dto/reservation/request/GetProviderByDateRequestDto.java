@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class FindProviderByDateRequestDto {
+public class GetProviderByDateRequestDto {
     private LocalDate startDate;
     private LocalDate endDate;
 }

@@ -130,4 +130,7 @@ public class ResponseMessage {
     // 첨부파일 관련 메세지
     public static final String FILE_UPLOAD_ERROR = "File upload is failed";
     public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
+
+    // 예약 관련 메세지
+    public static final String NOT_EXIST_RESERVATION = "Reservation is not exist";
 }

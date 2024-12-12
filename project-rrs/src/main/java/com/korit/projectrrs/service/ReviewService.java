@@ -1,22 +1,20 @@
 package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.review.request.ReviewPostRequestDto;
-import com.korit.projectrrs.dto.review.request.ReviewPutRequestDto;
-import com.korit.projectrrs.dto.review.response.ReviewAvgScoreResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewGetResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPostResponseDto;
-import com.korit.projectrrs.dto.review.response.ReviewPutResponseDto;
-import com.korit.projectrrs.security.PrincipalUser;
+import com.korit.projectrrs.dto.review.request.CreateReviewRequestDto;
+import com.korit.projectrrs.dto.review.request.UpdateReviewRequestDto;
+import com.korit.projectrrs.dto.review.response.GetAvgReviewScoreResponseDto;
+import com.korit.projectrrs.dto.review.response.GetReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.CreateReviewResponseDto;
+import com.korit.projectrrs.dto.review.response.UpdateReviewResponseDto;
 
 import java.util.List;
 
 public interface ReviewService {
-    ResponseDto<ReviewPostResponseDto> createReview(Long userId, ReviewPostRequestDto dto);
-    ResponseDto<List<ReviewGetResponseDto>> getReviewsByProvider(Long providerId);
-    ResponseDto<ReviewAvgScoreResponseDto> getAverageReviewScoreByProvider(Long userId);
-    ResponseDto<ReviewGetResponseDto> getByReviewId(Long reviewId);
-    ResponseDto<ReviewPutResponseDto> updateReview(ReviewPutRequestDto dto);
+    ResponseDto<CreateReviewResponseDto> createReview(Long userId, CreateReviewRequestDto dto);
+    ResponseDto<List<GetReviewResponseDto>> getReviewsByProvider(Long providerId);
+    ResponseDto<GetAvgReviewScoreResponseDto> getAverageReviewScoreByProvider(Long userId);
+    ResponseDto<GetReviewResponseDto> getByReviewId(Long reviewId);
+    ResponseDto<UpdateReviewResponseDto> updateReview(UpdateReviewRequestDto dto);
     ResponseDto<Void> deleteReview(Long reviewId);
-
 }

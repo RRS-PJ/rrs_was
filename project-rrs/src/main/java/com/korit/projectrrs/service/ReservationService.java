@@ -1,21 +1,18 @@
 package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.reservation.request.ReservationPostRequestDto;
-import com.korit.projectrrs.dto.reservation.request.ReservationPutRequestDto;
-import com.korit.projectrrs.dto.reservation.request.FindProviderByDateRequestDto;
-import com.korit.projectrrs.dto.reservation.request.GetReservationByProviderIdRequestDto;
+import com.korit.projectrrs.dto.reservation.request.*;
 import com.korit.projectrrs.dto.reservation.response.*;
 
 import java.util.List;
 import java.util.Set;
 
 public interface ReservationService {
-    ResponseDto<ReservationPostResponseDto> createReservation(Long userId, ReservationPostRequestDto dto);
-    ResponseDto<List<ReservationGetResponseDto>> getAllReservationByUserId(Long userId);
-    ResponseDto<ReservationGetResponseDto> getReservationByReservationId(Long userId);
-    ResponseDto<ReservationPutResponseDto> putReservationByReservationId(ReservationPutRequestDto dto);
-    ResponseDto<Void> deleteReview(Long reservationId);
-    ResponseDto<Set<FindProviderByDateResponseDto>> findProviderByDate(FindProviderByDateRequestDto dto);
-    ResponseDto<List<getReservationByProviderIdResponseDto>> getReservationByProviderId(Long providerId, GetReservationByProviderIdRequestDto dto);
+    ResponseDto<CreateReservationResponseDto> createReservation(Long userId, CreateReservationRequestDto dto);
+    ResponseDto<List<GetReservationResponseDto>> getAllReservationByUserId(Long userId);
+    ResponseDto<List<GetByProviderResponseDto>> getReservationByProviderId(Long providerId, GetByProviderRequestDto dto);
+    ResponseDto<GetReservationResponseDto> getReservationByReservationId(Long userId);
+    ResponseDto<UpdateReservationResponseDto> putReservationByReservationId(ReservationUpdateRequestDto dto);
+    ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(GetProviderByDateRequestDto dto);
+    ResponseDto<UpdateStatusResponseDto> updateReservationStatus(UpdateStatusRequestDto dto);
 }

@@ -5,18 +5,17 @@ import com.korit.projectrrs.entity.Reservation;
 import com.korit.projectrrs.entity.ReservationStatus;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Builder(toBuilder = true)
-@RequiredArgsConstructor
-public class ReservationPostResponseDto {
-    private GetChosenProviderInfoResponseDto providerInfo;
-
+@Builder
+public class GetReservationResponseDto {
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;
+
+    private GetChosenProviderInfoResponseDto providerInfo;
 
     private List<Pet> pets;
     private String phone;
@@ -24,11 +23,11 @@ public class ReservationPostResponseDto {
 
     private ReservationStatus reservationStatus;
 
-    public ReservationPostResponseDto(Reservation reservation, double avgReviewScore){
-        this.providerInfo = new GetChosenProviderInfoResponseDto(reservation.getProvider(), avgReviewScore);
-
+    public GetReservationResponseDto(Reservation reservation, double avgReviewScore){
         this.reservationStartDate = reservation.getReservationStartDate();
         this.reservationEndDate = reservation.getReservationEndDate();
+
+        this.providerInfo = new GetChosenProviderInfoResponseDto(reservation.getProvider(), avgReviewScore);
 
         this.pets = reservation.getUser().getPet();
         this.phone = reservation.getUser().getPhone();

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder(toBuilder = true)
-public class FindProviderByDateResponseDto {
+public class GetProviderByDateResponseDto {
     private Long providerId;
     private String profileImageUrl;
     private String providerNickname;
@@ -14,7 +14,7 @@ public class FindProviderByDateResponseDto {
     private String providerIntroduction;
     private double avgReviewScore;
 
-    public FindProviderByDateResponseDto(User provider, double avgReviewScore){
+    public GetProviderByDateResponseDto(User provider, double avgReviewScore){
         this.providerId = provider.getUserId();
         this.profileImageUrl = provider.getProfileImageUrl();
         this.providerNickname = provider.getNickname();

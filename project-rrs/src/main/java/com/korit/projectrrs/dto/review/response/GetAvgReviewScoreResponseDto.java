@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ReviewAvgScoreResponseDto {
+public class GetAvgReviewScoreResponseDto {
     private Double avgScore;
 }

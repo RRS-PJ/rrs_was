@@ -2,11 +2,11 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPostRequestDto;
-import com.korit.projectrrs.dto.customerSupport.request.CustomerSupportPutRequestDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportGetResponseDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPostResponseDto;
-import com.korit.projectrrs.dto.customerSupport.response.CustomerSupportPutResponseDto;
+import com.korit.projectrrs.dto.customerSupport.request.CreateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.GetCSResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
+import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.CustomerSupportService;
 import lombok.RequiredArgsConstructor;
@@ -28,44 +28,44 @@ public class CustomerSupportController {
     private final String CUSTOMER_SUPPORT_DELETE = "/{customerSupportId}";
 
     @PostMapping
-    private ResponseEntity<ResponseDto<CustomerSupportPostResponseDto>> createCustomerSupport (
+    private ResponseEntity<ResponseDto<CreateCSResponseDto>> createCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody CustomerSupportPostRequestDto dto
+            @RequestBody CreateCSRequestDto dto
             ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<CustomerSupportPostResponseDto> response = customerSupportService.createCustomerSupport(userId, dto);
+        ResponseDto<CreateCSResponseDto> response = customerSupportService.createCustomerSupport(userId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(CUSTOMER_SUPPORT_GET)
-    private ResponseEntity<ResponseDto<CustomerSupportGetResponseDto>> getCustomerSupportByUserIdAndCustomerId (
+    private ResponseEntity<ResponseDto<GetCSResponseDto>> getCustomerSupportByUserIdAndCustomerId (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long customerSupportId
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<CustomerSupportGetResponseDto> response = customerSupportService.getCustomerSupportByUserIdAndCustomerId(userId, customerSupportId);
+        ResponseDto<GetCSResponseDto> response = customerSupportService.getCustomerSupportByUserIdAndCustomerId(userId, customerSupportId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping
-    private ResponseEntity<ResponseDto<List<CustomerSupportGetResponseDto>>> getAllCustomerSupportByUserId (
+    private ResponseEntity<ResponseDto<List<GetCSResponseDto>>> getAllCustomerSupportByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<CustomerSupportGetResponseDto>> response = customerSupportService.getAllCustomerSupportByUserId(userId);
+        ResponseDto<List<GetCSResponseDto>> response = customerSupportService.getAllCustomerSupportByUserId(userId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @PutMapping(CUSTOMER_SUPPORT_UPDATE)
-    private ResponseEntity<ResponseDto<CustomerSupportPutResponseDto>> updateCustomerSupport (
+    private ResponseEntity<ResponseDto<UpdateCSResponseDto>> updateCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long customerSupportId,
-            @RequestBody CustomerSupportPutRequestDto dto
+            @RequestBody UpdateCSRequestDto dto
     ) {
-        ResponseDto<CustomerSupportPutResponseDto> response = customerSupportService.updateCustomerSupport(customerSupportId, dto);
+        ResponseDto<UpdateCSResponseDto> response = customerSupportService.updateCustomerSupport(customerSupportId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
