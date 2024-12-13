@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Builder
 public class GetReservationResponseDto {
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;

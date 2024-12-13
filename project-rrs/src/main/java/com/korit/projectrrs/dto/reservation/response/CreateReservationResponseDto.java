@@ -3,14 +3,12 @@ package com.korit.projectrrs.dto.reservation.response;
 import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.Reservation;
 import com.korit.projectrrs.entity.ReservationStatus;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Builder(toBuilder = true)
 @RequiredArgsConstructor
 public class CreateReservationResponseDto {
     private GetChosenProviderInfoResponseDto providerInfo;
