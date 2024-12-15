@@ -8,10 +8,10 @@ import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.TodoRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
-import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -66,10 +66,9 @@ public class TodoServiceImpl implements TodoService {
     public ResponseDto<List<TodoResponseDto>> getAllTodosByUserIdAndDay(Long userId,LocalDate day) {
         List<TodoResponseDto> data = null;
         try {
-            Optional<List<Todo>> optionaltodos = todoRepository.findTodosByUserIdAndDay(userId, day);
-            if (optionaltodos.isPresent()) {
-                List<Todo> todos = optionaltodos.get();
-                data = todos.stream()
+            List<Todo> optionalTodos = todoRepository.findTodosByUserIdAndDay(userId, day);
+            if (!optionalTodos.isEmpty()) {
+                data = optionalTodos.stream()
                         .map(TodoResponseDto::new)
                         .collect(Collectors.toList());
             } else {
@@ -83,7 +82,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<TodoResponseDto> updateTodo(Long todoId, @Valid TodoRequestDto dto) {
+    public ResponseDto<TodoResponseDto> updateTodo(Long userId, Long todoId, @Valid TodoRequestDto dto) {
         TodoResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
 
@@ -99,9 +98,13 @@ public class TodoServiceImpl implements TodoService {
 
         try {
             Optional<Todo> optionalTodo = todoRepository.findById(todoId);
-            if(optionalTodo.isEmpty()) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            if(optionalTodo.isEmpty()) ResponseDto.setFailed(ResponseMessage.NOT_EXIST_TODO);
 
             Todo updateTodo = optionalTodo.get();
+
+            if (updateTodo.getUser().getUserId().equals(userId)) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+            }
 
             updateTodo = Todo.builder()
                     .user(updateTodo.getUser())
@@ -122,13 +125,19 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<Void> deleteTodo(Long todoId) {
+    public ResponseDto<Void> deleteTodo(Long userId , Long todoId) {
         try {
-            if(!todoRepository.existsById(todoId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            Todo todo = todoRepository.findById(todoId)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_TODO));
+
+            if (todo.getUser().getUserId().equals(userId)) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+
+            }
             todoRepository.deleteById(todoId);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_TODO);
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }

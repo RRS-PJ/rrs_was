@@ -36,4 +36,8 @@ public class Review {
 
     @Column(name = "REVIEW_CONTENT", nullable = false)
     private String reviewContent; // 리뷰 내용
+
+    @OneToOne
+    @JoinColumn (name =  "RESERVATION_ID", nullable = false)
+    private Reservation reservation; // FK reservation Id
 }

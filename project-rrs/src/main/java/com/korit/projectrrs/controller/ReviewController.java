@@ -23,10 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
+
     private static final String REVIEW = "/{reviewId}";
     private static final String PROVIDER = "/provider/{providerId}";
     private static final String PROVIDER_AVG = "/provider-avg/{providerId}";
-
 
     @PostMapping
     private ResponseEntity<ResponseDto<CreateReviewResponseDto>> createReview (
@@ -59,7 +59,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(REVIEW)
+    @GetMapping("reservation/{reservationId}"+REVIEW)
     private ResponseEntity<ResponseDto<GetReviewResponseDto>> getByReviewId (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId
@@ -69,12 +69,14 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping(REVIEW)
+    @PutMapping("reservation/{reservationId}"+REVIEW)
     private ResponseEntity<ResponseDto<UpdateReviewResponseDto>> updateReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long reviewId,
+            @PathVariable Long reservationId,
             @RequestBody UpdateReviewRequestDto dto
     ){
-        ResponseDto<UpdateReviewResponseDto> response = reviewService.updateReview(dto);
+        ResponseDto<UpdateReviewResponseDto> response = reviewService.updateReview(reviewId, reservationId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

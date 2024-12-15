@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class GetByProviderResponseDto {
+public class GetByProviderIdResponseDto {
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;
 
@@ -20,7 +20,7 @@ public class GetByProviderResponseDto {
 
     private ReservationStatus reservationStatus;
 
-    public GetByProviderResponseDto(Reservation reservation){
+    public GetByProviderIdResponseDto(Reservation reservation){
         this.reservationStartDate = reservation.getReservationStartDate();
         this.reservationEndDate = reservation.getReservationEndDate();
 

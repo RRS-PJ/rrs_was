@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -15,6 +16,13 @@ SELECT DISTINCT u.USER_ID,
 FROM USERS u
 JOIN AVAILABLE_DATE_OF_WEEK adw ON u.USER_ID = adw.PROVIDER_ID
 WHERE adw.AVAILABLE_DATE BETWEEN :startDate AND :endDate
+AND NOT EXISTS (
+    SELECT 1
+    FROM RESERVATIONS r
+    WHERE r.PROVIDER_ID = u.USER_ID
+    AND r.RESERVATION_START_DATE <= :endDate
+    AND r.RESERVATION_END_DATE >= :startDate
+)
 GROUP BY u.USER_ID
 HAVING NOT EXISTS (
     SELECT 1
@@ -54,4 +62,21 @@ WHERE
     AND U.ROLES LIKE '%, ROLE_PROVIDER%'
 """, nativeQuery = true)
     List<Reservation> findAllByProviderId(@Param("providerId") Long providerId);
+
+    @Query(value = """
+SELECT 
+    CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+FROM 
+    reservations r
+WHERE 
+    r.provider_id = :providerId
+AND 
+    r.reservation_start_date <= :reservationEndDate
+AND 
+    r.reservation_end_date >= :reservationStartDate
+""",nativeQuery = true)
+    boolean existsByProviderAndDateRange(
+            @Param("providerId") Long providerId,
+            @Param("reservationStartDate") LocalDate reservationStartDate,
+            @Param("reservationEndDate") LocalDate reservationEndDate);
 }

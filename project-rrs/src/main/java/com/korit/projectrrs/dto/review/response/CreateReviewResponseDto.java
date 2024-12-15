@@ -1,7 +1,9 @@
 package com.korit.projectrrs.dto.review.response;
 
 import com.korit.projectrrs.entity.Review;
+import lombok.Data;
 
+@Data
 public class CreateReviewResponseDto {
     private int reviewScore;
     private String reviewContent;

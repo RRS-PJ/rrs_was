@@ -6,6 +6,7 @@ import com.korit.projectrrs.dto.reservation.request.*;
 import com.korit.projectrrs.dto.reservation.response.*;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,15 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     private final String RESERVATION_GET = "/{reservationId}";
+    private final String RESERVATION_GET_MINE = "/reservations/mine";
     private final String RESERVATION_PUT = "/{reservationId}";
+    private final String RESERVATION_STATUS = "/update-reservation-status";
+    private final String FIND_PROVIDER_BY_DATE = "/getProvider";
 
     @PostMapping
     private ResponseEntity<ResponseDto<CreateReservationResponseDto>> createReservation (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody CreateReservationRequestDto dto
+            @Valid @RequestBody CreateReservationRequestDto dto
             ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<CreateReservationResponseDto> response = reservationService.createReservation(userId, dto);
@@ -35,7 +39,8 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    // userId로 조회 이용자 본인 예약 내역만 조회 가능하다.
+    @GetMapping(RESERVATION_GET_MINE+"/user")
     private ResponseEntity<ResponseDto<List<GetReservationResponseDto>>> getAllReservationByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
             ) {
@@ -45,51 +50,54 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping()
+    // providerId로 조회 제공자 본인 예약 내역만 조회 가능하다.
+    @GetMapping(RESERVATION_GET_MINE+"/provider")
+    private ResponseEntity<ResponseDto<List<GetByProviderIdResponseDto>>> getAllReservationByProviderId (
+            @AuthenticationPrincipal PrincipalUser principalUser
+    ) {
+        Long providerId = principalUser.getUser().getUserId();
+        ResponseDto<List<GetByProviderIdResponseDto>> response = reservationService.getReservationByProviderId(providerId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    // reservationId로 조회
+    @GetMapping(RESERVATION_GET)
     private ResponseEntity<ResponseDto<GetReservationResponseDto>> getReservationByReservationId (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestParam Long reservationId
+            @PathVariable Long reservationId
     ) {
         ResponseDto<GetReservationResponseDto> response = reservationService.getReservationByReservationId(reservationId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping
+    // reservation update 사실상 memo 밖에 수정 못한다.
+    @PutMapping(RESERVATION_PUT)
     private ResponseEntity<ResponseDto<UpdateReservationResponseDto>> updateReservation (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody ReservationUpdateRequestDto dto
+            @PathVariable Long reservationId,
+            @Valid @RequestBody ReservationUpdateRequestDto dto
         ){
-        ResponseDto<UpdateReservationResponseDto> response = reservationService.putReservationByReservationId(dto);
+        ResponseDto<UpdateReservationResponseDto> response = reservationService.updateReservationByReservationId(reservationId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-    @PostMapping
+    @PostMapping(FIND_PROVIDER_BY_DATE)
     private ResponseEntity<ResponseDto<Set<GetProviderByDateResponseDto>>> findProviderByDate (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody GetProviderByDateRequestDto dto
+            @Valid @RequestBody GetProviderByDateRequestDto dto
     ) {
         ResponseDto<Set<GetProviderByDateResponseDto>> response = reservationService.findProviderByDate(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
-    private ResponseEntity<ResponseDto<List<GetByProviderResponseDto>>> getAllReservationByProviderId (
-            @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody GetByProviderRequestDto dto
-    ) {
-        Long providerId = principalUser.getUser().getUserId();
-        ResponseDto<List<GetByProviderResponseDto>> response = reservationService.getReservationByProviderId(providerId, dto);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
-    }
-
-    @PutMapping
+    @PutMapping(RESERVATION_STATUS)
     private ResponseEntity<ResponseDto<UpdateStatusResponseDto>> updateReservationStatus (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody UpdateStatusRequestDto dto
+            @Valid @RequestBody UpdateStatusRequestDto dto
     ){
         ResponseDto<UpdateStatusResponseDto> response = reservationService.updateReservationStatus(dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;

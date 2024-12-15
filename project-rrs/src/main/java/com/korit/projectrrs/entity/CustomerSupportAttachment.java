@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "CUSTOMER_SUPPORT_ATTACHMENTS")
 @Data
@@ -24,5 +23,5 @@ public class CustomerSupportAttachment {
     private CustomerSupport customerSupport;
 
     @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_FILE", nullable = false)
-    private String CUSTOMER_SUPPORT_ATTACHMENT_FILE;
+    private String customerAttachmentFile;
 }

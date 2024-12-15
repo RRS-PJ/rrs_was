@@ -66,7 +66,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<GetCSResponseDto> getCustomerSupportByUserIdAndCustomerId(Long userId, Long customerSupportId) {
+    public ResponseDto<GetCSResponseDto> getCSByUserIdAndCustomerId(Long userId, Long customerSupportId) {
         GetCSResponseDto data = null;
         try {
             if (!userRepository.existsById(userId)) {
@@ -95,7 +95,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<List<GetCSResponseDto>> getAllCustomerSupportByUserId(Long userId) {
+    public ResponseDto<List<GetCSResponseDto>> getAllCSByUserId(Long userId) {
         List<GetCSResponseDto> data = null;
         try {
             if (!userRepository.existsById(userId)) {
@@ -120,7 +120,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<UpdateCSResponseDto> updateCustomerSupport(Long customerSupportId, UpdateCSRequestDto dto) {
+    public ResponseDto<UpdateCSResponseDto> updateCS(Long userId, Long customerSupportId, UpdateCSRequestDto dto) {
         UpdateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
@@ -138,6 +138,10 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             if (optionalCustomerSupport.isPresent()) {
 
                 CustomerSupport responsedCustomerSupport = optionalCustomerSupport.get();
+
+                if (!responsedCustomerSupport.getUser().getUserId().equals(userId)) {
+                    return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+                }
                 responsedCustomerSupport.setCustomerSupportTitle(title);
                 responsedCustomerSupport.setCustomerSupportContent(content);
 
@@ -155,11 +159,15 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<Void> deleteCustomerService(Long customerSupportId) {
+    public ResponseDto<Void> deleteCS(Long userId, Long customerSupportId) {
         try {
-            if(!customerSupportRepository.existsById(customerSupportId)) {
-                ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
+            CustomerSupport customerSupport = customerSupportRepository.findById(customerSupportId)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT));
+
+            if (!customerSupport.getUser().getUserId().equals(userId)){
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
             }
+
             customerSupportRepository.deleteById(customerSupportId);
         } catch (Exception e) {
             e.printStackTrace();

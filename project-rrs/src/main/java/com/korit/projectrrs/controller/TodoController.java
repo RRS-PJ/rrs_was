@@ -54,7 +54,8 @@ public class TodoController {
             @PathVariable Long todoId,
             @Valid @RequestBody TodoRequestDto dto
     ) {
-        ResponseDto<TodoResponseDto> response = todoService.updateTodo(todoId, dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<TodoResponseDto> response = todoService.updateTodo(userId, todoId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
@@ -64,7 +65,8 @@ public class TodoController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long todoId
     ) {
-        ResponseDto<Void> response = todoService.deleteTodo(todoId);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<Void> response = todoService.deleteTodo(userId, todoId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }

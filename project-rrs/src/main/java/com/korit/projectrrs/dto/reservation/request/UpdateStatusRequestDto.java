@@ -10,6 +10,7 @@ import lombok.Data;
 public class UpdateStatusRequestDto {
     @NotBlank
     private Long reservationId;
+
     @NotBlank
     private ReservationStatus reservationStatus;
 }

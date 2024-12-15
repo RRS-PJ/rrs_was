@@ -24,9 +24,9 @@ public class Todo {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    @Column(name = "TODO_PREPARATION_CONTENT", nullable = false)
     private String todoPreparationContent;
 
-    @Column(nullable = false)
+    @Column(name = "TODO_CREATE_AT", nullable = false)
     private LocalDate todoCreateAt;
 }

@@ -1,9 +1,10 @@
 package com.korit.projectrrs.dto.reservation.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class ReservationUpdateRequestDto {
-    private Long reservationId;
+    @NotBlank
     private String reservationMemo;
 }

@@ -1,5 +1,8 @@
 package com.korit.projectrrs.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum ReservationStatus {
     PENDING("예약대기"),
     IN_PROGRESS("예약 진행중"),

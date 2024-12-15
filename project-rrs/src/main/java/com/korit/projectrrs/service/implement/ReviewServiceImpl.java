@@ -8,8 +8,11 @@ import com.korit.projectrrs.dto.review.response.GetAvgReviewScoreResponseDto;
 import com.korit.projectrrs.dto.review.response.GetReviewResponseDto;
 import com.korit.projectrrs.dto.review.response.CreateReviewResponseDto;
 import com.korit.projectrrs.dto.review.response.UpdateReviewResponseDto;
+import com.korit.projectrrs.entity.Reservation;
+import com.korit.projectrrs.entity.ReservationStatus;
 import com.korit.projectrrs.entity.Review;
 import com.korit.projectrrs.entity.User;
+import com.korit.projectrrs.repositoiry.ReservationRepository;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReviewService;
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
     @Override
     public ResponseDto<CreateReviewResponseDto> createReview(Long userId, @Valid CreateReviewRequestDto dto)  {
@@ -35,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
         Long providerId = dto.getProviderId();
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
+        Long reservationId = dto.getReservationId();
 
         //유효성 검사
         if (content == null || content.isEmpty() || content.length() > 500) {
@@ -43,12 +48,18 @@ public class ReviewServiceImpl implements ReviewService {
         if (score > 5 || score < 0) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_SCORE_NUMBER_VALIDATION);
         }
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+
+        if (reservation.getReservationStatus() != ReservationStatus.COMPLETED){
+            return ResponseDto.setFailed(ResponseMessage.RESERVATION_IS_NOT_COMPLETED);
+        }
+
         try{
-            // Provider 등록 여부 확인
             User provider = userRepository.findProviderById(providerId)
                     .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
 
-            // User 조회
             Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
@@ -66,7 +77,6 @@ public class ReviewServiceImpl implements ReviewService {
 
             reviewRepository.save(review);
 
-            // 성공 응답 데이터 생성
             data = new CreateReviewResponseDto(review);
 
         } catch (Exception e) {
@@ -97,7 +107,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ResponseDto<GetAvgReviewScoreResponseDto> getAverageReviewScoreByProvider(Long providerId) {
         GetAvgReviewScoreResponseDto data = null;
         try {
-            Double avgScore = reviewRepository.findAverageReviewScoreByProvider(providerId)
+            Double avgScore = reviewRepository.findAvgReviewScoreByProvider(providerId)
                     .orElse(0.0);
             if (!userRepository.existsById(providerId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
@@ -126,12 +136,20 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<UpdateReviewResponseDto> updateReview(UpdateReviewRequestDto dto) {
+    public ResponseDto<UpdateReviewResponseDto> updateReview(Long reviewId, Long reservationId ,UpdateReviewRequestDto dto) {
         UpdateReviewResponseDto data = null;
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+
+        if (reservation.getReservationStatus() != ReservationStatus.COMPLETED){
+            return ResponseDto.setFailed(ResponseMessage.RESERVATION_IS_NOT_COMPLETED);
+        }
+
         try {
-            Optional<Review> optionalReview = reviewRepository.findById(dto.getReviewId());
+            Optional<Review> optionalReview = reviewRepository.findById(reviewId);
             if (optionalReview.isPresent()) {
                 Review respondedReview = optionalReview.get().toBuilder()
                         .reviewScore(score)

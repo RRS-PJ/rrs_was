@@ -27,22 +27,4 @@ WHERE
     AND U.ROLES LIKE '%, ROLE_PROVIDER%';
 """,nativeQuery = true)
     Optional<User> findProviderById(@Param("userId") Long userId);
-
-    @Query(value = """
-SELECT
-    U.NAME,
-    U.NICKNAME,
-    U.PHONE,
-    U.PROFILE_IMAGE_URL,
-    AVG(R.REVIEW_SCORE) AS avgReviewScore
-FQROM
-    USERS U
-INNER JOIN
-    REVIEWS R ON U.USER_ID = R.PROVIDER_ID
-WHERE
-    U.ROLES LIKE '%, ROLE_PROVIDER%'
-GROUP BY
-    U.NAME, U.NICKNAME, U.PHONE, U.PROFILE_IMAGE_URL
-            """, nativeQuery = true)
-Optional<User> findChosenProviderById(@Param("providerId") Long providerId);
 }

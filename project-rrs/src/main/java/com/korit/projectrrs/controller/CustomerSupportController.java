@@ -9,6 +9,7 @@ import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.CustomerSupportService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class CustomerSupportController {
     @PostMapping
     private ResponseEntity<ResponseDto<CreateCSResponseDto>> createCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody CreateCSRequestDto dto
+            @Valid @RequestBody CreateCSRequestDto dto
             ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<CreateCSResponseDto> response = customerSupportService.createCustomerSupport(userId, dto);
@@ -44,7 +45,7 @@ public class CustomerSupportController {
             @PathVariable Long customerSupportId
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<GetCSResponseDto> response = customerSupportService.getCustomerSupportByUserIdAndCustomerId(userId, customerSupportId);
+        ResponseDto<GetCSResponseDto> response = customerSupportService.getCSByUserIdAndCustomerId(userId, customerSupportId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -54,7 +55,7 @@ public class CustomerSupportController {
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<GetCSResponseDto>> response = customerSupportService.getAllCustomerSupportByUserId(userId);
+        ResponseDto<List<GetCSResponseDto>> response = customerSupportService.getAllCSByUserId(userId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -63,9 +64,10 @@ public class CustomerSupportController {
     private ResponseEntity<ResponseDto<UpdateCSResponseDto>> updateCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long customerSupportId,
-            @RequestBody UpdateCSRequestDto dto
+            @Valid @RequestBody UpdateCSRequestDto dto
     ) {
-        ResponseDto<UpdateCSResponseDto> response = customerSupportService.updateCustomerSupport(customerSupportId, dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<UpdateCSResponseDto> response = customerSupportService.updateCS(userId, customerSupportId, dto);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -75,7 +77,8 @@ public class CustomerSupportController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long customerSupportId
     ) {
-        ResponseDto<Void> response = customerSupportService.deleteCustomerService(customerSupportId);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<Void> response = customerSupportService.deleteCS(userId, customerSupportId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
