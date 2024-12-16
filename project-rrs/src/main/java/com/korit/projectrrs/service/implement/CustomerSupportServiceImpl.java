@@ -14,7 +14,7 @@ import com.korit.projectrrs.repositoiry.CustomerSupportAttachmentRepository;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
-import com.korit.projectrrs.service.FileUploadService;
+import com.korit.projectrrs.service.FileAttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final CustomerSupportRepository customerSupportRepository;
     private final UserRepository userRepository;
-    private final FileUploadService fileUploadService;
+    private final FileAttachmentService fileAttachmentService;
     private final CustomerSupportAttachmentRepository customerSupportAttachmentRepository;
 
     @Override
@@ -67,7 +67,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             // 파일 업로드 처리
             List<MultipartFile> files = fileDto.getFile();
             for (MultipartFile file : files) {
-                String fileUrl = fileUploadService.UploadFile(file);
+                String fileUrl = fileAttachmentService.uploadCSFile(file).getData();
 
                 if (fileUrl != null) {
                     CustomerSupportAttachment attachment = new CustomerSupportAttachment();

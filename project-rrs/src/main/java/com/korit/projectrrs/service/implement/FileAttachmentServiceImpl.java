@@ -28,7 +28,7 @@ public class FileAttachmentServiceImpl implements FileAttachmentService {
     private String rootPath;
 
     @Override
-    public ResponseDto<String> UploadFile(MultipartFile file) {
+    public ResponseDto<String> uploadCSFile(MultipartFile file) {
         String filePath = null;
 
         if(file == null) { return null; }
@@ -55,7 +55,7 @@ public class FileAttachmentServiceImpl implements FileAttachmentService {
     }
 
     @Override
-    public ResponseDto<Void> removeFile(Long attachmentId) {
+    public ResponseDto<Void> removeCSFile(Long attachmentId) {
         String srcFileName = null;
 
         CustomerSupportAttachment attachment = customerSupportAttachmentRepository.findById(attachmentId)

@@ -4,6 +4,6 @@ import com.korit.projectrrs.dto.ResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileAttachmentService {
-    ResponseDto<String> UploadFile(MultipartFile file);
-    ResponseDto<Void> removeFile(Long attachmentId);
+    ResponseDto<String> uploadCSFile(MultipartFile file);
+    ResponseDto<Void> removeCSFile(Long attachmentId);
 }

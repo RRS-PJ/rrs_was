@@ -45,7 +45,7 @@ public class FileUploadController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long attachmentId
     ) {
-        ResponseDto<Void> response = fileAttachmentService.removeFile(attachmentId);
+        ResponseDto<Void> response = fileAttachmentService.removeCSFile(attachmentId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
