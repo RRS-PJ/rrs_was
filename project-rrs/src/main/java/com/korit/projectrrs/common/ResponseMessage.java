@@ -129,7 +129,9 @@ public class ResponseMessage {
     public static final String NOT_REGISTERED_PROVIDER = "Provider is not registered";
 
     // 첨부파일 관련 메세지
-    public static final String FILE_UPLOAD_ERROR = "File upload is failed";
+    public static final String FILE_UPLOAD_FAILED = "File upload is failed";
+    public static final String FILE_DELETE_FAILED = "File delete is failed";
+    public static final String FILE_NOT_FOUND = "This file is not found";
     public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
 
     // 예약 관련 메세지
@@ -146,4 +148,6 @@ public class ResponseMessage {
     public static final String RESERVATION_ALREADY_EXISTS = "This provider already has a reservation";
     public static final String INVALIDATED_RESERVATION_STATUS = "The reservation status is invalid";
     public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
+
+
 }

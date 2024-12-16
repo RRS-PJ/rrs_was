@@ -67,12 +67,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             // 파일 업로드 처리
             List<MultipartFile> files = fileDto.getFile();
             for (MultipartFile file : files) {
-                String imgUrl = fileUploadService.UploadProfileImg(file);
+                String fileUrl = fileUploadService.UploadFile(file);
 
-                if (imgUrl != null) {
+                if (fileUrl != null) {
                     CustomerSupportAttachment attachment = new CustomerSupportAttachment();
                     attachment.setCustomerSupport(customerSupport);
-                    attachment.setCustomerAttachmentFile(imgUrl);
+                    attachment.setCustomerAttachmentFile(fileUrl);
                     customerSupportAttachmentRepository.save(attachment);
                 }
             }

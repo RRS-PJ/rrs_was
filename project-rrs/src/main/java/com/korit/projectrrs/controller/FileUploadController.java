@@ -6,7 +6,7 @@ import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
 import com.korit.projectrrs.dto.fileUpload.request.UploadFileRequestDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.CustomerSupportService;
-import com.korit.projectrrs.service.FileUploadService;
+import com.korit.projectrrs.service.FileAttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileUploadController {
     private final CustomerSupportService customerSupportService;
-    private final FileUploadService fileUploadService;
+    private final FileAttachmentService fileAttachmentService;
 
     @CrossOrigin
     @PostMapping("/api/upload")
-    public ResponseEntity<?> upload(
+    public ResponseEntity<ResponseDto<?>> uploadCSFile(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @ModelAttribute UploadFileRequestDto uploadFileDto
     ) {
@@ -36,6 +36,17 @@ public class FileUploadController {
         ResponseDto<CreateCSResponseDto> response = customerSupportService.createCustomerSupport(userId, dto, uploadFileDto);
 
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @CrossOrigin
+    @DeleteMapping
+    private ResponseEntity<ResponseDto<Void>> removeCSFile(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long attachmentId
+    ) {
+        ResponseDto<Void> response = fileAttachmentService.removeFile(attachmentId);
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.FORBIDDEN;
         return ResponseEntity.status(status).body(response);
     }
 }
