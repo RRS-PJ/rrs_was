@@ -7,13 +7,18 @@ import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
 import com.korit.projectrrs.dto.customerSupport.response.GetCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
+import com.korit.projectrrs.dto.fileUpload.request.UploadFileRequestDto;
 import com.korit.projectrrs.entity.CustomerSupport;
+import com.korit.projectrrs.entity.CustomerSupportAttachment;
+import com.korit.projectrrs.repositoiry.CustomerSupportAttachmentRepository;
 import com.korit.projectrrs.repositoiry.CustomerSupportRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CustomerSupportService;
+import com.korit.projectrrs.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,9 +30,11 @@ import java.util.stream.Collectors;
 public class CustomerSupportServiceImpl implements CustomerSupportService {
     private final CustomerSupportRepository customerSupportRepository;
     private final UserRepository userRepository;
+    private final FileUploadService fileUploadService;
+    private final CustomerSupportAttachmentRepository customerSupportAttachmentRepository;
 
     @Override
-    public ResponseDto<CreateCSResponseDto> createCustomerSupport(Long userId, CreateCSRequestDto dto) {
+    public ResponseDto<CreateCSResponseDto> createCustomerSupport(Long userId, CreateCSRequestDto dto, UploadFileRequestDto fileDto) {
         CreateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
@@ -56,6 +63,20 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                     .build();
 
             customerSupportRepository.save(customerSupport);
+
+            // 파일 업로드 처리
+            List<MultipartFile> files = fileDto.getFile();
+            for (MultipartFile file : files) {
+                String imgUrl = fileUploadService.UploadProfileImg(file);
+
+                if (imgUrl != null) {
+                    CustomerSupportAttachment attachment = new CustomerSupportAttachment();
+                    attachment.setCustomerSupport(customerSupport);
+                    attachment.setCustomerAttachmentFile(imgUrl);
+                    customerSupportAttachmentRepository.save(attachment);
+                }
+            }
+
             data = new CreateCSResponseDto(customerSupport);
 
         } catch (Exception e) {
