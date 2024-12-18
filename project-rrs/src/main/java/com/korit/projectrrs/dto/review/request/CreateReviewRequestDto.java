@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CreateReviewRequestDto {
     @NotBlank
-    private Long providerId;
+    private Long reservationId;
 
     @Min(0)
     @Max(5)
@@ -16,7 +16,4 @@ public class CreateReviewRequestDto {
 
     @NotBlank
     private String reviewContent;
-
-    @NotBlank
-    private Long reservationId;
 }

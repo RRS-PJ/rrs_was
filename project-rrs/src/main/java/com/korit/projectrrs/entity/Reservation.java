@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.korit.projectrrs.converter.ReservationStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "RESERVATIONS")
@@ -18,7 +21,7 @@ import java.time.LocalDate;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RESERVATION_ID")
+    @Column(name = "RESERVATION_ID", nullable = false, unique = true)
     private Long reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,4 +45,7 @@ public class Reservation {
     @Builder.Default
     @Column(name = "RESERVATION_MEMO")
     private String reservationMemo = "";
+
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Review review;
 }

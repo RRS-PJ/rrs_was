@@ -194,7 +194,7 @@ public class ReservationServiceImpl implements ReservationService {
                     .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
 
             // 예약대기가 아니면 수정이 불가능
-            if (reservation.getReservationStatus() != ReservationStatus.IN_PROGRESS){
+            if (reservation.getReservationStatus() != ReservationStatus.PENDING){
                 return  ResponseDto.setFailed(ResponseMessage.INVALIDATED_RESERVATION_STATUS);
             }
 

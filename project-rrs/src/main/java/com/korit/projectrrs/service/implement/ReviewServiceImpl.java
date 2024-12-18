@@ -36,7 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ResponseDto<CreateReviewResponseDto> createReview(Long userId, @Valid CreateReviewRequestDto dto)  {
         CreateReviewResponseDto data = null;
-        Long providerId = dto.getProviderId();
         int score = dto.getReviewScore();
         String content = dto.getReviewContent();
         Long reservationId = dto.getReservationId();
@@ -52,14 +51,17 @@ public class ReviewServiceImpl implements ReviewService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
 
+        reservationId = reservation.getReservationId();
+
+        if (reviewRepository.existsByReservation_ReservationId(reservationId)) {
+            return ResponseDto.setFailed(ResponseMessage.REVIEW_NO_OVERLAP);
+        }
+
         if (reservation.getReservationStatus() != ReservationStatus.COMPLETED){
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_IS_NOT_COMPLETED);
         }
 
         try{
-            User provider = userRepository.findProviderById(providerId)
-                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
-
             Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
@@ -69,6 +71,7 @@ public class ReviewServiceImpl implements ReviewService {
 
             Review review = Review.builder()
                     .user(user)
+                    .reservation(reservation)
                     .reviewScore(score)
                     .reviewContent(content)
                     .reviewCreatedAt(LocalDateTime.now())

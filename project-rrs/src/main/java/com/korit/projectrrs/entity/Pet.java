@@ -19,7 +19,7 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long petId;
 
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, unique = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private User user;

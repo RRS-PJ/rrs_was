@@ -20,7 +20,7 @@ import java.util.List;
 public class CustomerSupport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CUSTOMER_SUPPORT_ID", nullable = false)
+    @Column(name = "CUSTOMER_SUPPORT_ID", nullable = false, unique = true)
     private Long csId;
 
     @ManyToOne(fetch = FetchType.LAZY)

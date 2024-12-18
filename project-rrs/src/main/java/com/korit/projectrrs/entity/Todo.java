@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TODO_ID", nullable = false)
+    @Column(name = "TODO_ID", nullable = false, unique = true)
     private Long todoId;
 
     @ManyToOne(fetch = FetchType.LAZY)

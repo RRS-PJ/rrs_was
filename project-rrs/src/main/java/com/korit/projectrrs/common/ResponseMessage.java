@@ -123,6 +123,7 @@ public class ResponseMessage {
     // 리뷰 관련 메세지
     public static final String REVIEW_TOO_lONG =  "Review Content is too long.";
     public static final String REVIEW_SCORE_NUMBER_VALIDATION =  "The review score is too long or too short";
+    public static final String REVIEW_NO_OVERLAP = "Review cant not be overlapped";
 
     // 댕시터 관련 메세지
     public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";

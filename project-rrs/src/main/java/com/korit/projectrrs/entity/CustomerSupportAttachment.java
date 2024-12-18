@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class CustomerSupportAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_ID", nullable = false)
+    @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_ID", nullable = false, unique = true)
     private Long customerSupportAttachmentId;
 
     @ManyToOne(fetch = FetchType.LAZY)

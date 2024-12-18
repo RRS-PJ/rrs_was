@@ -21,7 +21,7 @@ FROM
 INNER JOIN USERS U ON U.USER_ID = R.PROVIDER_ID
 WHERE 
     R.PROVIDER_ID = :providerId
-    AND U.ROLES LIKE '%, ROLE_PROVIDER%'
+    AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
     Optional<List<Review>>  findReviewsByProvider(@Param("providerId") Long providerId);
 
@@ -29,13 +29,13 @@ WHERE
     @Query(value = """
 SELECT 
     AVG(R.REVIEW_SCORE)
-FROM 
+FROM
     REVIEWS R
-        INNER jOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
-        INNER JOIN USERS U ON U.USER_ID = R.PROVIDER_ID
-WHERE
-    U.USER_ID = :providerId 
-    AND U.ROLES LIKE '%, ROLE_PROVIDER%'
+    LEFT OUTER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
+    LEFT OUTER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
+            WHERE
+    U.USER_ID = :providerId\s
+    AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
     Optional<Double> findAvgReviewScoreByProvider(@Param("providerId") Long providerId);
 
@@ -46,4 +46,6 @@ WHERE
         GROUP BY r.provider_user_id
     """, nativeQuery = true)
     Map<Long, Double> findAverageReviewScoresByProviders(@Param("providerUserIds") Set<Long> providerUserIds);
+
+    boolean existsByReservation_ReservationId(Long reservationId);
 }
