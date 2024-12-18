@@ -26,7 +26,7 @@ public class ReservationController {
     private final String RESERVATION_GET_MINE = "/reservations/mine";
     private final String RESERVATION_PUT = "/{reservationId}";
     private final String RESERVATION_STATUS = "/update-reservation-status";
-    private final String FIND_PROVIDER_BY_DATE = "/getProvider";
+    private final String FIND_PROVIDER_BY_DATE = "/get-provider";
 
     @PostMapping
     private ResponseEntity<ResponseDto<CreateReservationResponseDto>> createReservation (
@@ -40,7 +40,7 @@ public class ReservationController {
     }
 
     // userId로 조회 이용자 본인 예약 내역만 조회 가능하다.
-    @GetMapping(RESERVATION_GET_MINE+"/user")
+    @GetMapping(RESERVATION_GET_MINE)
     private ResponseEntity<ResponseDto<List<GetReservationResponseDto>>> getAllReservationByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
             ) {

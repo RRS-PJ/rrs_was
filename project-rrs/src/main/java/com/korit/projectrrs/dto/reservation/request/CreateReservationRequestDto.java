@@ -11,9 +11,6 @@ import java.time.LocalDate;
 @Data
 public class CreateReservationRequestDto {
     @NotBlank
-    private Long userId;
-
-    @NotBlank
     private Long providerId;
 
     @NotNull

@@ -18,7 +18,7 @@ public class CustomerSupport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CUSTOMER_SUPPORT_ID", nullable = false)
-    private Long reviewId;
+    private Long csId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)

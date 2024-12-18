@@ -69,7 +69,6 @@ public class ReviewServiceImpl implements ReviewService {
 
             Review review = Review.builder()
                     .user(user)
-                    .provider(provider)
                     .reviewScore(score)
                     .reviewContent(content)
                     .reviewCreatedAt(LocalDateTime.now())

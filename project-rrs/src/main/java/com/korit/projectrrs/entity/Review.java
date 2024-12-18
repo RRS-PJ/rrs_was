@@ -24,10 +24,6 @@ public class Review {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user; // USER_ID와 연결된 USER 엔티티
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROVIDER_ID", nullable = false)
-    private User provider; // PROVIDER_ID와 연결된 USER 엔티티
-
     @Column(name = "REVIEW_CREATE_AT", nullable = false)
     private LocalDateTime reviewCreatedAt;
 
