@@ -150,4 +150,5 @@ public class ResponseMessage {
     public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
 
 
+    public static final String UNKNOWN_STATUS = "This is Unknown ReservationStatus";
 }

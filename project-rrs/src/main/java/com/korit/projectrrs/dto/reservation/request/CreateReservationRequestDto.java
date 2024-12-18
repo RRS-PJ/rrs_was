@@ -21,5 +21,5 @@ public class CreateReservationRequestDto {
     @Future
     private LocalDate reservationEndDate;
 
-    private ReservationStatus reservationStatus; // 기본값 '예약대기'
+    private String reservationMemo;
 }

@@ -24,7 +24,7 @@ FROM
     USERS U
 WHERE
     U.USER_ID = :userId
-    AND U.ROLES LIKE '%, ROLE_PROVIDER%';
+    AND U.ROLES LIKE '%ROLE_PROVIDER%';
 """,nativeQuery = true)
-    Optional<User> findProviderById(@Param("userId") Long userId);
+    Optional<User> findProviderById(@Param("userId") Long providerId);
 }

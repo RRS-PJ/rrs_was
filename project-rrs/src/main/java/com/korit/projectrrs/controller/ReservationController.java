@@ -23,7 +23,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     private final String RESERVATION_GET = "/{reservationId}";
-    private final String RESERVATION_GET_MINE = "/reservations/mine";
+    private final String RESERVATION_GET_MINE = "/mine";
     private final String RESERVATION_PUT = "/{reservationId}";
     private final String RESERVATION_STATUS = "/update-reservation-status";
     private final String FIND_PROVIDER_BY_DATE = "/get-provider";

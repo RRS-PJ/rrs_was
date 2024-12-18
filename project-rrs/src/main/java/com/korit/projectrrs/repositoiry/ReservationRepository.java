@@ -12,13 +12,13 @@ import java.util.Set;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     @Query(value = """
-SELECT DISTINCT u.USER_ID,
-FROM USERS u
-JOIN AVAILABLE_DATE_OF_WEEK adw ON u.USER_ID = adw.PROVIDER_ID
+SELECT DISTINCT u.USER_ID
+FROM `USERS` u
+JOIN `AVAILABLE_DATE_OF_WEEK` adw ON u.USER_ID = adw.PROVIDER_ID
 WHERE adw.AVAILABLE_DATE BETWEEN :startDate AND :endDate
 AND NOT EXISTS (
     SELECT 1
-    FROM RESERVATIONS r
+    FROM `RESERVATIONS` r
     WHERE r.PROVIDER_ID = u.USER_ID
     AND r.RESERVATION_START_DATE <= :endDate
     AND r.RESERVATION_END_DATE >= :startDate
@@ -54,28 +54,29 @@ WHERE
 
     @Query(value = """
 SELECT
-    *
+    R.*
 FROM 
     RESERVATIONS R
+    INNER JOIN USERS U ON U.USER_ID = R.PROVIDER_ID
 WHERE
-    R.USER_ID = :providerId
-    AND U.ROLES LIKE '%, ROLE_PROVIDER%'
+    R.PROVIDER_ID = :providerId
+    AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
     List<Reservation> findAllByProviderId(@Param("providerId") Long providerId);
 
     @Query(value = """
 SELECT 
-    CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+     CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
 FROM 
-    reservations r
+    RESERVATIONS r
 WHERE 
-    r.provider_id = :providerId
+    r.PROVIDER_ID = :providerId
 AND 
-    r.reservation_start_date <= :reservationEndDate
+    r.RESERVATION_START_DATE <= :reservationEndDate
 AND 
-    r.reservation_end_date >= :reservationStartDate
-""",nativeQuery = true)
-    boolean existsByProviderAndDateRange(
+    r.RESERVATION_END_DATE >= :reservationStartDate
+""", nativeQuery = true)
+    int existsByProviderAndDateRange(
             @Param("providerId") Long providerId,
             @Param("reservationStartDate") LocalDate reservationStartDate,
             @Param("reservationEndDate") LocalDate reservationEndDate);

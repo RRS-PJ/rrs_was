@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.korit.projectrrs.converter.ReservationStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,10 +35,11 @@ public class Reservation {
     @Column(name = "RESERVATION_END_DATE", nullable = false)
     private LocalDate reservationEndDate;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ReservationStatusConverter.class)
     @Column(name = "RESERVATION_STATUS", nullable = false, columnDefinition = "ENUM('예약대기', '예약 진행중', '거절', '취소', '완료') DEFAULT '예약대기'")
     private ReservationStatus reservationStatus = ReservationStatus.PENDING; // 기본값 '예약대기'
 
+    @Builder.Default
     @Column(name = "RESERVATION_MEMO")
-    private String reservationMemo;
+    private String reservationMemo = "";
 }

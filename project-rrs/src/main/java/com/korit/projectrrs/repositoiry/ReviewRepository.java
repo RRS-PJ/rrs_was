@@ -28,7 +28,7 @@ WHERE
     // 제공자 닉네임으로 평균 리뷰 조회
     @Query(value = """
 SELECT 
-    AVG(R.SCORE)
+    AVG(R.REVIEW_SCORE)
 FROM 
     REVIEWS R
         INNER jOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
@@ -40,7 +40,7 @@ WHERE
     Optional<Double> findAvgReviewScoreByProvider(@Param("providerId") Long providerId);
 
     @Query(value = """
-        SELECT r.provider_user_id, AVG(r.score) 
+        SELECT r.provider_user_id, AVG(r.REVIEW_SCORE) 
         FROM reviews r 
         WHERE r.provider_user_id IN :providerUserIds 
         GROUP BY r.provider_user_id

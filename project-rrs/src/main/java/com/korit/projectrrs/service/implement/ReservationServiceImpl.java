@@ -37,6 +37,8 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDate endDate = dto.getReservationEndDate();
         LocalDate currentDate = LocalDate.now();
         LocalDate maxAllowedDate = currentDate.plusDays(30);  // 30일 이후의 날짜 제한
+        String memo = dto.getReservationMemo();
+        Long providerId = dto.getProviderId();
 
         // 시작 날짜가 과거일 경우
         if (startDate.isBefore(currentDate)) {
@@ -63,15 +65,16 @@ public class ReservationServiceImpl implements ReservationService {
             return ResponseDto.setFailed(ResponseMessage.MINIMUM_ONE_DAY_RESERVATION);
         }
 
-        boolean isReserved = reservationRepository.existsByProviderAndDateRange(dto.getProviderId(), dto.getReservationStartDate(), dto.getReservationEndDate());
-        if (isReserved) {
+        int isReserved = reservationRepository.existsByProviderAndDateRange(dto.getProviderId(), dto.getReservationStartDate(), dto.getReservationEndDate());
+        if (isReserved == 1) {
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_ALREADY_EXISTS);
         }
 
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(()-> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
-            User provider = userRepository.findProviderById(dto.getProviderId())
+
+            User provider = userRepository.findProviderById(providerId)
                     .orElseThrow(()-> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
 
             Reservation newReservation = Reservation.builder()
@@ -80,6 +83,7 @@ public class ReservationServiceImpl implements ReservationService {
                     .reservationStartDate(startDate)
                     .reservationEndDate(endDate)
                     .reservationStatus(ReservationStatus.PENDING)
+                    .reservationMemo(memo)
                     .build();
 
             reservationRepository.save(newReservation);
