@@ -4,9 +4,11 @@ import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CreateCSRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.GetAllCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.GetCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
+import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.entity.CustomerSupport;
 import com.korit.projectrrs.entity.CustomerSupportAttachment;
 import com.korit.projectrrs.repositoiry.CustomerSupportAttachmentRepository;
@@ -66,15 +68,16 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             customerSupportRepository.save(customerSupport);
 
             // 파일 업로드 처리
-            List<MultipartFile> files = dto.getFiles();
+            List<MultipartFile> Multifiles = dto.getFiles();
+            List<String > fileNames = new ArrayList<>();
 
-            if (files == null || files.isEmpty()) {
-                files = new ArrayList<>();  // 빈 배열로 초기화
+            if (Multifiles == null || Multifiles.isEmpty()) {
+                Multifiles = new ArrayList<>();  // 빈 배열로 초기화
             };
 
-            for (MultipartFile file : files) {
-                String fileName = fileService.uploadFile(file, "customer-support");  // 파일 업로드 서비스 호출
-
+            for (MultipartFile multiFile : Multifiles) {
+                String fileName = fileService.uploadFile(multiFile, "customer-support");  // 파일 업로드 서비스 호출
+                fileNames.add(fileName);
                 // 파일 정보 CustomerSupportAttachment 테이블에 저장
                 if (fileName != null) {
                     CustomerSupportAttachment attachment = new CustomerSupportAttachment();
@@ -85,7 +88,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             }
 
             data = new CreateCSResponseDto(customerSupport).toBuilder()
-                    .files(files)
+                    .fileName(fileNames)
                     .build();
 
         } catch (Exception e) {
@@ -112,6 +115,18 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                     return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
                 }
 
+                List<CustomerSupportAttachment> csAtts = csAttRepository.findByCSId(customerSupportId);
+                if (csAtts.isEmpty()){
+                    csAtts = new ArrayList<>();
+                }
+
+                List<GetFilePathAndName> filesInfo = new ArrayList<>();
+
+                for (CustomerSupportAttachment att: csAtts) {
+                    File file = new File(att.getCustomerAttachmentFile());
+                    filesInfo.add(new GetFilePathAndName(file));
+                }
+
                 data = new GetCSResponseDto(optionalCustomerSupport.get());
 
             } else {
@@ -127,8 +142,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public ResponseDto<List<GetCSResponseDto>> getAllCSByUserId(Long userId) {
-        List<GetCSResponseDto> data = null;
+    public ResponseDto<List<GetAllCSResponseDto>> getAllCSByUserId(Long userId) {
+        List<GetAllCSResponseDto> data = null;
         try {
             if (!userRepository.existsById(userId)) {
                 // 유저 아이디가 존재하지 않음
@@ -138,7 +153,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
             if(!customerServices.isEmpty()){
                 data = customerServices
-                        .stream().map(GetCSResponseDto::new)
+                        .stream().map(GetAllCSResponseDto::new)
                         .collect(Collectors.toList());
             } else {
                 // 고객센터 포스트가 존재하지 않음

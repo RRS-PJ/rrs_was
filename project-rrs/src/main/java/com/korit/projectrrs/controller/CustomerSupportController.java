@@ -4,6 +4,7 @@ import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CreateCSRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
+import com.korit.projectrrs.dto.customerSupport.response.GetAllCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.GetCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.CreateCSResponseDto;
 import com.korit.projectrrs.dto.customerSupport.response.UpdateCSResponseDto;
@@ -51,11 +52,11 @@ public class CustomerSupportController {
     }
 
     @GetMapping
-    private ResponseEntity<ResponseDto<List<GetCSResponseDto>>> getAllCustomerSupportByUserId (
+    private ResponseEntity<ResponseDto<List<GetAllCSResponseDto>>> getAllCustomerSupportByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<GetCSResponseDto>> response = customerSupportService.getAllCSByUserId(userId);
+        ResponseDto<List<GetAllCSResponseDto>> response = customerSupportService.getAllCSByUserId(userId);
         HttpStatus status = response.isResult()? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

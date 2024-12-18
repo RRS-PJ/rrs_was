@@ -1,15 +1,13 @@
 package com.korit.projectrrs.dto.customerSupport.response;
 
-import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndPath;
+import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder(toBuilder = true)
@@ -20,7 +18,7 @@ public class GetCSResponseDto {
     private char customerSupportCategory;
     private LocalDateTime customerSupportCreateAt;
     private char customerSupportStatus;
-    private List<GetFilePathAndPath> fileInfos;
+    private List<GetFilePathAndName> fileInfos;
 
     public GetCSResponseDto(CustomerSupport customerSupport){
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
