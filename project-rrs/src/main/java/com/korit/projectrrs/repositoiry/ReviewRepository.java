@@ -15,12 +15,13 @@ import java.util.Set;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = """
 SELECT 
-    *
-FROM 
+    R.*
+FROM
     REVIEWS R
-INNER JOIN USERS U ON U.USER_ID = R.PROVIDER_ID
+    INNER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
+    INNER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
 WHERE 
-    R.PROVIDER_ID = :providerId
+    U.USER_ID = :providerId
     AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
     Optional<List<Review>>  findReviewsByProvider(@Param("providerId") Long providerId);
@@ -31,9 +32,9 @@ SELECT
     AVG(R.REVIEW_SCORE)
 FROM
     REVIEWS R
-    LEFT OUTER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
-    LEFT OUTER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
-            WHERE
+    INNER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
+    INNER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
+WHERE
     U.USER_ID = :providerId\s
     AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
