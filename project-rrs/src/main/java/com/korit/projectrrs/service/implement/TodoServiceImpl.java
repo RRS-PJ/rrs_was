@@ -52,6 +52,7 @@ public class TodoServiceImpl implements TodoService {
                     .user(user)
                     .todoPreparationContent(todoContent)
                     .todoCreateAt(todoCreateAt)
+                    .todoStatus('0')
                     .build();
 
             todoRepository.save(todo);
@@ -62,6 +63,25 @@ public class TodoServiceImpl implements TodoService {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
 
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
+
+    @Override
+    public ResponseDto<List<TodoResponseDto>> getAllTodosByUser(Long userId) {
+        List<TodoResponseDto> data = null;
+        try {
+            List<Todo> optionalTodos = todoRepository.findAllByUser_UserId(userId);
+            if (!optionalTodos.isEmpty()) {
+                data = optionalTodos.stream()
+                        .map(TodoResponseDto::new)
+                        .collect(Collectors.toList());
+            } else {
+                return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
@@ -89,16 +109,19 @@ public class TodoServiceImpl implements TodoService {
         TodoResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
         LocalDate todoCreateAt = dto.getTodoCreateAt();
+        Character todoStatus = dto.getTodoStatus();
 
-        if (todoContent == null || todoContent.trim().isEmpty()) {
-            // Todo 내용 공백
-            return ResponseDto.setFailed(ResponseMessage.TODO_IS_EMPTY);
+        if (todoContent != null){
+            if (todoContent.length() > 255) {
+                // Todo 내용 글자수 초과
+                return ResponseDto.setFailed(ResponseMessage.TODO_TOO_LONG);
+            }
         }
 
-        if (todoContent.length() > 255) {
-            // Todo 내용 글자수 초과
-            return ResponseDto.setFailed(ResponseMessage.TODO_TOO_LONG);
-        }
+        if (todoStatus != null) {
+            if (todoStatus != '0' && todoStatus != '1') {
+            return ResponseDto.setFailed(ResponseMessage.TODO_NOT_EXIST_STATUS);
+        }}
 
         try {
            Todo todo = todoRepository.findById(todoId)
@@ -112,9 +135,11 @@ public class TodoServiceImpl implements TodoService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_TODO_ID);
             }
 
+
             Todo updatedTodo = todo.toBuilder()
-                    .todoPreparationContent(todoContent)
+                    .todoPreparationContent(todoContent == null ? todo.getTodoPreparationContent() : todoContent)
                     .todoCreateAt(todoCreateAt == null ? todo.getTodoCreateAt() : todoCreateAt)
+                    .todoStatus(todoStatus == null ? todo.getTodoStatus() : todoStatus)
                     .build();
 
             todoRepository.save(updatedTodo);

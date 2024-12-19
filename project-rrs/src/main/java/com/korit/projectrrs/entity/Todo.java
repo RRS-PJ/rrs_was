@@ -29,4 +29,7 @@ public class Todo {
 
     @Column(name = "TODO_CREATE_AT", nullable = false)
     private LocalDate todoCreateAt;
+
+    @Column(name = "TODO_STATUS", nullable = false)
+    private Character todoStatus;
 }

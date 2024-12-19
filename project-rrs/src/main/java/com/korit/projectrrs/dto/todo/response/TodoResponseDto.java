@@ -9,9 +9,11 @@ import java.time.LocalDate;
 public class TodoResponseDto {
     private String todoPreparationContent;
     private LocalDate todoCreateAt;
+    private Character todoStatus;
 
     public TodoResponseDto(Todo todo){
         this.todoPreparationContent = todo.getTodoPreparationContent();
         this.todoCreateAt = todo.getTodoCreateAt();
+        this.todoStatus = todo.getTodoStatus();
     }
 }

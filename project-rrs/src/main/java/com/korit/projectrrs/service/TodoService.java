@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface TodoService {
     ResponseDto<TodoResponseDto> createTodo(Long userId, TodoRequestDto dto);
+    ResponseDto<List<TodoResponseDto>> getAllTodosByUser(Long userId);
     ResponseDto<List<TodoResponseDto>> getAllTodosByUserIdAndDay(Long userId, LocalDate day);
     ResponseDto<TodoResponseDto> updateTodo(Long userId, Long todoId, UpdateTodoRequestDto dto);
     ResponseDto<Void> deleteTodo(Long userId, Long todoId);

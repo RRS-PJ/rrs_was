@@ -45,13 +45,13 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
         // 유효성 검사
         if (title == null || title.isEmpty() || title.length() > 20) {
-            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+            return ResponseDto.setFailed(ResponseMessage.CS_TITLE_PROBLEM);
         }
         if (content == null || content.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+            return ResponseDto.setFailed(ResponseMessage.CS_CONTENT_PROBLEM);
         }
         if (category != '0' && category != '1') {
-            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+            return ResponseDto.setFailed(ResponseMessage.CS_STATUS_NOT_EXIST);
         }
 
         try {
@@ -172,12 +172,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
 
-        // 요효성 검사
+        // 유효성 검사
         if (title == null || title.isEmpty() || title.length() > 20) {
-            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+            return ResponseDto.setFailed(ResponseMessage.CS_TITLE_PROBLEM);
         }
         if (content == null || content.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.BAD_REQUEST);
+            return ResponseDto.setFailed(ResponseMessage.CS_CONTENT_PROBLEM);
         }
 
         try {

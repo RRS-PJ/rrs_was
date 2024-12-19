@@ -117,9 +117,13 @@ public class ResponseMessage {
     public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
     public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
     public static final String NOT_MATCH_TODO_ID = "Todo ID is not matched";
+    public static final String TODO_NOT_EXIST_STATUS = "This todo status is not exist";
 
     // 고객센터 관련 메세지
     public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
+    public static final String CS_STATUS_NOT_EXIST = "This CS status is not exist";
+    public static final String CS_TITLE_PROBLEM = "This title got problem with validation";
+    public static final String CS_CONTENT_PROBLEM = "This content got problem with validation";
 
     // 리뷰 관련 메세지
     public static final String REVIEW_TOO_lONG =  "Review Content is too long.";
@@ -150,6 +154,4 @@ public class ResponseMessage {
     public static final String INVALIDATED_RESERVATION_STATUS = "The reservation status is invalid";
     public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
     public static final String UNKNOWN_STATUS = "This is Unknown ReservationStatus";
-
-
 }
