@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-    @Value(value = "${file.upload-dir}")
+    @Value("${file.upload-dir}")
     private String rootPath;
 
     @Override
@@ -27,8 +27,15 @@ public class FileServiceImpl implements FileService {
         String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         filePath = "file/" + path + "/" + newFileName;
 
+        // 파일이 없다면 생성
         File f = new File(rootPath, "file");
-        if(!f.exists()) { f.mkdirs(); }
+        if(!f.exists()) { f.mkdirs();
+            File pathFile = new File(rootPath + "/file", path);
+            if(!pathFile.exists()) pathFile.mkdirs();
+        }
+
+        File pathFile = new File(rootPath + "/file", path);
+        if(!pathFile.exists()) pathFile.mkdirs();
 
         Path uploadPath = Paths.get(rootPath + filePath);
 
