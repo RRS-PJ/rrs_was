@@ -3,6 +3,7 @@ package com.korit.projectrrs.service.implement;
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
+import com.korit.projectrrs.dto.todo.request.UpdateTodoRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoResponseDto;
 import com.korit.projectrrs.entity.Todo;
 import com.korit.projectrrs.entity.User;
@@ -55,10 +56,12 @@ public class TodoServiceImpl implements TodoService {
 
             todoRepository.save(todo);
             data = new TodoResponseDto(todo);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
+
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
@@ -82,9 +85,10 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseDto<TodoResponseDto> updateTodo(Long userId, Long todoId, @Valid TodoRequestDto dto) {
+    public ResponseDto<TodoResponseDto> updateTodo(Long userId, Long todoId, @Valid UpdateTodoRequestDto dto) {
         TodoResponseDto data = null;
         String todoContent = dto.getTodoPreparationContent();
+        LocalDate todoCreateAt = dto.getTodoCreateAt();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
             // Todo 내용 공백
@@ -97,25 +101,25 @@ public class TodoServiceImpl implements TodoService {
         }
 
         try {
-            Optional<Todo> optionalTodo = todoRepository.findById(todoId);
-            if(optionalTodo.isEmpty()) ResponseDto.setFailed(ResponseMessage.NOT_EXIST_TODO);
+           Todo todo = todoRepository.findById(todoId)
+                   .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_TODO));
 
-            Todo updateTodo = optionalTodo.get();
-
-            if (updateTodo.getUser().getUserId().equals(userId)) {
+            if (!todo.getUser().getUserId().equals(userId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
             }
 
-            updateTodo = Todo.builder()
-                    .user(updateTodo.getUser())
-                    .todoId(todoId)
-                    .todoPreparationContent(dto.getTodoPreparationContent())
-                    .todoCreateAt(updateTodo.getTodoCreateAt())
+            if (!todo.getTodoId().equals(todoId)){
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_TODO_ID);
+            }
+
+            Todo updatedTodo = todo.toBuilder()
+                    .todoPreparationContent(todoContent)
+                    .todoCreateAt(todoCreateAt == null ? todo.getTodoCreateAt() : todoCreateAt)
                     .build();
 
-            todoRepository.save(updateTodo);
+            todoRepository.save(updatedTodo);
 
-            data = new TodoResponseDto(updateTodo);
+            data = new TodoResponseDto(updatedTodo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,10 +134,10 @@ public class TodoServiceImpl implements TodoService {
             Todo todo = todoRepository.findById(todoId)
                     .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_TODO));
 
-            if (todo.getUser().getUserId().equals(userId)) {
+            if (!todo.getUser().getUserId().equals(userId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
-
             }
+
             todoRepository.deleteById(todoId);
         } catch (Exception e) {
             e.printStackTrace();

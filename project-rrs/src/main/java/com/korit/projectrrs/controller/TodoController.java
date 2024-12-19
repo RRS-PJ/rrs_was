@@ -3,6 +3,7 @@ package com.korit.projectrrs.controller;
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
+import com.korit.projectrrs.dto.todo.request.UpdateTodoRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.TodoService;
@@ -52,7 +53,7 @@ public class TodoController {
     private ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long todoId,
-            @Valid @RequestBody TodoRequestDto dto
+            @Valid @RequestBody UpdateTodoRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<TodoResponseDto> response = todoService.updateTodo(userId, todoId, dto);

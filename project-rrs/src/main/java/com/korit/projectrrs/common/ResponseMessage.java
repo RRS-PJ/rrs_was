@@ -116,6 +116,7 @@ public class ResponseMessage {
     public static final String NOT_EXIST_TODO = "This todo is not exist"; // TODO가 존재하지 않음
     public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
     public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
+    public static final String NOT_MATCH_TODO_ID = "Todo ID is not matched";
 
     // 고객센터 관련 메세지
     public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
@@ -142,14 +143,13 @@ public class ResponseMessage {
     public static final String DATE_RANGE_TOO_LONG = "The reservation duration cannot exceed 7 days.";
     public static final String MINIMUM_ONE_DAY_RESERVATION = "Reservation must be at least one day.";
 
-
     public static final String NOT_EXIST_RESERVATION = "Reservation is not exist";
     public static final String RESERVATION_MEMO_TOO_LONG = "The reservation's memo is too long";
     public static final String RESERVATION_VALIDATION_ERROR = "date of reservation's validationError";
     public static final String RESERVATION_ALREADY_EXISTS = "This provider already has a reservation";
     public static final String INVALIDATED_RESERVATION_STATUS = "The reservation status is invalid";
     public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
-
-
     public static final String UNKNOWN_STATUS = "This is Unknown ReservationStatus";
+
+
 }
