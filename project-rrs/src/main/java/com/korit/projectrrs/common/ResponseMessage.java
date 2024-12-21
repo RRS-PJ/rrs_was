@@ -130,4 +130,57 @@ public class ResponseMessage {
     // 첨부파일 관련 메세지
     public static final String FILE_UPLOAD_ERROR = "File upload is failed";
     public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
+
+    // 커뮤니티 관련 메시지
+    public static final String COMMUNITY_CREATED_SUCCESSFULLY = "Community created successfully."; // 커뮤니티 생성 성공
+    public static final String COMMUNITY_UPDATED_SUCCESSFULLY = "Community updated successfully."; // 커뮤니티 업데이트 성공
+    public static final String COMMUNITY_DELETED_SUCCESSFULLY = "Community deleted successfully."; // 커뮤니티 삭제 성공
+    public static final String COMMUNITY_FETCHED_SUCCESSFULLY = "Community fetched successfully."; // 커뮤니티 조회 성공
+    public static final String LIKE_TOGGLE_SUCCESS = "Like toggled successfully."; // 좋아요 상태 변경 성공
+    public static final String COMMUNITY_NOT_FOUND = "Community not found."; // 커뮤니티를 찾을 수 없음
+    public static final String NOT_EXIST_COMMUNITY = "The community does not exist."; // 존재하지 않는 커뮤니티
+
+    // 권한 관련 메시지
+    public static final String NOT_AUTHORIZED_TO_CREATE = "You do not have permission to create this community."; // 생성 권한 부족
+    public static final String NOT_AUTHORIZED_TO_UPDATE = "You do not have permission to update this community."; // 업데이트 권한 부족
+    public static final String NOT_AUTHORIZED_TO_DELETE = "You do not have permission to delete this community."; // 삭제 권한 부족
+    public static final String NOT_AUTHORIZED_TO_TOGGLE_LIKE = "You cannot like your own community."; // 좋아요 권한 부족
+
+    // 댓글 관련 메시지
+    public static final String INVALID_COMMENT_CONTENT = "Comment content is invalid."; // 유효하지 않은 댓글 내용
+    public static final String COMMENT_NOT_BELONG_TO_COMMUNITY = "Comment does not belong to the specified community."; // 커뮤니티에 속하지 않은 댓글
+    public static final String NOT_AUTHORIZED_TO_UPDATE_COMMENT = "You do not have permission to update this comment."; // 댓글 업데이트 권한 부족
+    public static final String NOT_AUTHORIZED_TO_DELETE_COMMENT = "You do not have permission to delete this comment."; // 댓글 삭제 권한 부족
+    public static final String COMMENT_CREATED_SUCCESSFULLY = "Comment created successfully.";
+    public static final String COMMENT_UPDATED_SUCCESSFULLY = "Comment updated successfully.";
+    public static final String COMMENT_DELETED_SUCCESSFULLY = "Comment deleted successfully.";
+    public static final String COMMENT_FETCHED_SUCCESSFULLY = "Comments fetched successfully.";
+
+    // 인증 및 로그인 관련 메시지
+    public static final String USER_NOT_AUTHENTICATED = "User is not authenticated. Please log in."; // 인증 실패
+    public static final String USER_NOT_FOUND = "User not found."; // 사용자 없음
+    public static final String NOT_AUTHORIZED_TO_CREATE_COMMENT = "You do not have permission to create this comment.";
+
+    // 공지사항 관련 메시지
+    public static final String NOT_FOUND_ANNOUNCEMENT = "Announcement not found."; // 공지사항을 찾을 수 없음
+    public static final String NOT_EXIST_PET_ID = "Pet ID does not exist."; // 펫 ID가 존재하지 않을 때
+    public static final String INVALID_PET_GENDER = "Invalid pet gender format."; // 잘못된 펫 성별 형식
+    public static final String INVALID_PET_BIRTH_DATE = "Invalid pet birth date format."; // 잘못된 펫 생일 형식
+    public static final String INVALID_PET_WEIGHT = "Invalid pet weight format."; // 잘못된 펫 무게 형식
+    public static final String INVALID_PET_PROFILE = "Invalid pet profile format."; // 잘못된 펫 프로필 형식
+    public static final String INVALID_PET_NEUTRALITY_YN = "Invalid pet neutrality (Y/N) format."; // 잘못된 중성화 여부 형식
+    public static final String INVALID_PET_NAME = "Invalid pet name format."; // 잘못된 펫 이름 형식
+    public static final String RECORD_CREATED_SUCCESSFULLY = "Health record created successfully."; // 건강 기록 생성 성공
+    public static final String RECORD_NOT_FOUND = "Health record not found."; // 건강 기록을 찾을 수 없음
+
+    public static final String RECORD_CREATION_FAILED = "Failed to create health record."; // 건강 기록 생성 실패
+    public static final String RECORD_UPDATED_SUCCESSFULLY = "Health record updated successfully."; // 건강 기록 업데이트 성공
+    public static final String RECORD_DELETED_SUCCESSFULLY = "Health record deleted successfully."; // 건강 기록 삭제 성공
+    public static final String RECORDS_NOT_FOUND = "No health records found."; // 건강 기록을 찾을 수 없음
+    public static final String RECORD_FETCHED_SUCCESSFULLY = "Health record fetched successfully."; // 건강 기록 조회 성공
+
+    public static final String PET_INFO_NOT_FOUND = "Pet information not found. Please add pet information.";
+    public static final String INVALID_PET_AGE = "";
+    public static final String INVALID_WEIGHT = "";
+    public static final String NOT_AUTHORIZED = "";
 }
