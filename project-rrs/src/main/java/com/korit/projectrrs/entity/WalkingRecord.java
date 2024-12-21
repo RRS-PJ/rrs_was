@@ -43,6 +43,6 @@ public class WalkingRecord {
     private String walkingRecordMemo;
 
     @Builder.Default
-    @OneToMany(mappedBy = "walkingRecordId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "walkingRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WalkingRecordAttachment> walkingRecordAttachments = new ArrayList<>();
 }

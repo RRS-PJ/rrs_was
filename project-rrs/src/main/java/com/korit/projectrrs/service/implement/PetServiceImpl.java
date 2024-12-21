@@ -10,7 +10,6 @@ import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.PetRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
-import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

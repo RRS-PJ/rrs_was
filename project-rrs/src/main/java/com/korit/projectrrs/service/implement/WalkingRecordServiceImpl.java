@@ -11,7 +11,9 @@ import com.korit.projectrrs.entity.*;
 import com.korit.projectrrs.repositoiry.PetRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordAttachmentRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordRepository;
+import com.korit.projectrrs.service.FileService;
 import com.korit.projectrrs.service.WalkingRecordService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,13 +36,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
     private final PetRepository petRepository;
     private final WalkingRecordRepository walkingRecordRepository;
-    private final WalkingRecordAttachmentRepository walkingRecordAttachmentRepository;
-
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    private final WalkingRecordAttachmentRepository wrAttRepository;
+    private final FileService fileService;
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto) {
+    public ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, @Valid WalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState() != null
                 ? dto.getWalkingRecordWeatherState()
                 : WalkingRecordWeatherState.SUNNY;
@@ -96,6 +96,18 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                     .build();
 
             walkingRecordRepository.save(walkingRecord);
+
+            // 파일 업로드 처리
+            List<MultipartFile> Multifiles = dto.getFiles();
+            List<String > fileNames = new ArrayList<>();
+
+            if (Multifiles == null || Multifiles.isEmpty()) {
+                Multifiles = new ArrayList<>();  // 빈 배열로 초기화
+            };
+
+            for (Multifiles multifiles : Multifiles) {
+                String fileName = fileService.uploadFile(multifiles, "walking-record");
+            }
 
 //            if (files != null && !files.isEmpty()) {
 //                List<WalkingRecordAttachmentResponseDto> attachmentResponseList = new ArrayList<>();
@@ -180,7 +192,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> getWalkingRecord(Long userId, Long petId, Long walkingRecordId) {
+    public ResponseDto<WalkingRecordResponseDto> getWalkingRecordInfo(Long userId, Long petId, Long walkingRecordId) {
         WalkingRecordResponseDto data = null;
 
         try {
@@ -202,7 +214,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto) {
+    public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, @Valid UpdateWalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState();
         Integer walkingRecordDistance = dto.getWalkingRecordDistance();
         Integer hours = dto.getWalkingRecordWalkingHours();

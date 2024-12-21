@@ -21,4 +21,6 @@ public class UpdateUserRequestDto {
     private String addressDetail;
     @NotNull
     private String profileImageUrl;
+
+    private boolean status;
 }

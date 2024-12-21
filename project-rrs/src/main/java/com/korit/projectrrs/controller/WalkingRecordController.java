@@ -62,13 +62,13 @@ public class WalkingRecordController {
     }
 
     @GetMapping(WALKING_RECORD_GET_BY_ID)
-    public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> getWalkingRecord(
+    public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> getWalkingRecordInfo(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
             @PathVariable Long walkingRecordId
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.getWalkingRecord(userId, petId, walkingRecordId);
+        ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.getWalkingRecordInfo(userId, petId, walkingRecordId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

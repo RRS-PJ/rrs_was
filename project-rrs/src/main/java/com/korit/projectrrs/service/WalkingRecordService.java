@@ -13,7 +13,7 @@ import java.util.List;
 public interface WalkingRecordService {
     ResponseDto<WalkingRecordResponseDto> createWalkingRecord(Long userId, Long petId, WalkingRecordRequestDto dto);
     ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate walkingRecordCreateAt);
-    ResponseDto<WalkingRecordResponseDto> getWalkingRecord(Long userId, Long petId, Long walkingRecordId);
+    ResponseDto<WalkingRecordResponseDto> getWalkingRecordInfo(Long userId, Long petId, Long walkingRecordId);
     ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto);
     ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId);
 }

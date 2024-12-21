@@ -128,7 +128,7 @@ public class ResponseMessage {
     public static final String INVALID_WALKING_RECORD_DISTANCE = "Invalid Distance format."; // 유효하지 않은 산책기록 거리 형식
     public static final String INVALID_WALKING_RECORD_TIME = "Invalid hours or minutes format."; // 유효하지 않은 산책기록 산책시간 형식
     public static final String INVALID_WALKING_RECORD_CREATE_AT = "Invalid walking record createAt format."; // 유효하지 않은 산책기록 작성일 형식
-    public static final String TIME_IN_FUTURE_NOT_ALLOWED = "Future time cannot be selected."; // 미래 시간 선택 불가
+    public static final String TIME_IN_FUTURE_NOT_ALLOWED = "Future time cannot be selected."; // 미래 날짜 선택 불가
     public static final String INVALID_FILE = "Invalid file format."; // 유효하지 않은 파일 형식
     public static final String FILE_UPLOAD_ERROR = "An error occurred while uploading the file."; // 파일 업로드 에러
 
@@ -136,5 +136,11 @@ public class ResponseMessage {
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
 
     // PROVIDER 권한 메시지
-    public static final String EXIST_ROLE_PROVIDER = "The provider role has already been assigned..";   // PROVIDER 권한이 이미 존재하는 경우
+    public static final String EXIST_ROLE_PROVIDER = "The provider role has already been assigned.";   // PROVIDER 권한이 이미 존재하는 경우
+
+    // 댕시터 관련 메시지
+    public static final String INVALID_AVAILABLEDATE = "Invalid availableDate format."; // 유효하지 않은 댕시터 근무일 형식
+    public static final String PAST_TIME_NOT_ALLOWED = "Past time cannot be selected."; // 과거 날짜 선택 불가
+    public static final String INVALID_PROVIDER_INTRODUCTION = "Invalid providerIntroduction format.";  // 유효하지 않은 댕시터 소개
+    public static final String NOT_EXIST_AVAILABLEDATE_ID = "AvailableDate does not exist."; // 근무일이 존재하지 않을 때 반환 메시지
 }

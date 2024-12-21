@@ -9,4 +9,7 @@ public class ApiMappingPattern {
     public static final String COMMENT = "/api/v1/commemts";
     public static final String WALKING_RECORD = "/api/v1/walking-record";
     public static final String WALKING_RECORD_ATTACHMENT = "/api/v1/walking-record/petId/{petId}/walkingRecordId/{walkingRecordId}/attachments";
+    public static final String AVAILABLEDATEOFWEEK = "/api/v1/availableDateOfWeek";
+    public static final String PROVIDER = "/api/v1/provider";
+    public static final String ROLE = "/api/v1/role";
 }

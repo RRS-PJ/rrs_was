@@ -18,9 +18,10 @@ public class WalkingRecordAttachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walkingRecordAttachmentId;
 
-    @JoinColumn(name = "walkingRecordId", referencedColumnName = "walkingRecordId", nullable = false)
-//    @ManyToOne(fetch = FetchType.LAZY)
-    private Long walkingRecordId;
+    @JoinColumn(name = "walkingRecordId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private WalkingRecord walkingRecord;
 
     private String walkingRecordAttachmentFile;
 }
