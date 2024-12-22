@@ -4,10 +4,7 @@ import com.korit.projectrrs.dto.walkingRecordAttachment.response.WalkingRecordAt
 import com.korit.projectrrs.entity.WalkingRecord;
 import com.korit.projectrrs.entity.WalkingRecordAttachment;
 import com.korit.projectrrs.entity.WalkingRecordWeatherState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,13 +13,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(toBuilder = true)
 public class WalkingRecordResponseDto {
     private WalkingRecordWeatherState walkingRecordWeatherState;
     private Integer walkingRecordDistance;
     private Integer walkingRecordWalkingTime;
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
-    private List<WalkingRecordAttachment> walkingRecordAttachments;
+    private List<String> fileName;
 
     public WalkingRecordResponseDto(WalkingRecord walkingRecord) {
         this.walkingRecordWeatherState = walkingRecord.getWalkingRecordWeatherState();
@@ -30,6 +28,5 @@ public class WalkingRecordResponseDto {
         this.walkingRecordWalkingTime = walkingRecord.getWalkingRecordWalkingTime();
         this.walkingRecordCreateAt = walkingRecord.getWalkingRecordCreateAt();
         this.walkingRecordMemo = walkingRecord.getWalkingRecordMemo();
-        this.walkingRecordAttachments = walkingRecord.getWalkingRecordAttachments();
     }
 }

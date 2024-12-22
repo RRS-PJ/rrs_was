@@ -8,6 +8,7 @@ import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponse
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.WalkingRecordService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -36,13 +37,8 @@ public class WalkingRecordController {
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
-            @RequestParam("files") List<MultipartFile> files,  // 파일을 받는 파라미터
-            @ModelAttribute WalkingRecordRequestDto dto
+            @Valid @ModelAttribute WalkingRecordRequestDto dto
     ) {
-        if (files != null && !files.isEmpty()) {
-            dto.setFiles(files);
-        }
-
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.createWalkingRecord(userId, petId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;

@@ -99,68 +99,27 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             // 파일 업로드 처리
             List<MultipartFile> Multifiles = dto.getFiles();
-            List<String > fileNames = new ArrayList<>();
+            List<String> fileNames = new ArrayList<>();
 
             if (Multifiles == null || Multifiles.isEmpty()) {
                 Multifiles = new ArrayList<>();  // 빈 배열로 초기화
-            };
+            }
+            ;
 
-            for (Multifiles multifiles : Multifiles) {
+            for (MultipartFile multifiles : Multifiles) {
                 String fileName = fileService.uploadFile(multifiles, "walking-record");
+                fileNames.add(fileName);
+                if (fileName != null) {
+                    WalkingRecordAttachment attachment = new WalkingRecordAttachment();
+                    attachment.setWalkingRecord(walkingRecord);
+                    attachment.setWalkingRecordAttachmentFile(fileName);
+                    wrAttRepository.save(attachment);
+                }
             }
 
-//            if (files != null && !files.isEmpty()) {
-//                List<WalkingRecordAttachmentResponseDto> attachmentResponseList = new ArrayList<>();
-//
-//                for (MultipartFile file : files) {
-//                    String originalFileName = file.getOriginalFilename();
-//                    System.out.println("Original FileName: " + originalFileName);
-//
-//                    if (originalFileName != null && !originalFileName.isEmpty()) {
-//                        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
-//
-//                        if (!fileExtension.equals("png") && !fileExtension.equals("jpg")) {
-//                            return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
-//                        }
-//
-//                        String sanitizedFileName = originalFileName.replaceAll("[\\x00-\\x1F\\x7F]", "_");
-//                        String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
-//
-//                        Path path = Paths.get(uploadDir, fileName);
-//
-//                        try {
-//                            Files.copy(file.getInputStream(), path);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                            return ResponseDto.setFailed(ResponseMessage.FILE_UPLOAD_ERROR);
-//                        }
-//
-//                        WalkingRecordAttachment walkingRecordAttachment = WalkingRecordAttachment.builder()
-//                                .walkingRecordId(walkingRecord.getWalkingRecordId())
-//                                .walkingRecordAttachmentFile(path.toString())
-//                                .build();
-//
-//                        walkingRecordAttachmentRepository.save(walkingRecordAttachment);
-//
-//                        WalkingRecordAttachmentResponseDto attachmentResponseDto = WalkingRecordAttachmentResponseDto.builder()
-//                                .fileName(Paths.get(walkingRecordAttachment.getWalkingRecordAttachmentFile()).getFileName().toString())
-//                                .fileUrl(walkingRecordAttachment.getWalkingRecordAttachmentFile())
-//                                .build();
-//
-//                        attachmentResponseList.add(attachmentResponseDto);
-//                    }
-//                }
-//                data.setAttachments(attachmentResponseList);
-//            }
-//            if (attachmentIdsToDelete != null && !attachmentIdsToDelete.isEmpty()) {
-//                for (Long attachmentId : attachmentIdsToDelete) {
-//                    Optional<WalkingRecordAttachment> attachment = walkingRecordAttachmentRepository.findById(attachmentId);
-//                    attachment.ifPresent(att -> walkingRecordAttachmentRepository.delete(att));
-//                }
-//            }
-//
-//            data.setWalkingRecord(new WalkingRecordResponseDto(walkingRecord));
-//            return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+            data = new WalkingRecordResponseDto(walkingRecord).toBuilder()
+                    .fileName(fileNames)
+                    .build();
 
         } catch (Exception e) {
             e.printStackTrace();

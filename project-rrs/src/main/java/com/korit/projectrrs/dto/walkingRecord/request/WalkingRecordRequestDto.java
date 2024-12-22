@@ -1,7 +1,10 @@
 package com.korit.projectrrs.dto.walkingRecord.request;
 
 import com.korit.projectrrs.entity.WalkingRecordWeatherState;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,15 +16,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class WalkingRecordRequestDto {
-    @NotBlank
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private WalkingRecordWeatherState walkingRecordWeatherState;
-    @NotBlank
+    @NotNull
     private Integer walkingRecordDistance;
-    @NotBlank
+    @NotNull
     private Integer walkingRecordWalkingHours;
-    @NotBlank
+    @NotNull
     private Integer walkingRecordWalkingMinutes;
-    @NotBlank
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
