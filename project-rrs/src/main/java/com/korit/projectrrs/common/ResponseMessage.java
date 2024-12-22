@@ -180,7 +180,7 @@ public class ResponseMessage {
     public static final String RECORD_FETCHED_SUCCESSFULLY = "Health record fetched successfully."; // 건강 기록 조회 성공
 
     public static final String PET_INFO_NOT_FOUND = "Pet information not found. Please add pet information.";
-    public static final String INVALID_PET_AGE = "";
-    public static final String INVALID_WEIGHT = "";
-    public static final String NOT_AUTHORIZED = "";
+    public static final String INVALID_PET_AGE = "Invalid pet age format."; // 잘못된 펫 나이 형식
+    public static final String INVALID_WEIGHT = "Invalid weight format."; // 잘못된 무게 형식
+    public static final String NOT_AUTHORIZED = "You are not authorized to perform this operation."; // 이 작업을 수행할 권한이 없음
 }
