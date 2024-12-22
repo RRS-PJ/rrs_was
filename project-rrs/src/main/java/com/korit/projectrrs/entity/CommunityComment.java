@@ -23,12 +23,17 @@ public class CommunityComment {
     @JoinColumn(name = "COMMUNITY_ID", nullable = false)
     private Community community;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID", nullable = false)
+    private User user;
+
     @Column(name = "COMMUNITY_COMMENTS_CONTENTS", nullable = false, length = 255)
     private String communityCommentContent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
-
-    public String getNickname() {return user != null ? user.getNickname() : null;}
+    // 헬퍼 메서드 추가: userId 값을 반환
+    public String getNickname() {
+        return user != null ? user.getNickname() : null;
+    }
 }
+
+

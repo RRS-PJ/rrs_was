@@ -1,6 +1,7 @@
 package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.communitycomment.request.CommunityCommentCreateRequestDto;
 import com.korit.projectrrs.dto.communitycomment.request.CommunityCommentUpdateRequestDto;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.korit.projectrrs.common.ApiMappingPattern.*;
+
 @RestController
 @RequestMapping(ApiMappingPattern.COMMENT)
 @RequiredArgsConstructor
@@ -23,52 +26,72 @@ public class CommunityCommentController {
 
     private final CommunityCommentService communityCommentService;
 
-    @PostMapping
+    @PostMapping(COMMENT_CREATE)
     public ResponseEntity<ResponseDto<CommunityCommentResponseDto>> createComment(
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long communityId,
             @RequestBody @Valid CommunityCommentCreateRequestDto dto
     ) {
         if (principalUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
         }
         Long userId = principalUser.getUser().getUserId();
+        dto.setCommunityId(communityId);
         ResponseDto<CommunityCommentResponseDto> response = communityCommentService.createComment(userId, dto);
-        return ResponseEntity.ok(response);
+        if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_CREATE_COMMENT)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+        return ResponseEntity.status(response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @PutMapping("/{commentId}")
+    @PutMapping(COMMENT_PUT)
     public ResponseEntity<ResponseDto<CommunityCommentResponseDto>> updateComment(
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long communityId,
             @PathVariable Long commentId,
             @RequestBody @Valid CommunityCommentUpdateRequestDto dto
     ) {
         if (principalUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
         }
         Long userId = principalUser.getUser().getUserId();
-        dto.setCommentId(commentId); // Ensure DTO has the correct commentId
+        dto.setCommentId(commentId);
+        dto.setCommunityId(communityId);
         ResponseDto<CommunityCommentResponseDto> response = communityCommentService.updateComment(userId, dto);
-        return ResponseEntity.ok(response);
+        if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_UPDATE_COMMENT)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+        return ResponseEntity.status(response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @GetMapping("/by-community/{communityId}")
-    public ResponseEntity<List<CommunityCommentResponseDto>> getCommentsByCommunity(
+    @GetMapping(COMMENT_GET_BY_COMMUNITY_ID)
+    public ResponseEntity<ResponseDto<List<CommunityCommentResponseDto>>> getCommentsByCommunity(
             @PathVariable Long communityId
     ) {
-        List<CommunityCommentResponseDto> comments = communityCommentService.getCommentsByCommunity(communityId);
-        return ResponseEntity.ok(comments);
+        ResponseDto<List<CommunityCommentResponseDto>> response = communityCommentService.getCommentsByCommunity(communityId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+        return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    @DeleteMapping(COMMENT_DELETE_BY_COMMUNITY_ID)
+    public ResponseEntity<ResponseDto<Void>> deleteComment(
             @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long communityId,
             @PathVariable Long commentId
     ) {
         if (principalUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
         }
         Long userId = principalUser.getUser().getUserId();
-        communityCommentService.deleteComment(userId, commentId);
-        return ResponseEntity.noContent().build();
+        ResponseDto<Void> response = communityCommentService.deleteCommentFromCommunity(userId, communityId, commentId);
+        if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_DELETE_COMMENT)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
     }
 }
+
