@@ -19,15 +19,17 @@ public class FileServiceImpl implements FileService {
     @Value("${file.upload-dir}")
     private String rootPath;
 
+
     @Override
     public String uploadFile(MultipartFile file, String path) {
-        if(file == null || file.isEmpty()) { return null; }
+
+        if (file == null || file.isEmpty()) return null;
 
         String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         String filePath = "file/" + path + "/" + newFileName;
 
         Path uploadDir = Paths.get(rootPath, "file", path);
-        Path uploadPath = Paths.get(rootPath + filePath);
+        Path uploadPath = Paths.get(rootPath, filePath);
 
         try {
             createDirectoriesIfNoExists(uploadDir);
@@ -40,8 +42,8 @@ public class FileServiceImpl implements FileService {
         return filePath;
     }
 
-    private void createDirectoriesIfNoExists(Pathdirectory) throws IOException {
-        if (!File.exists(directory)) {
+    private void createDirectoriesIfNoExists(Path directory) throws IOException {
+        if (!Files.exists(directory)) {
             Files.createDirectories(directory);
         }
     }
