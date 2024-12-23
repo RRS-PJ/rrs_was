@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,31 +21,29 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String uploadFile(MultipartFile file, String path) {
-        String filePath = null;
-
-        if(file == null) { return null; }
+        if(file == null || file.isEmpty()) { return null; }
 
         String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        filePath = "file/" + path + "/" + newFileName;
+        String filePath = "file/" + path + "/" + newFileName;
 
-        // 파일이 없다면 생성
-        File f = new File(rootPath, "file");
-        if(!f.exists()) { f.mkdirs();
-            File pathFile = new File(rootPath + "/file", path);
-            if(!pathFile.exists()) pathFile.mkdirs();
-        }
-
-        File pathFile = new File(rootPath + "/file", path);
-        if(!pathFile.exists()) pathFile.mkdirs();
-
+        Path uploadDir = Paths.get(rootPath, "file", path);
         Path uploadPath = Paths.get(rootPath + filePath);
 
         try {
+            createDirectoriesIfNoExists(uploadDir);
+
             Files.write(uploadPath, file.getBytes());
-        }catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
         return filePath;
+    }
+
+    private void createDirectoriesIfNoExists(Pathdirectory) throws IOException {
+        if (!File.exists(directory)) {
+            Files.createDirectories(directory);
+        }
     }
 
     @Override
