@@ -32,6 +32,5 @@ public class CreateReservationResponseDto {
         this.phone = reservation.getUser().getPhone();
 
         this.reservationMemo = reservation.getReservationMemo();
-        this.reservationStatus = reservation.getReservationStatus();
     }
 }
