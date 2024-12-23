@@ -1,10 +1,6 @@
 package com.korit.projectrrs.repositoiry;
 
 import com.korit.projectrrs.entity.Pet;
-<<<<<<< HEAD
-import com.korit.projectrrs.security.PrincipalUser;
-=======
->>>>>>> develop
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
