@@ -5,7 +5,6 @@ import com.korit.projectrrs.dto.pet.request.PetRequestDto;
 import com.korit.projectrrs.dto.pet.request.UpdatePetRequestDto;
 import com.korit.projectrrs.dto.pet.response.PetListResponseDto;
 import com.korit.projectrrs.dto.pet.response.PetResponseDto;
-
 import java.util.List;
 
 public interface PetService {
