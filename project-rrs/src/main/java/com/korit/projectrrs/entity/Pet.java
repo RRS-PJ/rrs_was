@@ -1,15 +1,16 @@
 package com.korit.projectrrs.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "PETS")
+@Table(name = "pets")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long petId;
 
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false, unique = true)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private User user;
@@ -42,4 +43,13 @@ public class Pet {
     private String petAddInfo;
 
     private Character petNeutralityYn;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HealthRecord> healthRecords;
+
+    // 헬퍼 메서드 추가: userId 값을 반환
+    public Long getUserId() {
+        return user != null ? user.getUserId() : null;
+    }
+
 }
