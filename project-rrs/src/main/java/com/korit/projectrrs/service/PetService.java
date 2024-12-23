@@ -5,10 +5,6 @@ import com.korit.projectrrs.dto.pet.request.PetRequestDto;
 import com.korit.projectrrs.dto.pet.request.UpdatePetRequestDto;
 import com.korit.projectrrs.dto.pet.response.PetListResponseDto;
 import com.korit.projectrrs.dto.pet.response.PetResponseDto;
-<<<<<<< HEAD
-import com.korit.projectrrs.security.PrincipalUser;
-=======
->>>>>>> develop
 
 import java.util.List;
 
