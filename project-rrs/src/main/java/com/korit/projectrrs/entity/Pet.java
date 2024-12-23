@@ -1,12 +1,20 @@
 package com.korit.projectrrs.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+<<<<<<< HEAD
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+=======
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+>>>>>>> develop
 import java.util.List;
 
 @Entity
@@ -44,6 +52,12 @@ public class Pet {
 
     private Character petNeutralityYn;
 
+<<<<<<< HEAD
+    @Builder.Default
+    @JsonManagedReference
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WalkingRecord> walkingRecords = new ArrayList<>();
+=======
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HealthRecord> healthRecords;
 
@@ -52,4 +66,5 @@ public class Pet {
         return user != null ? user.getUserId() : null;
     }
 
+>>>>>>> develop
 }

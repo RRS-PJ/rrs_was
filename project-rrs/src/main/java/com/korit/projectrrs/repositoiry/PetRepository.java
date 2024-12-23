@@ -1,6 +1,10 @@
 package com.korit.projectrrs.repositoiry;
 
 import com.korit.projectrrs.entity.Pet;
+<<<<<<< HEAD
+import com.korit.projectrrs.security.PrincipalUser;
+=======
+>>>>>>> develop
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +26,8 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "FROM Pet p " +
             "WHERE p.user.userId = :userId ")
     List<Pet> findAllPetByUserId(@Param("userId") Long userId);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> develop

@@ -72,7 +72,11 @@ public class PetController {
     }
 
     @DeleteMapping(PET_DELETE)
+<<<<<<< HEAD
+    public ResponseEntity<ResponseDto<Void>> deletePet(
+=======
     public ResponseEntity<ResponseDto<Void>> deletePetP(
+>>>>>>> develop
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId
     ) {

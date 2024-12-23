@@ -51,12 +51,20 @@ public class User {
     @Column(name = "PROFILE_IMAGE_URL")
     private String profileImageUrl;
 
-    @Column(name = "ROLES")
+    @Column(name = "ROLES", nullable = false)
     private String roles;
 
     @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")
     private String providerIntroduction;
 
+<<<<<<< HEAD
+//    @Builder.Default
+//    @JsonBackReference
+//    @OneToMany(mappedBy = "providerId", cascade = CascadeType.ALL, orphanRemoval = true )
+//    private List<AvailableDateOfWeek> availableDateOfWeek = new ArrayList<>();
+
+=======
+>>>>>>> develop
     @Builder.Default
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
