@@ -1,20 +1,13 @@
 package com.korit.projectrrs.dto.auth.request;
 
-<<<<<<< HEAD
-import com.korit.projectrrs.entity.AvailableDateOfWeek;
-import jakarta.validation.constraints.*;
-=======
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
->>>>>>> develop
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Builder

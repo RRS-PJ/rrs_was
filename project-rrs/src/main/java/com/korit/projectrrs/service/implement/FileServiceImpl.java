@@ -56,8 +56,4 @@ public class FileServiceImpl implements FileService {
             boolean deleted = file.delete();
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 }

@@ -207,4 +207,11 @@ public class ResponseMessage {
     public static final String INVALIDATED_RESERVATION_STATUS = "The reservation status is invalid";
     public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
     public static final String UNKNOWN_STATUS = "This is Unknown ReservationStatus";
+    public static final String NOT_EXIST_AVAILABLEDATE_ID = "";
+    public static final String INVALID_WALKING_RECORD_WEATHER_STATE = "";
+    public static final String INVALID_WALKING_RECORD_DISTANCE = "";
+    public static final String INVALID_WALKING_RECORD_TIME = "";
+    public static final String INVALID_WALKING_RECORD_CREATE_AT = "";
+    public static final String TIME_IN_FUTURE_NOT_ALLOWED = "";
+    public static final String NOT_EXIST_WALKING_RECORD_ID = "";
 }
