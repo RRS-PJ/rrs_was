@@ -1,5 +1,6 @@
 package com.korit.projectrrs.repositoiry;
 
+<<<<<<< HEAD
 import com.korit.projectrrs.entity.AvailableDateOfWeek;
 import com.korit.projectrrs.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,7 @@ public interface AvailableDateOfWeekRepository extends JpaRepository<AvailableDa
     List<AvailableDateOfWeek> findAllAvailableDateByUserId(@Param("userId") Long userId);
 
     Optional<AvailableDateOfWeek> findByProvider_UserIdAndAvailableDate(Long userId, LocalDate availableDate);
+=======
+public interface AvailableDateOfWeekRepository {
+>>>>>>> develop
 }

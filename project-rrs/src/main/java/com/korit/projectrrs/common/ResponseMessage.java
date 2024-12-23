@@ -112,35 +112,99 @@ public class ResponseMessage {
     // 인증 관련 메시지
     public static final String IMAGE_AUTHORIZATION_FAIL = "Image authorization failed."; // 이미지 인증 실패
 
-    // 강아지 프로필 유효성 검사
-    public static final String INVALID_PET_NAME = "Invalid pet name format."; // 유효하지 않은 강아지 이름 형식
-    public static final String INVALID_PET_GENDER = "Invalid pet gender format."; // 유효하지 않은 강아지 성별 형식
-    public static final String INVALID_PET_BIRTH_DATE = "Invalid pet birth date format."; // 유효하지 않은 강아지 생일 형식
-    public static final String INVALID_PET_WEIGHT = "Invalid pet wight format."; // 유효하지 않은 강아지 몸무게 형식
-    public static final String INVALID_PET_PROFILE = "Invalid pet profile format."; // 유효하지 않은 강아지 프로필 형식
-    public static final String INVALID_PET_NEUTRALITY_YN = "Invalid pet neutrality format."; // 유효하지 않은 강아지 중성화 여부 형식
+    // Todo 관련 메세지
+    public static final String NOT_EXIST_TODO = "This todo is not exist"; // TODO가 존재하지 않음
+    public static final String TODO_TOO_LONG = "Todo Content is too long."; // Todo 내용이 너무 김
+    public static final String TODO_IS_EMPTY = "Todo Content is empty."; // Todo 내용이 없음
+    public static final String NOT_MATCH_TODO_ID = "Todo ID is not matched";
+    public static final String TODO_NOT_EXIST_STATUS = "This todo status is not exist";
 
-    // 존재하지 않는 강아지 id
-    public static final String NOT_EXIST_PET_ID = "Pet does not exist."; // 강아지가 존재하지 않을 때 반환 메시지
+    // 고객센터 관련 메세지
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT = "Customer support post is not exist."; // 고객센터 내용이 없음
+    public static final String CS_STATUS_NOT_EXIST = "This CS status is not exist";
+    public static final String CS_TITLE_PROBLEM = "This title got problem with validation";
+    public static final String CS_CONTENT_PROBLEM = "This content got problem with validation";
 
-    // 산책기록 유효성 검사
-    public static final String INVALID_WALKING_RECORD_WEATHER_STATE = "Invalid Weather format."; // 유효하지 않은 산책기록 날씨 형식
-    public static final String INVALID_WALKING_RECORD_DISTANCE = "Invalid Distance format."; // 유효하지 않은 산책기록 거리 형식
-    public static final String INVALID_WALKING_RECORD_TIME = "Invalid hours or minutes format."; // 유효하지 않은 산책기록 산책시간 형식
-    public static final String INVALID_WALKING_RECORD_CREATE_AT = "Invalid walking record createAt format."; // 유효하지 않은 산책기록 작성일 형식
-    public static final String TIME_IN_FUTURE_NOT_ALLOWED = "Future time cannot be selected."; // 미래 날짜 선택 불가
-    public static final String INVALID_FILE = "Invalid file format."; // 유효하지 않은 파일 형식
-    public static final String FILE_UPLOAD_ERROR = "An error occurred while uploading the file."; // 파일 업로드 에러
+    // 리뷰 관련 메세지
+    public static final String REVIEW_TOO_lONG =  "Review Content is too long.";
+    public static final String REVIEW_SCORE_NUMBER_VALIDATION =  "The review score is too long or too short";
+    public static final String REVIEW_NO_OVERLAP = "Review cant not be overlapped";
 
-    // 존재하지 않는 산책기록 id
-    public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
+    // 댕시터 관련 메세지
+    public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";
+    public static final String NOT_REGISTERED_PROVIDER = "Provider is not registered";
 
-    // PROVIDER 권한 메시지
-    public static final String EXIST_ROLE_PROVIDER = "The provider role has already been assigned.";   // PROVIDER 권한이 이미 존재하는 경우
+    // 첨부파일 관련 메세지
+    public static final String FILE_UPLOAD_FAILED = "File upload is failed";
+    public static final String FILE_DELETE_FAILED = "File delete is failed";
+    public static final String FILE_NOT_FOUND = "This file is not found";
+    public static final String NOT_EXIST_CUSTOMER_SUPPORT_ATTACHMENT = "Customer support attachment is not exist.";
 
-    // 댕시터 관련 메시지
-    public static final String INVALID_AVAILABLEDATE = "Invalid availableDate format."; // 유효하지 않은 댕시터 근무일 형식
-    public static final String PAST_TIME_NOT_ALLOWED = "Past time cannot be selected."; // 과거 날짜 선택 불가
-    public static final String INVALID_PROVIDER_INTRODUCTION = "Invalid providerIntroduction format.";  // 유효하지 않은 댕시터 소개
-    public static final String NOT_EXIST_AVAILABLEDATE_ID = "AvailableDate does not exist."; // 근무일이 존재하지 않을 때 반환 메시지
+    // 커뮤니티 관련 메시지
+    public static final String COMMUNITY_CREATED_SUCCESSFULLY = "Community created successfully."; // 커뮤니티 생성 성공
+    public static final String COMMUNITY_UPDATED_SUCCESSFULLY = "Community updated successfully."; // 커뮤니티 업데이트 성공
+    public static final String COMMUNITY_DELETED_SUCCESSFULLY = "Community deleted successfully."; // 커뮤니티 삭제 성공
+    public static final String COMMUNITY_FETCHED_SUCCESSFULLY = "Community fetched successfully."; // 커뮤니티 조회 성공
+    public static final String LIKE_TOGGLE_SUCCESS = "Like toggled successfully."; // 좋아요 상태 변경 성공
+    public static final String COMMUNITY_NOT_FOUND = "Community not found."; // 커뮤니티를 찾을 수 없음
+    public static final String NOT_EXIST_COMMUNITY = "The community does not exist."; // 존재하지 않는 커뮤니티
+
+    // 권한 관련 메시지
+    public static final String NOT_AUTHORIZED_TO_CREATE = "You do not have permission to create this community."; // 생성 권한 부족
+    public static final String NOT_AUTHORIZED_TO_UPDATE = "You do not have permission to update this community."; // 업데이트 권한 부족
+    public static final String NOT_AUTHORIZED_TO_DELETE = "You do not have permission to delete this community."; // 삭제 권한 부족
+    public static final String NOT_AUTHORIZED_TO_TOGGLE_LIKE = "You cannot like your own community."; // 좋아요 권한 부족
+
+    // 댓글 관련 메시지
+    public static final String INVALID_COMMENT_CONTENT = "Comment content is invalid."; // 유효하지 않은 댓글 내용
+    public static final String COMMENT_NOT_BELONG_TO_COMMUNITY = "Comment does not belong to the specified community."; // 커뮤니티에 속하지 않은 댓글
+    public static final String NOT_AUTHORIZED_TO_UPDATE_COMMENT = "You do not have permission to update this comment."; // 댓글 업데이트 권한 부족
+    public static final String NOT_AUTHORIZED_TO_DELETE_COMMENT = "You do not have permission to delete this comment."; // 댓글 삭제 권한 부족
+    public static final String COMMENT_CREATED_SUCCESSFULLY = "Comment created successfully.";
+    public static final String COMMENT_UPDATED_SUCCESSFULLY = "Comment updated successfully.";
+    public static final String COMMENT_DELETED_SUCCESSFULLY = "Comment deleted successfully.";
+    public static final String COMMENT_FETCHED_SUCCESSFULLY = "Comments fetched successfully.";
+
+    // 인증 및 로그인 관련 메시지
+    public static final String USER_NOT_AUTHENTICATED = "User is not authenticated. Please log in."; // 인증 실패
+    public static final String USER_NOT_FOUND = "User not found."; // 사용자 없음
+    public static final String NOT_AUTHORIZED_TO_CREATE_COMMENT = "You do not have permission to create this comment.";
+
+    // 공지사항 관련 메시지
+    public static final String NOT_FOUND_ANNOUNCEMENT = "Announcement not found."; // 공지사항을 찾을 수 없음
+    public static final String NOT_EXIST_PET_ID = "Pet ID does not exist."; // 펫 ID가 존재하지 않을 때
+    public static final String INVALID_PET_GENDER = "Invalid pet gender format."; // 잘못된 펫 성별 형식
+    public static final String INVALID_PET_BIRTH_DATE = "Invalid pet birth date format."; // 잘못된 펫 생일 형식
+    public static final String INVALID_PET_WEIGHT = "Invalid pet weight format."; // 잘못된 펫 무게 형식
+    public static final String INVALID_PET_PROFILE = "Invalid pet profile format."; // 잘못된 펫 프로필 형식
+    public static final String INVALID_PET_NEUTRALITY_YN = "Invalid pet neutrality (Y/N) format."; // 잘못된 중성화 여부 형식
+    public static final String INVALID_PET_NAME = "Invalid pet name format."; // 잘못된 펫 이름 형식
+    public static final String RECORD_CREATED_SUCCESSFULLY = "Health record created successfully."; // 건강 기록 생성 성공
+    public static final String RECORD_NOT_FOUND = "Health record not found."; // 건강 기록을 찾을 수 없음
+
+    public static final String RECORD_CREATION_FAILED = "Failed to create health record."; // 건강 기록 생성 실패
+    public static final String RECORD_UPDATED_SUCCESSFULLY = "Health record updated successfully."; // 건강 기록 업데이트 성공
+    public static final String RECORD_DELETED_SUCCESSFULLY = "Health record deleted successfully."; // 건강 기록 삭제 성공
+    public static final String RECORDS_NOT_FOUND = "No health records found."; // 건강 기록을 찾을 수 없음
+    public static final String RECORD_FETCHED_SUCCESSFULLY = "Health record fetched successfully."; // 건강 기록 조회 성공
+
+    public static final String PET_INFO_NOT_FOUND = "Pet information not found. Please add pet information.";
+    public static final String INVALID_PET_AGE = "Invalid pet age format."; // 잘못된 펫 나이 형식
+    public static final String INVALID_WEIGHT = "Invalid weight format."; // 잘못된 무게 형식
+    public static final String NOT_AUTHORIZED = "You are not authorized to perform this operation."; // 이 작업을 수행할 권한이 없음
+
+    // 예약 관련 메세지
+    public static final String START_DATE_CANNOT_BE_IN_PAST = "Start date cannot be in the past.";
+    public static final String INVALID_DATE_TOO_LATE = "Start date or end date cannot be more than 30 days from the current date.";
+    public static final String INVALID_DATE_RANGE = "End date cannot be before start date.";
+    public static final String DATE_RANGE_TOO_LONG = "The reservation duration cannot exceed 7 days.";
+    public static final String MINIMUM_ONE_DAY_RESERVATION = "Reservation must be at least one day.";
+
+    public static final String NOT_EXIST_RESERVATION = "Reservation is not exist";
+    public static final String RESERVATION_MEMO_TOO_LONG = "The reservation's memo is too long";
+    public static final String RESERVATION_VALIDATION_ERROR = "date of reservation's validationError";
+    public static final String RESERVATION_ALREADY_EXISTS = "This provider already has a reservation";
+    public static final String INVALIDATED_RESERVATION_STATUS = "The reservation status is invalid";
+    public static final String RESERVATION_IS_NOT_COMPLETED = "This reservation is not completed";
+    public static final String UNKNOWN_STATUS = "This is Unknown ReservationStatus";
 }
