@@ -1,7 +1,5 @@
 package com.korit.projectrrs.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.korit.projectrrs.converter.ReservationStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "RESERVATIONS")
@@ -38,8 +34,7 @@ public class Reservation {
     @Column(name = "RESERVATION_END_DATE", nullable = false)
     private LocalDate reservationEndDate;
 
-    @Convert(converter = ReservationStatusConverter.class)
-    @Column(name = "RESERVATION_STATUS", nullable = false, columnDefinition = "ENUM('예약대기', '예약 진행중', '거절', '취소', '완료') DEFAULT '예약대기'")
+    @Column(name = "RESERVATION_STATUS", nullable = false, columnDefinition = "ENUM('PENDING', 'IN_PROGRESS' , 'REJECTED', CANCELED, COMPLETED' DEFAULT 'PENDING'")
     private ReservationStatus reservationStatus = ReservationStatus.PENDING; // 기본값 '예약대기'
 
     @Builder.Default
