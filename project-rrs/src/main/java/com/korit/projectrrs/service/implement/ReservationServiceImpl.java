@@ -124,9 +124,13 @@ public class ReservationServiceImpl implements ReservationService {
                     .map(reservation -> {
                         Long providerUserId = reservation.getProvider().getUserId();
                         Double averageReviewScore = providerAverageReviewScores.get(providerUserId);
+                        if(averageReviewScore == null) {
+                            averageReviewScore = 0.0;
+                        }
                         return new GetReservationResponseDto(reservation, averageReviewScore);
                     })
                     .collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
