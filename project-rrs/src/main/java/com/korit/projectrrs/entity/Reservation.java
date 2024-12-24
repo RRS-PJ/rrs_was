@@ -34,8 +34,9 @@ public class Reservation {
     @Column(name = "RESERVATION_END_DATE", nullable = false)
     private LocalDate reservationEndDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "RESERVATION_STATUS", nullable = false, columnDefinition = "ENUM('PENDING', 'IN_PROGRESS' , 'REJECTED', CANCELED, COMPLETED' DEFAULT 'PENDING'")
-    private ReservationStatus reservationStatus = ReservationStatus.PENDING; // 기본값 '예약대기'
+    private ReservationStatus reservationStatus; // 기본값 '예약대기'
 
     @Builder.Default
     @Column(name = "RESERVATION_MEMO")

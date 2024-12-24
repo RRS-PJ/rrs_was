@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReservationStatus {
-    PENDING,
+    PENDING(),
     IN_PROGRESS,
     REJECTED,
     CANCELED,
