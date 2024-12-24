@@ -26,7 +26,7 @@ WHERE
 """, nativeQuery = true)
     Optional<List<Review>>  findReviewsByProvider(@Param("providerId") Long providerId);
 
-    // 제공자 닉네임으로 평균 리뷰 조회
+    // 제공자 ID으로 평균 리뷰 조회
     @Query(value = """
 SELECT 
     AVG(R.REVIEW_SCORE)
@@ -41,11 +41,17 @@ WHERE
     Optional<Double> findAvgReviewScoreByProvider(@Param("providerId") Long providerId);
 
     @Query(value = """
-        SELECT r.provider_user_id, AVG(r.REVIEW_SCORE) 
-        FROM reviews r 
-        WHERE r.provider_user_id IN :providerUserIds 
-        GROUP BY r.provider_user_id
-    """, nativeQuery = true)
+    SELECT 
+        RV.PROVIDER_ID, AVG(R.REVIEW_SCORE) AS AVG_SCORE
+    FROM 
+        REVIEWS R
+        LEFT OUTER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
+        LEFT OUTER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
+    WHERE 
+        U.USER_ID = :providerUserIds
+        AND U.ROLES LIKE '%ROLE_PROVIDER%'
+    GROUP BY RV.PROVIDER_ID
+""", nativeQuery = true)
     Map<Long, Double> findAverageReviewScoresByProviders(@Param("providerUserIds") Set<Long> providerUserIds);
 
     boolean existsByReservation_ReservationId(Long reservationId);
