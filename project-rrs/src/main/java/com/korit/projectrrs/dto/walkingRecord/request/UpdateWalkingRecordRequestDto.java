@@ -5,6 +5,7 @@ import com.korit.projectrrs.entity.WalkingRecordWeatherState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,5 +20,5 @@ public class UpdateWalkingRecordRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
-    private List<WalkingRecordAttachment> walkingRecordAttachments;
+    private List<MultipartFile> files;
 }
