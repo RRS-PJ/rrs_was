@@ -6,7 +6,6 @@ import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequest
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
-import com.korit.projectrrs.dto.walkingRecordAttachment.response.WalkingRecordAttachmentResponseDto;
 import com.korit.projectrrs.entity.*;
 import com.korit.projectrrs.repositoiry.PetRepository;
 import com.korit.projectrrs.repositoiry.WalkingRecordAttachmentRepository;
@@ -15,14 +14,8 @@ import com.korit.projectrrs.service.FileService;
 import com.korit.projectrrs.service.WalkingRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +29,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
     private final PetRepository petRepository;
     private final WalkingRecordRepository walkingRecordRepository;
-    private final WalkingRecordAttachmentRepository wrAttRepository;
+    private final WalkingRecordAttachmentRepository walkingRecordAttachmentRepository;
     private final FileService fileService;
 
     @Override
@@ -104,7 +97,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             if (Multifiles == null || Multifiles.isEmpty()) {
                 Multifiles = new ArrayList<>();  // 빈 배열로 초기화
             }
-            ;
 
             for (MultipartFile multifiles : Multifiles) {
                 String fileName = fileService.uploadFile(multifiles, "walking-record");
@@ -113,7 +105,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                     WalkingRecordAttachment attachment = new WalkingRecordAttachment();
                     attachment.setWalkingRecord(walkingRecord);
                     attachment.setWalkingRecordAttachmentFile(fileName);
-                    wrAttRepository.save(attachment);
+                    walkingRecordAttachmentRepository.save(attachment);
                 }
             }
 
@@ -180,7 +172,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         Integer minutes = dto.getWalkingRecordWalkingMinutes();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
-        List<WalkingRecordAttachment> walkingRecordAttachments = dto.getWalkingRecordAttachments();
+        List<MultipartFile> files = dto.getFiles();
 
         WalkingRecordResponseDto data = null;
 
@@ -207,7 +199,27 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
-            System.out.println("Received Weather State: " + walkingRecordWeatherState);
+            // 기존 첨부파일 삭제
+            List<WalkingRecordAttachment> currentAttachments = walkingRecord.getWalkingRecordAttachments();
+            if (currentAttachments != null) {
+                for (WalkingRecordAttachment attachment : currentAttachments) {
+                    fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
+                    walkingRecordAttachmentRepository.delete(attachment);
+                }
+            }
+
+            // 새로운 첨부파일 추가
+            if (files != null && !files.isEmpty()) {
+                for (MultipartFile file : files) {
+                    String filePath = fileService.uploadFile(file, "walking-record");
+                    if (filePath != null) {
+                        WalkingRecordAttachment attachment = new WalkingRecordAttachment();
+                        attachment.setWalkingRecord(walkingRecord);
+                        attachment.setWalkingRecordAttachmentFile(filePath);
+                        walkingRecordAttachmentRepository.save(attachment);
+                    }
+                }
+            }
 
             walkingRecord = walkingRecord.toBuilder()
                     .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
@@ -215,7 +227,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                     .walkingRecordWalkingTime(totalMinutes)
                     .walkingRecordCreateAt(walkingRecordCreateAt != null ? walkingRecordCreateAt : walkingRecord.getWalkingRecordCreateAt())
                     .walkingRecordMemo(walkingRecordMemo != null ? walkingRecordMemo : walkingRecord.getWalkingRecordMemo())
-                    .walkingRecordAttachments(walkingRecordAttachments != null ? walkingRecordAttachments :walkingRecord.getWalkingRecordAttachments())
                     .build();
 
             walkingRecordRepository.save(walkingRecord);
