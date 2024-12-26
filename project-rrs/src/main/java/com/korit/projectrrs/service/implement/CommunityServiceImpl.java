@@ -204,7 +204,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     @Transactional
-    public ResponseDto<Void> toggleLike(Long userId, Long communityId) {
+    public ResponseDto<Integer> toggleLike(Long userId, Long communityId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException(ResponseMessage.COMMUNITY_NOT_FOUND));
 
@@ -231,6 +231,9 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         communityRepository.save(community);
-        return ResponseDto.setSuccess(ResponseMessage.LIKE_TOGGLE_SUCCESS, null);
+
+        // 커뮤니티의 최신 좋아요 수 반환
+        return ResponseDto.setSuccess(ResponseMessage.LIKE_TOGGLE_SUCCESS, community.getCommunityLikeCount());
     }
+
 }

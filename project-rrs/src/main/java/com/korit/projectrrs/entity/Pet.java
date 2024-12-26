@@ -3,10 +3,8 @@ package com.korit.projectrrs.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.ArrayList;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -53,6 +51,7 @@ public class Pet {
     @JsonManagedReference
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WalkingRecord> walkingRecords = new ArrayList<>();
+
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HealthRecord> healthRecords;
 
