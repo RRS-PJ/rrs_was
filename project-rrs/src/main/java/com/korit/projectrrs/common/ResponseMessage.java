@@ -181,6 +181,9 @@ public class ResponseMessage {
     public static final String INVALID_PET_NAME = "Invalid pet name format."; // 잘못된 펫 이름 형식
     public static final String RECORD_CREATED_SUCCESSFULLY = "Health record created successfully."; // 건강 기록 생성 성공
     public static final String RECORD_NOT_FOUND = "Health record not found."; // 건강 기록을 찾을 수 없음
+    public static final String NOT_EXIST_AVAILABLEDATE_ID = "Available date ID does not exist.";
+    public static final String NOT_FOUND_EVENT = "The requested event could not be found.";
+    public static final String NOT_FOUND_USAGE_GUIDE = "The requested usage guide could not be found.";
 
     public static final String RECORD_CREATION_FAILED = "Failed to create health record."; // 건강 기록 생성 실패
     public static final String RECORD_UPDATED_SUCCESSFULLY = "Health record updated successfully."; // 건강 기록 업데이트 성공
@@ -220,5 +223,5 @@ public class ResponseMessage {
     // 존재하지 않는 산책기록 id
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
 
-    public static final String NOT_EXIST_AVAILABLEDATE_ID = "";
+
 }
