@@ -137,18 +137,6 @@ public class AuthServiceImpl implements AuthService {
 
         LoginResponseDto data = null;
 
-        // 2. 유효성 검사 //
-        if (username == null || username.isEmpty() || !username.matches("^[a-zA-Z0-9]{5,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_ID);
-        }
-
-        if (password == null || password.isEmpty() ||
-                password.length() < 8 ||
-                !password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
-        }
-
-
         try {
             // 3. 사용자 인증 //
             User user = userRepository.findUserByUsername(username)

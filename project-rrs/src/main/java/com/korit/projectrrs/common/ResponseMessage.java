@@ -220,5 +220,5 @@ public class ResponseMessage {
     // 존재하지 않는 산책기록 id
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
 
-    public static final String NOT_EXIST_AVAILABLEDATE_ID = "";
+    public static final String NOT_EXIST_AVAILABLEDATE_ID = "AvailableDate does not exist."; // 근무일이 존재하지 않을 때 반환 메시지
 }

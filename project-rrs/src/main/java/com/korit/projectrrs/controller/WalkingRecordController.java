@@ -74,7 +74,7 @@ public class WalkingRecordController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
             @PathVariable Long walkingRecordId,
-            @RequestBody UpdateWalkingRecordRequestDto dto
+            @Valid @ModelAttribute UpdateWalkingRecordRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<WalkingRecordResponseDto> response = walkingRecordService.updateWalkingRecord(userId, petId, walkingRecordId, dto);
