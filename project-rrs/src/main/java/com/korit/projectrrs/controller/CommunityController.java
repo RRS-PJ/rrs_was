@@ -102,7 +102,7 @@ public class CommunityController {
     }
 
     @PostMapping(COMMUNITY_LIKE_COUNT)
-    public ResponseEntity<ResponseDto<Void>> toggleLike(
+    public ResponseEntity<ResponseDto<Integer>> toggleLike(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long communityId
     ) {
@@ -111,7 +111,7 @@ public class CommunityController {
                     .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
         }
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Void> response = communityService.toggleLike(userId, communityId);
+        ResponseDto<Integer> response = communityService.toggleLike(userId, communityId);
         if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_TOGGLE_LIKE)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }

@@ -19,5 +19,5 @@ public interface CommunityService {
 
     ResponseDto<CommunityResponseDto> getCommunity(Long communityId);
 
-    ResponseDto<Void> toggleLike(Long userId, Long communityId);
+    ResponseDto<Integer> toggleLike(Long userId, Long communityId);
 }

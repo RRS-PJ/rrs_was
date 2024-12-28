@@ -27,6 +27,15 @@ public class ApiMappingPattern {
     public static final String ANNOUNCEMENT = "/api/v1/announcements";
     public static final String ANNOUNCEMENT_BY_ID = "/{announcementId}";
 
+    // 이벤트
+    public static final String EVENT = "/api/v1/events";
+    public static final String EVENT_BY_ID = "/{eventId}";
+
+    //사용법
+    public static final String USAGE_GUIDE = "/api/v1/usageGuide";
+    public static final String USAGE_GUIDE_BY_ID = "/{usageGuideId}";
+
+
     // 펫 및 건강 기록
     public static final String PET = "/api/v1/users/pet";
     public static final String HEALTH_RECORDS = "/api/v1/users/pet/petHealth";
