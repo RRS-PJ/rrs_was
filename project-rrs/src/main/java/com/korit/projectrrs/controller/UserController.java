@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(ApiMappingPattern.USER)
 @RequiredArgsConstructor
@@ -43,10 +45,12 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<ResponseDto<Void>> deleteUser(
-            @AuthenticationPrincipal PrincipalUser principalUser
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody Map<String, String> requestBody
     ) {
+        String inputPassword = requestBody.get("password");
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Void> response = userService.deleteUser(userId);
+        ResponseDto<Void> response = userService.deleteUser(userId, inputPassword);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

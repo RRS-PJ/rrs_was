@@ -223,4 +223,8 @@ public class ResponseMessage {
     // 존재하지 않는 산책기록 id
     public static final String NOT_EXIST_WALKING_RECORD_ID = "Walking Record does not exist."; // 산책기록이 존재하지 않을 때 반환 메시지
 
+    // 사용자 정보 수정 관련 메시지
+    public static final String NO_MODIFIED_VALUES = "No changes detected in the provided values."; // 수정 값이 없을 때 반환 메시지
+
+
 }
