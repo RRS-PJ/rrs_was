@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(Long userId) {
+    public ResponseDto<Void> deleteUser(Long userId, String inputPassword) {
         try {
             Optional<User> optionalUser = userRepository.findById(userId);
 
@@ -147,6 +147,11 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = optionalUser.get();
+
+            if (!bCryptpasswordEncoder.matches(inputPassword, user.getPassword())) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
+            }
+
             userRepository.delete(user);
 
         } catch (Exception e) {

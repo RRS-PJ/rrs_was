@@ -27,7 +27,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    @PostMapping
+    @PostMapping(COMMUNITY_POST)
     public ResponseEntity<ResponseDto<CommunityResponseDto>> createCommunity(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @ModelAttribute @Valid CommunityCreateRequestDto dto
