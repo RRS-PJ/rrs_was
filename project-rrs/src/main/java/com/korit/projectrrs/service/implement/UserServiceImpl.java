@@ -82,10 +82,6 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
-        if (userRepository.existsByPhone(phone)) {
-            return ResponseDto.setFailed(ResponseMessage.EXIST_USER_PHONE);
-        }
-
         try {
             Optional<User> optionalUser = userRepository.findById(userId);
 
@@ -94,6 +90,21 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = optionalUser.get();
+
+            if (phone != null && !phone.equals(user.getPhone()) && userRepository.existsByPhone(phone)) {
+                return ResponseDto.setFailed(ResponseMessage.EXIST_USER_PHONE);
+            }
+
+            boolean isSame = (name == null || name.equals(user.getName())) &&
+                    (phone == null || phone.equals(user.getPhone())) &&
+                    (address == null || address.equals(user.getAddress())) &&
+                    (addressDetail == null || addressDetail.equals(user.getAddressDetail())) &&
+                    (profileImageUrl == null || profileImageUrl.equals(user.getProfileImageUrl())) &&
+                    (password == null || password.isEmpty());
+
+            if (isSame) {
+                return ResponseDto.setFailed(ResponseMessage.NO_MODIFIED_VALUES);
+            }
 
             String encodedPassword = user.getPassword();
 
@@ -127,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(Long userId) {
+    public ResponseDto<Void> deleteUser(Long userId, String inputPassword) {
         try {
             Optional<User> optionalUser = userRepository.findById(userId);
 
@@ -136,6 +147,11 @@ public class UserServiceImpl implements UserService {
             }
 
             User user = optionalUser.get();
+
+            if (!bCryptpasswordEncoder.matches(inputPassword, user.getPassword())) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
+            }
+
             userRepository.delete(user);
 
         } catch (Exception e) {
