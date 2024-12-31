@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                                 )
                         .permitAll()
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/v1/provider/**") // 예시 링크
+                                new AntPathRequestMatcher("/api/v1/providers/profile/**") // 예시 링크
                         )
                         .hasRole("PROVIDER")
                         .anyRequest().authenticated())

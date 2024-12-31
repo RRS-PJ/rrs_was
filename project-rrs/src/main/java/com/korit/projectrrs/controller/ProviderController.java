@@ -19,7 +19,8 @@ public class ProviderController {
 
     private final ProviderService providerService;
 
-    private static final String PROVIDER_PUT = "/{userId}";
+    private static final String PROVIDER_PUT = "/profile/{userId}";
+    private static final String PROVIDER_GET = "/profile";
 
     @PutMapping(PROVIDER_PUT)
     public ResponseEntity<ResponseDto<ProviderResponseDto>> updateProvider(
@@ -32,7 +33,7 @@ public class ProviderController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(PROVIDER_GET)
     public ResponseEntity<ResponseDto<ProviderResponseDto>> getProviderInfo(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
