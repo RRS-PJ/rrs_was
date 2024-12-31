@@ -12,7 +12,7 @@ public class CreateReviewRequestDto {
 
     @Min(0)
     @Max(5)
-    private int reviewScore;
+    private Double reviewScore;
 
     @NotBlank
     private String reviewContent;
