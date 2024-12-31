@@ -103,7 +103,7 @@ public class PetServiceImpl implements PetService {
             List<Pet> pets = petRepository.findAllPetByUserId(userId);
 
             if (pets.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PET_ID);
+                return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
             }
 
             data = pets.stream()
