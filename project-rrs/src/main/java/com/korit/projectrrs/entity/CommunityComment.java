@@ -34,6 +34,12 @@ public class CommunityComment {
     public String getNickname() {
         return user != null ? user.getNickname() : null;
     }
+
+    // 헬퍼 메서드 추가: userId 값을 반환
+    public Long getUserId() {
+        return user != null ? user.getUserId() : null;
+    }
+
 }
 
 

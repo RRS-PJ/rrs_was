@@ -20,6 +20,7 @@ public class CommunityResponseDto {
     private String communityTitle;
     private LocalDateTime communityCreatedAt;
     private LocalDateTime communityUpdatedAt;
+    private int communityLikeCount = 0;
     private String communityContent;
     private String communityThumbnailImageUrl; // 썸네일 URL을 String으로 변경
 
@@ -33,6 +34,7 @@ public class CommunityResponseDto {
         this.communityTitle = community.getCommunityTitle();
         this.communityCreatedAt = community.getCommunityCreatedAt();
         this.communityUpdatedAt = community.getCommunityUpdatedAt();
+        this.communityLikeCount = community.getCommunityLikeCount();
         this.communityContent = community.getCommunityContent();
         this.communityThumbnailImageUrl = community.getCommunityThumbnailUrl(); // String 값 설정
 
