@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class CreateReviewResponseDto {
-    private int reviewScore;
+    private Double reviewScore;
     private String reviewContent;
 
     public CreateReviewResponseDto(Review review){

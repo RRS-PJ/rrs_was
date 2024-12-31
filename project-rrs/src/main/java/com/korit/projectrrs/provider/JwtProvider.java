@@ -20,8 +20,15 @@ public class JwtProvider {
     @Value("${jwt.expiration}")
     private int jwtExpirationMs;
 
+    @Value("${mail.auth-code-expiration-millis}")
+    private int jwtEmailExpirationMs;
+
     public int getExpiration() {
         return jwtExpirationMs;
+    }
+
+    public int getEmailExpiration() {
+        return jwtEmailExpirationMs;
     }
 
     public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs) {
@@ -38,11 +45,11 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateEmailValidToken(String email) {
+    public String generateEmailValidToken(String username) {
         return Jwts.builder()
-                .claim("email", email)
+                .claim("username", username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 5)))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtEmailExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -74,6 +81,11 @@ public class JwtProvider {
         return claims.get("userId", Long.class);
     }
 
+    public String getUsernameFromEmailJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("username", String.class);
+    }
+
     public String removeBearer(String bearerToken) {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             throw new RuntimeException("Invalid JWT token format");
@@ -95,5 +107,10 @@ public class JwtProvider {
                 .setSigningKey(key)
                 .build();
         return jwtParser.parseClaimsJws(token).getBody();
+    }
+
+    public Long getUserIdFromEmailJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("userId", Long.class);
     }
 }

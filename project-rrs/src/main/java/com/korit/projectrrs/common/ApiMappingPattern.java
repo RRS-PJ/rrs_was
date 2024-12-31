@@ -18,6 +18,7 @@ public class ApiMappingPattern {
 
     // 커뮤니티
     public static final String COMMUNITY = "/api/v1/users/community";
+    public static final String COMMUNITY_POST = "/write";
     public static final String COMMUNITY_PUT = "/{communityId}";
     public static final String COMMUNITY_DELETE = "/{communityId}";
     public static final String COMMUNITY_GET_BY_ID = "/{communityId}";
