@@ -22,6 +22,7 @@ import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ResponseDto<CreateReviewResponseDto> createReview(Long userId, @Valid CreateReviewRequestDto dto)  {
         CreateReviewResponseDto data = null;
-        int score = dto.getReviewScore();
+        Double score = dto.getReviewScore();
         String content = dto.getReviewContent();
         Long reservationId = dto.getReservationId();
 
@@ -91,13 +92,26 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ResponseDto<List<GetReviewResponseDto>> getReviewsByProvider(Long providerId) {
         List<GetReviewResponseDto> data = null;
+
         try {
-            Optional<List<Review>> reviews = reviewRepository.findReviewsByProvider(providerId);
-            if (reviews.isPresent()) {
-                data = reviews.get().stream()
-                        .map(GetReviewResponseDto::new)
-                        .collect(Collectors.toList());
+            List<Review> reviews = reviewRepository.findReviewsByProvider(providerId);
+
+            if (reviews == null || reviews.isEmpty()) {
+                System.out.println("No reviews found for provider ID: " + providerId);
+                return ResponseDto.setSuccess(ResponseMessage.SUCCESS, new ArrayList<>());
             }
+
+            data = reviews.stream().map((review) -> {
+                System.out.println("Processing review: " + review.getReviewId());
+                User user = userRepository.findById(review.getUser().getUserId())
+                        .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
+                return new GetReviewResponseDto(review).toBuilder()
+                        .userNickname(user.getNickname())
+                        .username(user.getUsername())
+                        .profileImageUrl(user.getProfileImageUrl())
+                        .build();
+            }).collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -138,9 +152,30 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public ResponseDto<GetReviewResponseDto> getLatestReviewByProviderId(Long providerId) {
+        GetReviewResponseDto data = null;
+        try {
+            Optional<Review> latestReview = reviewRepository.findLatestReviewByProviderId(providerId);
+            if (latestReview.isPresent()) {
+                User user = userRepository.findById(latestReview.get().getUser().getUserId())
+                        .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
+                data = new GetReviewResponseDto(latestReview.get()).toBuilder()
+                        .userNickname(user.getNickname())
+                        .username(user.getUsername())
+                        .profileImageUrl(user.getProfileImageUrl())
+                        .build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
+
+    @Override
     public ResponseDto<UpdateReviewResponseDto> updateReview(Long reviewId, Long reservationId ,UpdateReviewRequestDto dto) {
         UpdateReviewResponseDto data = null;
-        int score = dto.getReviewScore();
+        Double score = dto.getReviewScore();
         String content = dto.getReviewContent();
 
         Reservation reservation = reservationRepository.findById(reservationId)

@@ -3,6 +3,7 @@ package com.korit.projectrrs.controller;
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.provider.request.ProviderRequestDto;
+import com.korit.projectrrs.dto.provider.response.GetOneProviderInfoResponseDto;
 import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.ProviderService;
@@ -21,6 +22,7 @@ public class ProviderController {
 
     private static final String PROVIDER_PUT = "/profile/{userId}";
     private static final String PROVIDER_GET = "/profile";
+    private static final String ONE_PROVIDER_INFO = "/{providerId}";
 
     @PutMapping(PROVIDER_PUT)
     public ResponseEntity<ResponseDto<ProviderResponseDto>> updateProvider(
@@ -39,6 +41,16 @@ public class ProviderController {
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<ProviderResponseDto> response = providerService.getProviderInfo(userId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping(ONE_PROVIDER_INFO)
+    public ResponseEntity<ResponseDto<GetOneProviderInfoResponseDto>> getOneProviderInfo (
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long providerId
+    ){
+        ResponseDto<GetOneProviderInfoResponseDto> response = providerService.getOneProviderInfoById(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

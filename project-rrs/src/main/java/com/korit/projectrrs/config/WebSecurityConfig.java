@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/v1/auth/**"),
+                                new AntPathRequestMatcher("/api/v1/mail/**"),
                                 new AntPathRequestMatcher("/api/v1/users/community"),
                                 new AntPathRequestMatcher("/api/v1/announcements/**"),
                                 new AntPathRequestMatcher("/api/v1/events/**"),
@@ -66,7 +67,7 @@ public class WebSecurityConfig {
                                 )
                         .permitAll()
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/v1/providers/profile/**") // 예시 링크
+                                new AntPathRequestMatcher("/api/v1/provider/profile/**")
                         )
                         .hasRole("PROVIDER")
                         .anyRequest().authenticated())

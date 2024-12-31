@@ -14,17 +14,33 @@ import java.util.Set;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = """
-SELECT 
+SELECT
     R.*
 FROM
     REVIEWS R
     INNER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
     INNER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
-WHERE 
+WHERE
     U.USER_ID = :providerId
     AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
-    Optional<List<Review>>  findReviewsByProvider(@Param("providerId") Long providerId);
+    List<Review> findReviewsByProvider(@Param("providerId") Long providerId);
+
+    @Query(value = """
+SELECT
+    R.*
+FROM
+    REVIEWS R
+    INNER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
+    INNER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
+WHERE
+    U.USER_ID = :providerId
+    AND U.ROLES LIKE '%ROLE_PROVIDER%'
+ORDER BY
+    R.REVIEW_CREATE_AT DESC
+LIMIT 1
+""", nativeQuery = true)
+    Optional<Review> findLatestReviewByProviderId(@Param("providerId") Long providerId);
 
     // 제공자 ID으로 평균 리뷰 조회
     @Query(value = """

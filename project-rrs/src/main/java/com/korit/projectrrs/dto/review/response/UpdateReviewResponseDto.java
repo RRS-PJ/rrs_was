@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class UpdateReviewResponseDto {
-    private int reviewScore;
+    private Double reviewScore;
     private String reviewContent;
 
     public UpdateReviewResponseDto(Review review){

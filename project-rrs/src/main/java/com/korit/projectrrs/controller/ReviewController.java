@@ -26,6 +26,7 @@ public class ReviewController {
 
     private static final String REVIEW = "/{reviewId}";
     private static final String PROVIDER = "/provider/{providerId}";
+    private static final String LATEST_REVIEW_BY_PROVIDER = "/latest-review/{providerId}";
     private static final String PROVIDER_AVG = "/provider-avg/{providerId}";
 
     @PostMapping
@@ -60,11 +61,21 @@ public class ReviewController {
     }
 
     @GetMapping("reservation/{reservationId}"+REVIEW)
-    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getByReviewId (
+    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getReviewByReviewId (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId
     ) {
         ResponseDto<GetReviewResponseDto> response = reviewService.getByReviewId(reviewId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping(LATEST_REVIEW_BY_PROVIDER)
+    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getLatestReviewByProviderId (
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long providerId
+    ) {
+        ResponseDto<GetReviewResponseDto> response = reviewService.getLatestReviewByProviderId(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

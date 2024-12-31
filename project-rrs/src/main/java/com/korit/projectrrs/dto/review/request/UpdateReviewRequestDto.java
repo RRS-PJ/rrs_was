@@ -9,7 +9,7 @@ import lombok.Data;
 public class UpdateReviewRequestDto {
     @Min(0)
     @Max(5)
-    private int reviewScore;
+    private Double reviewScore;
 
     @NotBlank
     private String reviewContent;
