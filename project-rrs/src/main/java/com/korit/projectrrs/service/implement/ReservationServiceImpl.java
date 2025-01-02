@@ -16,10 +16,7 @@ import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -224,16 +221,15 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             Set<Long> providerIds = reservationRepository.findProviderByDate(startDate, endDate);
 
-            if(providerIds.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
+            if (providerIds.isEmpty()) {
+                return ResponseDto.setSuccess(ResponseMessage.SUCCESS, Collections.emptySet());
             }
+
             data = providerIds.stream()
                     .map(providerId ->{
                         User provider = userRepository.findById(providerId)
                                 .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_PROVIDER_ID));
-                        double avgScore = reviewRepository.findAvgReviewScoreByProvider(providerId)
-                                .orElse(0.0);
-                        return new GetProviderByDateResponseDto(provider, avgScore);
+                        return new GetProviderByDateResponseDto(provider);
                     })
                     .collect(Collectors.toSet());
 
