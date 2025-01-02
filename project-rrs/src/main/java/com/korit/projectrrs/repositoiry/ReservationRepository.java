@@ -44,7 +44,7 @@ HAVING NOT EXISTS (
 
     @Query(value = """
 SELECT
-    *
+    R.*
 FROM 
     RESERVATIONS R
 WHERE

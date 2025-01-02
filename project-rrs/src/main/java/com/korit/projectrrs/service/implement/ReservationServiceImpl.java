@@ -113,6 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             Map<Long, Double> providerAverageReviewScores = reviewRepository.findAverageReviewScoresByProviders(
                     reservations.stream()
+                            .filter(reservation -> reservation.getProvider() != null)
                             .map(reservation -> reservation.getProvider().getUserId())
                             .collect(Collectors.toSet())
             );
@@ -120,10 +121,7 @@ public class ReservationServiceImpl implements ReservationService {
             data = reservations.stream()
                     .map(reservation -> {
                         Long providerUserId = reservation.getProvider().getUserId();
-                        Double averageReviewScore = providerAverageReviewScores.get(providerUserId);
-                        if(averageReviewScore == null) {
-                            averageReviewScore = 0.0;
-                        }
+                        Double averageReviewScore = Optional.ofNullable(providerAverageReviewScores.get(providerUserId)).orElse(0.0);
                         return new GetReservationResponseDto(reservation, averageReviewScore);
                     })
                     .collect(Collectors.toList());

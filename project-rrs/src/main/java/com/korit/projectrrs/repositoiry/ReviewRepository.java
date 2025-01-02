@@ -64,7 +64,7 @@ WHERE
         LEFT OUTER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
         LEFT OUTER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
     WHERE 
-        U.USER_ID = :providerUserIds
+        U.USER_ID IN (:providerUserIds)
         AND U.ROLES LIKE '%ROLE_PROVIDER%'
     GROUP BY RV.PROVIDER_ID
 """, nativeQuery = true)
