@@ -3,6 +3,7 @@ package com.korit.projectrrs.dto.community.response;
 import com.korit.projectrrs.dto.communitycomment.response.CommunityCommentResponseDto;
 import com.korit.projectrrs.entity.Community;
 import com.korit.projectrrs.entity.CommunityAttachment;
+import com.korit.projectrrs.entity.CommunityLikes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,11 +23,11 @@ public class CommunityResponseDto {
     private LocalDateTime communityUpdatedAt;
     private int communityLikeCount = 0;
     private String communityContent;
-    private String communityThumbnailImageUrl; // 썸네일 URL을 String으로 변경
+    private String communityThumbnailImageUrl;
 
     private List<CommunityCommentResponseDto> comments;
-
     private List<String> attachments;
+    private List<Long> userLiked; // 사용자 ID 목록으로 수정
 
     public CommunityResponseDto(Community community) {
         this.communityId = community.getCommunityId();
@@ -38,20 +39,26 @@ public class CommunityResponseDto {
         this.communityContent = community.getCommunityContent();
         this.communityThumbnailImageUrl = community.getCommunityThumbnailUrl(); // String 값 설정
 
-        // Comments
-        if (community.getComments() != null && !community.getComments().isEmpty()) {
-            this.comments = community.getComments().stream()
-                    .map(CommunityCommentResponseDto::new)
-                    .collect(Collectors.toList());
-        } else {
-            this.comments = null;
-        }
-
-        // Attachments
-        this.attachments = Optional.ofNullable(community.getAttachments())
-                .orElseGet(Collections::emptyList) // null일 경우 빈 리스트 반환
+        // userLiked: CommunityLikes 엔티티에서 사용자 ID만 가져오기
+        this.userLiked = Optional.ofNullable(community.getUserLiked())
+                .orElse(Collections.emptyList())
                 .stream()
-                .map(CommunityAttachment::getCommunityAttachment) // 파일 경로를 리스트로 변환
+                .filter(CommunityLikes::isUserLiked) // 좋아요가 활성화된 사용자만 가져옴
+                .map(like -> like.getUser().getUserId())
+                .collect(Collectors.toList());
+
+        // Comments: CommunityCommentResponseDto로 변환
+        this.comments = Optional.ofNullable(community.getComments())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(CommunityCommentResponseDto::new)
+                .collect(Collectors.toList());
+
+        // Attachments: 파일 경로만 리스트로 변환
+        this.attachments = Optional.ofNullable(community.getAttachments())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(CommunityAttachment::getCommunityAttachment)
                 .collect(Collectors.toList());
     }
 }

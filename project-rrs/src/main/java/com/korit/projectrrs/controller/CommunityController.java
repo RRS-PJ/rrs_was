@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.korit.projectrrs.common.ApiMappingPattern.*;
 
@@ -102,7 +103,7 @@ public class CommunityController {
     }
 
     @PostMapping(COMMUNITY_LIKE_COUNT)
-    public ResponseEntity<ResponseDto<Integer>> toggleLike(
+    public ResponseEntity<ResponseDto<Map<String, Object>>> toggleLike(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long communityId
     ) {
@@ -110,11 +111,15 @@ public class CommunityController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
         }
+
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Integer> response = communityService.toggleLike(userId, communityId);
+        ResponseDto<Map<String, Object>> response = communityService.toggleLike(userId, communityId);
+
         if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_TOGGLE_LIKE)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
+
         return ResponseEntity.status(response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
     }
+
 }
