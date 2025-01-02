@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PetResponseDto {
+    private Long petId;
     private String petName;
     private Character petGender;
     private String petBirthDate;
@@ -18,6 +19,7 @@ public class PetResponseDto {
     private Character petNeutralityYn;
 
     public PetResponseDto(Pet pet) {
+        this.petId = pet.getPetId();
         this.petName = pet.getPetName();
         this.petGender = pet.getPetGender();
         this.petBirthDate = pet.getPetBirthDate();

@@ -128,7 +128,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petId, walkingRecordCreateAt);
 
             if (walkingRecords.isEmpty()) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
+                return ResponseDto.setSuccess(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID, data);
             }
 
             data = walkingRecords.stream()
