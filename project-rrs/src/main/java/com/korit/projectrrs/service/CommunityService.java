@@ -7,6 +7,7 @@ import com.korit.projectrrs.dto.community.response.CommunityResponseAllDto;
 import com.korit.projectrrs.dto.community.response.CommunityResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommunityService {
     ResponseDto<CommunityResponseDto> createCommunity(Long userId, CommunityCreateRequestDto dto);
@@ -19,5 +20,5 @@ public interface CommunityService {
 
     ResponseDto<CommunityResponseDto> getCommunity(Long communityId);
 
-    ResponseDto<Integer> toggleLike(Long userId, Long communityId);
+    ResponseDto<Map<String, Object>> toggleLike(Long userId, Long communityId);
 }
