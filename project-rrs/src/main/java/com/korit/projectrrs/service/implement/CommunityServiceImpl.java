@@ -17,13 +17,12 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.CommunityService;
 import com.korit.projectrrs.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,13 +49,8 @@ public class CommunityServiceImpl implements CommunityService {
         if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
             String fileName = fileService.uploadFile(dto.getCommunityThumbnailFile(), "community-thumbnail");
             if (fileName != null) {
-                thumbnailUrl = fileName; // 업로드된 파일 URL로 설정
+                thumbnailUrl = fileName;
             }
-        }
-
-        // Default thumbnail 설정
-        if (thumbnailUrl == null) {
-            thumbnailUrl = "default-thumbnail.jpg"; // 기본값 설정
         }
 
         Community community = Community.builder()
@@ -68,23 +62,18 @@ public class CommunityServiceImpl implements CommunityService {
 
         communityRepository.save(community);
 
-        // 파일 업로드 처리
         List<MultipartFile> multifiles = dto.getFiles();
         List<String> fileNames = new ArrayList<>();
-
-        if (multifiles == null || multifiles.isEmpty()) {
-            multifiles = new ArrayList<>();  // 빈 배열로 초기화
-        }
-
-        for (MultipartFile multiFile : multifiles) {
-            String fileName = fileService.uploadFile(multiFile, "community");  // 파일 업로드 서비스 호출
-            fileNames.add(fileName);
-            // 파일 정보 CommunityAttachment 테이블에 저장
-            if (fileName != null) {
-                CommunityAttachment attachment = new CommunityAttachment();
-                attachment.setCommunity(community);
-                attachment.setCommunityAttachment(fileName);
-                communityAttachmentRepository.save(attachment);
+        if (multifiles != null && !multifiles.isEmpty()) {
+            for (MultipartFile multiFile : multifiles) {
+                String fileName = fileService.uploadFile(multiFile, "community");
+                if (fileName != null) {
+                    fileNames.add(fileName);
+                    CommunityAttachment attachment = new CommunityAttachment();
+                    attachment.setCommunity(community);
+                    attachment.setCommunityAttachment(fileName);
+                    communityAttachmentRepository.save(attachment);
+                }
             }
         }
 
@@ -93,7 +82,6 @@ public class CommunityServiceImpl implements CommunityService {
 
         return ResponseDto.setSuccess(ResponseMessage.COMMUNITY_CREATED_SUCCESSFULLY, responseDto);
     }
-
 
     @Override
     @Transactional
@@ -108,7 +96,6 @@ public class CommunityServiceImpl implements CommunityService {
             return ResponseDto.setFailed(ResponseMessage.NOT_AUTHORIZED_TO_UPDATE);
         }
 
-        // Update thumbnail handling
         String defaultThumbnailUrl = "default-thumbnail.jpg";
         String thumbnailUrl = community.getCommunityThumbnailUrl();
         if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
@@ -146,15 +133,6 @@ public class CommunityServiceImpl implements CommunityService {
                 }
             }
         }
-
-        community.getAttachments().clear();
-        community.getAttachments().addAll(fileNames.stream()
-                .map(name -> {
-                    CommunityAttachment newAttachment = new CommunityAttachment();
-                    newAttachment.setCommunity(community);
-                    newAttachment.setCommunityAttachment(name);
-                    return newAttachment;
-                }).collect(Collectors.toList()));
 
         communityRepository.save(community);
 
@@ -199,12 +177,21 @@ public class CommunityServiceImpl implements CommunityService {
             return ResponseDto.setFailed(ResponseMessage.COMMUNITY_NOT_FOUND);
         }
 
-        return ResponseDto.setSuccess(ResponseMessage.COMMUNITY_FETCHED_SUCCESSFULLY, new CommunityResponseDto(optionalCommunity.get()));
+        Community community = optionalCommunity.get();
+
+        // Initialize lazy fields
+        Hibernate.initialize(community.getUserLiked());
+        Hibernate.initialize(community.getComments());
+        Hibernate.initialize(community.getAttachments());
+
+        CommunityResponseDto responseDto = new CommunityResponseDto(community);
+
+        return ResponseDto.setSuccess(ResponseMessage.COMMUNITY_FETCHED_SUCCESSFULLY, responseDto);
     }
 
     @Override
     @Transactional
-    public ResponseDto<Integer> toggleLike(Long userId, Long communityId) {
+    public ResponseDto<Map<String, Object>> toggleLike(Long userId, Long communityId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException(ResponseMessage.COMMUNITY_NOT_FOUND));
 
@@ -213,27 +200,49 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         Optional<CommunityLikes> existingLike = communityLikesRepository.findByCommunityCommunityIdAndUserUserId(communityId, userId);
+        boolean userLiked;
 
         if (existingLike.isPresent()) {
-            // 좋아요 제거
-            communityLikesRepository.delete(existingLike.get());
-            community.updateLikeCount(community.getCommunityLikeCount() - 1);
+            CommunityLikes like = existingLike.get();
+            if (like.isUserLiked()) {
+                // 좋아요를 취소
+                if (community.getCommunityLikeCount() > 0) { // 좋아요 수가 0 이하로 내려가지 않도록 제한
+                    community.updateLikeCount(community.getCommunityLikeCount() - 1);
+                }
+                like.setUserLiked(false);
+                communityLikesRepository.save(like);
+                userLiked = false;
+            } else {
+                // 다시 좋아요 추가
+                like.setUserLiked(true);
+                community.updateLikeCount(community.getCommunityLikeCount() + 1);
+                communityLikesRepository.save(like);
+                userLiked = true;
+            }
         } else {
-            // 좋아요 추가
+            // 처음 좋아요를 추가
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException(ResponseMessage.USER_NOT_FOUND));
+
             CommunityLikes newLike = CommunityLikes.builder()
                     .community(community)
                     .user(user)
+                    .userLiked(true)
                     .build();
             communityLikesRepository.save(newLike);
+
             community.updateLikeCount(community.getCommunityLikeCount() + 1);
+            userLiked = true;
         }
 
         communityRepository.save(community);
 
-        // 커뮤니티의 최신 좋아요 수 반환
-        return ResponseDto.setSuccess(ResponseMessage.LIKE_TOGGLE_SUCCESS, community.getCommunityLikeCount());
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("likeCount", community.getCommunityLikeCount());
+        responseData.put("userLiked", userLiked);
+        responseData.put("userId", userId); // userId 추가
+
+        return ResponseDto.setSuccess(ResponseMessage.LIKE_TOGGLE_SUCCESS, responseData);
     }
 
 }

@@ -17,7 +17,7 @@ public class CommunityComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMUNITY_COMMENTS_ID", nullable = false, updatable = false)
-    private Long commentId;
+    private Long communityCommentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMMUNITY_ID", nullable = false)
