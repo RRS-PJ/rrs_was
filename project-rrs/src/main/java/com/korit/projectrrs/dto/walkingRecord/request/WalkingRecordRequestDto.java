@@ -3,7 +3,6 @@ package com.korit.projectrrs.dto.walkingRecord.request;
 import com.korit.projectrrs.entity.WalkingRecordWeatherState;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +20,10 @@ public class WalkingRecordRequestDto {
     private WalkingRecordWeatherState walkingRecordWeatherState;
     @NotNull
     private Integer walkingRecordDistance;
-    @NotNull
+
     private Integer walkingRecordWalkingHours;
-    @NotNull
     private Integer walkingRecordWalkingMinutes;
+
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;
