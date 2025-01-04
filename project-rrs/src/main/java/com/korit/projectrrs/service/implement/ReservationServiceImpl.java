@@ -13,6 +13,7 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -111,12 +112,19 @@ public class ReservationServiceImpl implements ReservationService {
                 return ResponseDto.setSuccess(ResponseMessage.SUCCESS, new ArrayList<>());
             }
 
-            Map<Long, Double> providerAverageReviewScores = reviewRepository.findAverageReviewScoresByProviders(
-                    reservations.stream()
-                            .filter(reservation -> reservation.getProvider() != null)
-                            .map(reservation -> reservation.getProvider().getUserId())
-                            .collect(Collectors.toSet())
-            );
+            Set<Long> providerUserIds = reservations.stream()
+                    .filter(reservation -> reservation.getProvider() != null)
+                    .map(reservation -> reservation.getProvider().getUserId())
+                    .collect(Collectors.toSet());
+
+            List<Object[]> rawReviewScores = reviewRepository.findAverageReviewScoresByProviders(providerUserIds);
+
+            // List<Object[]> -> Map<Long, Double> 변환
+            Map<Long, Double> providerAverageReviewScores = rawReviewScores.stream()
+                    .collect(Collectors.toMap(
+                            row -> ((Long) row[0]).longValue(),
+                            row -> (Double) row[1]
+                    ));
 
             data = reservations.stream()
                     .map(reservation -> {
@@ -253,6 +261,27 @@ public class ReservationServiceImpl implements ReservationService {
 
             data = new UpdateStatusResponseDto(cancledReservation.getReservationStatus());
         } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
+
+    @Override
+    public ResponseDto<HasReview> hasReview(Long reservationId) {
+        HasReview data = null;
+
+        reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
+
+        try {
+            boolean result = reviewRepository.existsByReservation_ReservationId(reservationId);
+            if(result){
+                data = new HasReview('Y');
+            } else {
+                data = new HasReview('N');
+            }
+        } catch (DataAccessException e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }

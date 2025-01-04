@@ -58,7 +58,7 @@ WHERE
 
     @Query(value = """
     SELECT 
-        RV.PROVIDER_ID, AVG(R.REVIEW_SCORE) AS AVG_SCORE
+        RV.PROVIDER_ID AS providerId, AVG(R.REVIEW_SCORE) AS averageScore
     FROM 
         REVIEWS R
         LEFT OUTER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
@@ -68,7 +68,9 @@ WHERE
         AND U.ROLES LIKE '%ROLE_PROVIDER%'
     GROUP BY RV.PROVIDER_ID
 """, nativeQuery = true)
-    Map<Long, Double> findAverageReviewScoresByProviders(@Param("providerUserIds") Set<Long> providerUserIds);
+    List<Object[]> findAverageReviewScoresByProviders(@Param("providerUserIds") Set<Long> providerUserIds);
 
     boolean existsByReservation_ReservationId(Long reservationId);
+
+    Optional<Review> findByReservation_ReservationId(Long reservationId);
 }

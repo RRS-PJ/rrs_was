@@ -105,11 +105,7 @@ public class ReviewServiceImpl implements ReviewService {
                 System.out.println("Processing review: " + review.getReviewId());
                 User user = userRepository.findById(review.getUser().getUserId())
                         .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
-                return new GetReviewResponseDto(review).toBuilder()
-                        .userNickname(user.getNickname())
-                        .username(user.getUsername())
-                        .profileImageUrl(user.getProfileImageUrl())
-                        .build();
+                return new GetReviewResponseDto(review, user);
             }).collect(Collectors.toList());
 
         } catch (Exception e) {
@@ -137,13 +133,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<GetReviewResponseDto> getByReviewId(Long reviewId) {
+    public ResponseDto<GetReviewResponseDto> getReviewByReservationId(Long reservationId) {
         GetReviewResponseDto data = null;
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
         try {
-            Optional<Review> optionalReview = reviewRepository.findById(reviewId);
-            if (optionalReview.isPresent()) {
-                data = new GetReviewResponseDto(optionalReview.get());
-            }
+            Review review = reviewRepository.findByReservation_ReservationId(reservationId)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_REVIEW));
+
+            data = new GetReviewResponseDto(review, reservation.getUser());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -159,7 +157,7 @@ public class ReviewServiceImpl implements ReviewService {
             if (latestReview.isPresent()) {
                 User user = userRepository.findById(latestReview.get().getUser().getUserId())
                         .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
-                data = new GetReviewResponseDto(latestReview.get()).toBuilder()
+                data = new GetReviewResponseDto(latestReview.get(), user).toBuilder()
                         .userNickname(user.getNickname())
                         .username(user.getUsername())
                         .profileImageUrl(user.getProfileImageUrl())
@@ -173,7 +171,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseDto<UpdateReviewResponseDto> updateReview(Long reviewId, Long reservationId ,UpdateReviewRequestDto dto) {
+    public ResponseDto<UpdateReviewResponseDto> updateReviewByReservationId(Long reservationId, UpdateReviewRequestDto dto) {
         UpdateReviewResponseDto data = null;
         Double score = dto.getReviewScore();
         String content = dto.getReviewContent();
@@ -185,8 +183,11 @@ public class ReviewServiceImpl implements ReviewService {
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_IS_NOT_COMPLETED);
         }
 
+        Review review = reviewRepository.findByReservation_ReservationId(reservationId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_REVIEW));
+
         try {
-            Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+            Optional<Review> optionalReview = reviewRepository.findById(review.getReviewId());
             if (optionalReview.isPresent()) {
                 Review respondedReview = optionalReview.get().toBuilder()
                         .reviewScore(score)

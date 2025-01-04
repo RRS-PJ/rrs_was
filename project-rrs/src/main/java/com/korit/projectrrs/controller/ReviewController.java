@@ -25,11 +25,14 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     private static final String REVIEW = "/{reviewId}";
+    private static final String GET_REVIEW_BY_RESERVATION_ID = "/reservation/{reservationId}";
+    private static final String UPDATE_REVIEW_BY_RESERVATION_ID = "/reservation/{reservationId}";
+    private static final String CREATE_REVIEW = "/write";
     private static final String PROVIDER = "/provider/{providerId}";
     private static final String LATEST_REVIEW_BY_PROVIDER = "/latest-review/{providerId}";
     private static final String PROVIDER_AVG = "/provider-avg/{providerId}";
 
-    @PostMapping
+    @PostMapping(CREATE_REVIEW)
     private ResponseEntity<ResponseDto<CreateReviewResponseDto>> createReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody CreateReviewRequestDto dto
@@ -60,15 +63,17 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping("reservation/{reservationId}"+REVIEW)
-    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getReviewByReviewId (
+    @GetMapping(GET_REVIEW_BY_RESERVATION_ID)
+    private ResponseEntity<ResponseDto<GetReviewResponseDto>> getReviewByReservationId (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable Long reviewId
+            @PathVariable Long reservationId
     ) {
-        ResponseDto<GetReviewResponseDto> response = reviewService.getByReviewId(reviewId);
+        ResponseDto<GetReviewResponseDto> response = reviewService.getReviewByReservationId(reservationId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
+
+
 
     @GetMapping(LATEST_REVIEW_BY_PROVIDER)
     private ResponseEntity<ResponseDto<GetReviewResponseDto>> getLatestReviewByProviderId (
@@ -80,14 +85,13 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping("reservation/{reservationId}"+REVIEW)
-    private ResponseEntity<ResponseDto<UpdateReviewResponseDto>> updateReview (
+    @PutMapping(UPDATE_REVIEW_BY_RESERVATION_ID)
+    private ResponseEntity<ResponseDto<UpdateReviewResponseDto>> updateReviewByReservationId (
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable Long reviewId,
             @PathVariable Long reservationId,
             @RequestBody UpdateReviewRequestDto dto
     ){
-        ResponseDto<UpdateReviewResponseDto> response = reviewService.updateReview(reviewId, reservationId, dto);
+        ResponseDto<UpdateReviewResponseDto> response = reviewService.updateReviewByReservationId(reservationId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

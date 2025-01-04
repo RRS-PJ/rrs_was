@@ -7,6 +7,6 @@ public enum ReservationStatus {
     PENDING(),
     IN_PROGRESS,
     REJECTED,
-    CANCELED,
+    CANCELLED,
     COMPLETED;
 }

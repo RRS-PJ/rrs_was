@@ -14,8 +14,8 @@ public interface ReviewService {
     ResponseDto<CreateReviewResponseDto> createReview(Long userId, CreateReviewRequestDto dto);
     ResponseDto<List<GetReviewResponseDto>> getReviewsByProvider(Long providerId);
     ResponseDto<GetAvgReviewScoreResponseDto> getAverageReviewScoreByProvider(Long userId);
-    ResponseDto<GetReviewResponseDto> getByReviewId(Long reviewId);
+    ResponseDto<GetReviewResponseDto> getReviewByReservationId(Long reviewId);
     ResponseDto<GetReviewResponseDto> getLatestReviewByProviderId(Long providerId);
-    ResponseDto<UpdateReviewResponseDto> updateReview(Long reviewId, Long reservationId, UpdateReviewRequestDto dto);
+    ResponseDto<UpdateReviewResponseDto> updateReviewByReservationId(Long reservationId, UpdateReviewRequestDto dto);
     ResponseDto<Void> deleteReview(Long reviewId);
 }
