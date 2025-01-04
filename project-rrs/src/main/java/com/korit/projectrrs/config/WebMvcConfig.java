@@ -21,7 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/file/**")
-                .addResourceLocations("file:///" + rootPath + "/") // 파일 시스템 경로 매핑
+                .addResourceLocations("file:///" + rootPath + "/file/")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
