@@ -101,25 +101,4 @@ public class CommunityController {
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
-
-    @PostMapping(COMMUNITY_LIKE_COUNT)
-    public ResponseEntity<ResponseDto<Map<String, Object>>> toggleLike(
-            @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable Long communityId
-    ) {
-        if (principalUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ResponseDto.setFailed(ResponseMessage.USER_NOT_AUTHENTICATED));
-        }
-
-        Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Map<String, Object>> response = communityService.toggleLike(userId, communityId);
-
-        if (response.getMessage().equals(ResponseMessage.NOT_AUTHORIZED_TO_TOGGLE_LIKE)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        }
-
-        return ResponseEntity.status(response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
-    }
-
 }

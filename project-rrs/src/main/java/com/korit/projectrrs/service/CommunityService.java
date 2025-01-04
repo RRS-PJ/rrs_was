@@ -11,14 +11,8 @@ import java.util.Map;
 
 public interface CommunityService {
     ResponseDto<CommunityResponseDto> createCommunity(Long userId, CommunityCreateRequestDto dto);
-
     ResponseDto<CommunityResponseDto> updateCommunity(Long userId, Long communityId, CommunityUpdateRequestDto dto);
-
     ResponseDto<Void> deleteCommunity(Long userId, Long communityId);
-
     ResponseDto<List<CommunityResponseAllDto>> getAllCommunities();
-
     ResponseDto<CommunityResponseDto> getCommunity(Long communityId);
-
-    ResponseDto<Map<String, Object>> toggleLike(Long userId, Long communityId);
 }
