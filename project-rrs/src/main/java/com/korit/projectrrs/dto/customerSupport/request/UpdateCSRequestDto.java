@@ -19,5 +19,5 @@ public class UpdateCSRequestDto {
 
     private List<MultipartFile> files;
 
-    private String path = "customer-service";
+    private String path = "customer-support";
 }
