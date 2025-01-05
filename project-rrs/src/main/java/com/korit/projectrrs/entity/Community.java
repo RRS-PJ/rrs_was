@@ -44,8 +44,8 @@ public class Community {
     @Column(name = "COMMUNITY_CONTENTS", nullable = false, columnDefinition = "TEXT")
     private String communityContent;
 
-    @Column(name = "COMMUNITY_THUMBNAIL_URL", nullable = false, columnDefinition = "VARCHAR(255) default 'example.jpg'")
-    private String communityThumbnailUrl;
+    @Column(name = "COMMUNITY_THUMBNAIL_File", nullable = false, columnDefinition = "VARCHAR(255) default 'example.jpg'")
+    private String communityThumbnailFile;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityComment> comments = new ArrayList<>();
@@ -68,10 +68,10 @@ public class Community {
     }
 
     // 다른 필드 변경
-    public void updateDetails(String title, String content, String thumbnailUrl) {
+    public void updateDetails(String title, String content, String thumbnailFile) {
         this.communityTitle = title;
         this.communityContent = content;
-        this.communityThumbnailUrl = thumbnailUrl;
+        this.communityThumbnailFile = thumbnailFile;
         this.communityUpdatedAt = LocalDateTime.now(); // 명시적으로 갱신
     }
 

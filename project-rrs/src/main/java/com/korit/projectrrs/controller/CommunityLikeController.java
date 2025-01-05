@@ -1,5 +1,6 @@
 package com.korit.projectrrs.controller;
 
+import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.communityLike.response.CommunityLikeResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/communities")
+@RequestMapping(ApiMappingPattern.COMMUNITY_LIKE)
 @RequiredArgsConstructor
 public class CommunityLikeController {
 
@@ -27,7 +28,7 @@ public class CommunityLikeController {
      * @param principalUser 인증된 사용자 정보
      * @return 좋아요 상태 및 좋아요 수
      */
-    @PostMapping("/{communityId}/like")
+    @PostMapping("/{communityId}")
     public ResponseEntity<ResponseDto<Map<String, Object>>> toggleLike(
             @PathVariable Long communityId,
             @AuthenticationPrincipal PrincipalUser principalUser) {

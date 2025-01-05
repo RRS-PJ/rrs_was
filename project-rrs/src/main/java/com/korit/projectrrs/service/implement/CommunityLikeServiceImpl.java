@@ -77,10 +77,11 @@ public class CommunityLikeServiceImpl implements CommunityLikeService {
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("likeCount", community.getCommunityLikeCount());
         responseData.put("userLiked", userLiked);
-        responseData.put("userId", user.getUserId());
+        responseData.put("nickname", user.getNickname()); // userId 대신 nickname 추가
 
         return ResponseDto.setSuccess(ResponseMessage.LIKE_TOGGLE_SUCCESS, responseData);
     }
+
 
     @Override
     @Transactional(readOnly = true)

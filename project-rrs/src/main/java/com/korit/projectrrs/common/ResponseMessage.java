@@ -230,4 +230,5 @@ public class ResponseMessage {
     public static final String USER_NOT_AUTHORIZED = "사용자가 이 작업을 수행할 권한이 없습니다.";
     public static final String SERVER_ERROR = "서버 오류가 발생했습니다.";
     public static final String USERS_FETCHED_SUCCESSFULLY = "";
+    public static final String INVALID_THUMBNAIL_FORMAT = "";
 }
