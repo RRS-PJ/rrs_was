@@ -27,7 +27,7 @@ public class CommunityResponseDto {
     private LocalDateTime communityUpdatedAt; // 수정 날짜
     private int communityLikeCount = 0;      // 좋아요 수 기본값: 0
     private String communityContent;         // 게시글 내용
-    private String communityThumbnailFile; // 썸네일 이미지 URL
+    private String communityThumbnailFile;   // 썸네일 이미지 URL
 
     private List<CommunityCommentResponseDto> comments = Collections.emptyList(); // 댓글
     private List<String> attachments = Collections.emptyList(); // 첨부파일 경로
@@ -45,9 +45,7 @@ public class CommunityResponseDto {
         this.communityUpdatedAt = community.getCommunityUpdatedAt();
         this.communityLikeCount = community.getCommunityLikeCount();
         this.communityContent = community.getCommunityContent();
-        this.communityThumbnailFile = community.getCommunityThumbnailFile() != null
-                ? community.getCommunityThumbnailFile()
-                : "default-thumbnail.jpg";
+        this.communityThumbnailFile = community.getCommunityThumbnailFile(); // 기본값 설정 로직 제거
 
         // 좋아요한 사용자 닉네임 목록
         if (Objects.nonNull(community.getUserLiked())) {
@@ -56,7 +54,6 @@ public class CommunityResponseDto {
                     .map(like -> like.getUser().getNickname())
                     .collect(Collectors.toList());
         }
-
 
         // 댓글 리스트 변환
         if (Objects.nonNull(community.getComments())) {

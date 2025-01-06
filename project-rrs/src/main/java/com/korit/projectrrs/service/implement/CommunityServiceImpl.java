@@ -46,7 +46,7 @@ public class CommunityServiceImpl implements CommunityService {
             User user = optionalUser.get();
 
             // Handle thumbnail
-            String thumbnailFile = "default-thumbnail.jpg";
+            String thumbnailFile = null;
             if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
                 thumbnailFile = fileService.uploadFile(dto.getCommunityThumbnailFile(), "community-thumbnail");
             }
@@ -103,13 +103,12 @@ public class CommunityServiceImpl implements CommunityService {
             // Handle thumbnail
             String thumbnailFile = community.getCommunityThumbnailFile();
             if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
-                if (!"default-thumbnail.jpg".equals(thumbnailFile)) {
+                if (thumbnailFile != null) {
                     fileService.removeFile(thumbnailFile);
                 }
                 thumbnailFile = fileService.uploadFile(dto.getCommunityThumbnailFile(), "community-thumbnail");
-            } else if (!"default-thumbnail.jpg".equals(thumbnailFile)) {
-                fileService.removeFile(thumbnailFile);
-                thumbnailFile = "default-thumbnail.jpg";
+            } else {
+                thumbnailFile = null;
             }
 
             community.updateDetails(dto.getCommunityTitle(), dto.getCommunityContent(), thumbnailFile);
@@ -162,15 +161,16 @@ public class CommunityServiceImpl implements CommunityService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_AUTHORIZED_TO_DELETE);
             }
 
-            // Remove attachments and thumbnail
+            // Remove attachments
             List<CommunityAttachment> attachments = communityAttachmentRepository.findByCommunityCommunityId(communityId);
             for (CommunityAttachment attachment : attachments) {
                 fileService.removeFile(attachment.getCommunityAttachment());
                 communityAttachmentRepository.delete(attachment);
             }
 
+            // Remove thumbnail if exists
             String thumbnailFile = community.getCommunityThumbnailFile();
-            if (!"default-thumbnail.jpg".equals(thumbnailFile)) {
+            if (thumbnailFile != null) {
                 fileService.removeFile(thumbnailFile);
             }
 
