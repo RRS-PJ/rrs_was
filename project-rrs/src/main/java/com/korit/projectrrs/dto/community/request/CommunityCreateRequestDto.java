@@ -1,6 +1,5 @@
 package com.korit.projectrrs.dto.community.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
