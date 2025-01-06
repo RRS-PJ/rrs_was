@@ -226,4 +226,5 @@ public class ResponseMessage {
     // 사용자 정보 수정 관련 메시지
     public static final String NO_MODIFIED_VALUES = "No changes detected in the provided values."; // 수정 값이 없을 때 반환 메시지
     public static final String NOT_EXIST_REVIEW = "This review is not exist";
+    public static final String USERS_FETCHED_SUCCESSFULLY = "Success to fetch users";
 }

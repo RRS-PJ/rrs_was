@@ -17,12 +17,13 @@ public class UpdateCSResponseDto {
     private String customerSupportContent;
     private char customerSupportCategory;
     private LocalDateTime customerSupportCreateAt;
-    private List<MultipartFile> files;
+    private List<String> files;
 
-    public UpdateCSResponseDto(CustomerSupport customerSupport){
+    public UpdateCSResponseDto(CustomerSupport customerSupport, List<String> files){
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();
         this.customerSupportCreateAt = customerSupport.getCustomerSupportCreateAt();
+        this.files = files;
     }
 }

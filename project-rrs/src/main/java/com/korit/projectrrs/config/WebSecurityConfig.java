@@ -39,7 +39,6 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
@@ -64,10 +63,6 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/api/v1/events/**"),
                                 new AntPathRequestMatcher("/api/v1/usageGuide/**"),
                                 new AntPathRequestMatcher("/upload/**"),
-                                new AntPathRequestMatcher("/file/**")
-                        )
-                        .permitAll()
-                                new AntPathRequestMatcher("/uploads/**"),
                                 new AntPathRequestMatcher("/file/**")
                         )
                         .permitAll()
