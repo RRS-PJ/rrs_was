@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class WalkingRecordResponseDto {
+    private Long walkingRecordId;
     private WalkingRecordWeatherState walkingRecordWeatherState;
     private Integer walkingRecordDistance;
     private Integer walkingRecordWalkingTime;
@@ -21,6 +22,7 @@ public class WalkingRecordResponseDto {
     private List<String> fileName;
 
     public WalkingRecordResponseDto(WalkingRecord walkingRecord) {
+        this.walkingRecordId = walkingRecord.getWalkingRecordId();
         this.walkingRecordWeatherState = walkingRecord.getWalkingRecordWeatherState();
         this.walkingRecordDistance = walkingRecord.getWalkingRecordDistance();
         this.walkingRecordWalkingTime = walkingRecord.getWalkingRecordWalkingTime();

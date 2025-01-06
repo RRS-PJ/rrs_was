@@ -55,11 +55,18 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_DISTANCE);
         }
 
-        if (minutes == null || minutes < 0 || minutes >= 60) {
-            return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_TIME);
+        int totalMinutes = 0;
+        if (hours != null && minutes != null) {
+            totalMinutes = (hours * 60) + minutes;
+        } else if (hours != null) {
+            totalMinutes = hours * 60; // 시간만 있는 경우
+        } else if (minutes != null) {
+            totalMinutes = minutes; // 분만 있는 경우
         }
 
-        int totalMinutes = (hours != null ? hours : 0) * 60 + minutes;
+        if ((hours == null && minutes == null) || minutes < 0 || minutes >= 60 || hours < 0) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_TIME);
+        }
 
         if (walkingRecordCreateAt == null) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_CREATE_AT);

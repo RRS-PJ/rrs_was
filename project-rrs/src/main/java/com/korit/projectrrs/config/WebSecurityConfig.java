@@ -66,7 +66,11 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/upload/**"),
                                 new AntPathRequestMatcher("/file/**")
                         )
-                .permitAll()
+                        .permitAll()
+                                new AntPathRequestMatcher("/uploads/**"),
+                                new AntPathRequestMatcher("/file/**")
+                        )
+                        .permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/v1/provider/profile/**")
                         )
