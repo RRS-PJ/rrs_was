@@ -65,7 +65,7 @@ public class CustomerSupportController {
     private ResponseEntity<ResponseDto<UpdateCSResponseDto>> updateCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long customerSupportId,
-            @Valid @RequestBody UpdateCSRequestDto dto
+            @Valid @ModelAttribute UpdateCSRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<UpdateCSResponseDto> response = customerSupportService.updateCS(userId, customerSupportId, dto);

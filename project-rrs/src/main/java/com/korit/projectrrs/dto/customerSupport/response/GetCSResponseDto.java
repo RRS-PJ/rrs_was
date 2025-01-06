@@ -13,6 +13,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class GetCSResponseDto {
+    private Long customerSupportId;
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportCategory;
@@ -21,6 +22,7 @@ public class GetCSResponseDto {
     private List<GetFilePathAndName> fileInfos;
 
     public GetCSResponseDto(CustomerSupport customerSupport){
+        this.customerSupportId = customerSupport.getCsId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();

@@ -127,7 +127,9 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                     filesInfo.add(new GetFilePathAndName(file));
                 }
 
-                data = new GetCSResponseDto(optionalCustomerSupport.get());
+                data = new GetCSResponseDto(optionalCustomerSupport.get()).toBuilder()
+                        .fileInfos(filesInfo)
+                        .build();
 
             } else {
                 // 고객센터 포스트가 존재하지 않음
@@ -171,8 +173,8 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         UpdateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
+        char category = dto.getCustomerSupportCategory();
 
-        // 유효성 검사
         if (title == null || title.isEmpty() || title.length() > 20) {
             return ResponseDto.setFailed(ResponseMessage.CS_TITLE_PROBLEM);
         }
@@ -189,20 +191,23 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 if (!respondedCS.getUser().getUserId().equals(userId)) {
                     return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
                 }
-                respondedCS.setCustomerSupportTitle(title);
-                respondedCS.setCustomerSupportContent(content);
+                respondedCS = respondedCS.toBuilder()
+                        .customerSupportCreateAt(LocalDateTime.now())
+                        .customerSupportStatus('0')
+                        .customerSupportTitle(title)
+                        .customerSupportContent(content)
+                        .customerSupportCategory(category)
+                        .build();
 
-                // 기존 파일 삭제
                 List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(respondedCS.getCsId());
                 for (CustomerSupportAttachment attachment : currentAtt) {
                     fileService.removeFile(attachment.getCustomerAttachmentFile());
                     csAttRepository.delete(attachment);
                 }
 
-                // 새로운 파일 업로드
-                List<MultipartFile> newFile = dto.getFiles();
-                if (newFile != null && !newFile.isEmpty()) {
-                    for (MultipartFile file : newFile) {
+                List<MultipartFile> newFiles = dto.getFiles();
+                if (newFiles != null && !newFiles.isEmpty()) {
+                    for (MultipartFile file : newFiles) {
                         String filePath = fileService.uploadFile(file, dto.getPath());
                         if (filePath != null) {
                             CustomerSupportAttachment attachment = CustomerSupportAttachment.builder()
@@ -213,10 +218,14 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                         }
                     }
                 }
-                data = new UpdateCSResponseDto(respondedCS);
+                List<String> filePaths = csAttRepository.findByCSId(respondedCS.getCsId())
+                        .stream()
+                        .map(CustomerSupportAttachment::getCustomerAttachmentFile)
+                        .toList();
+
+                data = new UpdateCSResponseDto(respondedCS, filePaths);
 
             } else {
-                // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
         } catch (Exception e) {
