@@ -22,17 +22,10 @@ public class CommunityResponseAllDto {
     private String communityContent;         // 게시글 내용
     private String communityThumbnailFile;    // 썸네일 URL
 
-    /**
-     * 기본 생성자
-     */
     public CommunityResponseAllDto() {
         this.communityLikeCount = 0; // 기본값 설정
     }
 
-    /**
-     * Community 엔티티를 기반으로 DTO를 생성하는 생성자
-     * @param community Community 엔티티
-     */
     public CommunityResponseAllDto(Community community) {
         this.communityId = community.getCommunityId();
         this.nickname = community.getUser().getNickname();
