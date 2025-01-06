@@ -45,9 +45,11 @@ public class MailServiceImpl implements MailService {
     }
     @Override
     public String verifyEmail(String token) {
+        String body = "";
         try {
             String username = jwtProvider.getUsernameFromEmailJwt(token);
-            return username + "님 인증되셨습니다.";
+            body += "<a href=\"http://localhost:3000/find-password" + token + "\">여기를 클릭하여 비밀번호를 재 설정해주세요.</a>";
+            return username + "님 인증되셨습니다." + body;
         } catch (ExpiredJwtException e) {
             return "만료된 인증 토큰입니다.";
         }

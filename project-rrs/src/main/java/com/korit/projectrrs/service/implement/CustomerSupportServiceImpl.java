@@ -78,7 +78,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             for (MultipartFile multiFile : Multifiles) {
                 String fileName = fileService.uploadFile(multiFile, "customer-support");
                 fileNames.add(fileName);
-                // 파일 정보 CustomerSupportAttachment 테이블에 저장
+
                 if (fileName != null) {
                     CustomerSupportAttachment attachment = new CustomerSupportAttachment();
                     attachment.setCustomerSupport(customerSupport);

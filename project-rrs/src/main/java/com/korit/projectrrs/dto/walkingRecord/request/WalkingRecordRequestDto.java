@@ -28,5 +28,6 @@ public class WalkingRecordRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
+
     private List<MultipartFile> files;
 }
