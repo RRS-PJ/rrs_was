@@ -1,31 +1,46 @@
 package com.korit.projectrrs.dto.community.response;
 
 import com.korit.projectrrs.entity.Community;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
+/**
+ * 커뮤니티 게시글 리스트 응답 DTO
+ */
+@Getter
+@Setter
 public class CommunityResponseAllDto {
-    private Long communityId;
-    private String nickname;
-    private String communityTitle;
-    private int communityLikeCount = 0;
-    private LocalDateTime communityCreatedAt;
-    private LocalDateTime communityUpdatedAt;
-    private String communityContent;
-    private String communityThumbnailUrl; // Thumbnail URL 타입 수정
 
+    private Long communityId;                // 게시글 ID
+    private String nickname;                 // 작성자 닉네임
+    private String communityTitle;           // 게시글 제목
+    private int communityLikeCount;          // 좋아요 수
+    private LocalDateTime communityCreatedAt; // 생성 날짜
+    private LocalDateTime communityUpdatedAt; // 수정 날짜
+    private String communityContent;         // 게시글 내용
+    private String communityThumbnailFile;    // 썸네일 URL
+
+    /**
+     * 기본 생성자
+     */
+    public CommunityResponseAllDto() {
+        this.communityLikeCount = 0; // 기본값 설정
+    }
+
+    /**
+     * Community 엔티티를 기반으로 DTO를 생성하는 생성자
+     * @param community Community 엔티티
+     */
     public CommunityResponseAllDto(Community community) {
         this.communityId = community.getCommunityId();
-        this.nickname = community.getUser().getNickname(); // 작성자의 닉네임 설정
+        this.nickname = community.getUser().getNickname();
         this.communityTitle = community.getCommunityTitle();
         this.communityLikeCount = community.getCommunityLikeCount();
         this.communityCreatedAt = community.getCommunityCreatedAt();
         this.communityUpdatedAt = community.getCommunityUpdatedAt();
         this.communityContent = community.getCommunityContent();
-        this.communityThumbnailUrl = community.getCommunityThumbnailUrl(); // URL 값 가져오기
+        this.communityThumbnailFile = community.getCommunityThumbnailFile();
     }
 }
