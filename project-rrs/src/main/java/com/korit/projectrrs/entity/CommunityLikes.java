@@ -35,4 +35,9 @@ public class CommunityLikes {
     public Long getUserId() {
         return user != null ? user.getUserId() : null;
     }
+
+    public String getNickname() {
+        return user != null ? user.getNickname() : null;
+    }
 }
+

@@ -52,4 +52,5 @@ public class ApiMappingPattern {
     public static final String COMMENT_PUT = "/{communityId}/{commentId}";
     public static final String COMMENT_DELETE_BY_COMMUNITY_ID = "/{communityId}/{commentId}";
     public static final String COMMENT_GET_BY_COMMUNITY_ID = "/{communityId}";
+    public static final String COMMUNITY_LIKE = "/api/v1/users/community/like";
 }

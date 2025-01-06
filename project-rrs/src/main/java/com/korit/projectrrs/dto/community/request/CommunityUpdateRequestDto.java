@@ -1,29 +1,54 @@
 package com.korit.projectrrs.dto.community.request;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+/**
+ * 커뮤니티 게시글 업데이트 요청 DTO
+ */
+@Getter
+@Setter
 public class CommunityUpdateRequestDto {
 
-    private String communityTitle; // 게시글 제목
+    /**
+     * 게시글 제목 (선택 사항)
+     */
+    private String communityTitle;
 
-    private String communityContent; // 게시글 내용
+    /**
+     * 게시글 내용 (선택 사항)
+     */
+    private String communityContent;
 
-    private MultipartFile communityThumbnailUrl; // 썸네일 URL (선택 사항)
+    /**
+     * 썸네일 파일 (선택 사항)
+     */
+    private MultipartFile communityThumbnailFile;
 
-    // 업로드할 파일 목록을 저장하는 필드
-    private List<MultipartFile> attachments;
+    /**
+     * 첨부파일 리스트 (선택 사항, 기본값: 빈 리스트)
+     */
+    private List<MultipartFile> attachments = new ArrayList<>();
 
-    // 파일 목록을 반환하는 메서드
+    /**
+     * 첨부파일 리스트 반환
+     *
+     * @return 첨부파일 리스트
+     */
     public List<MultipartFile> getFiles() {
         return attachments;
     }
 
+    /**
+     * 썸네일 파일 반환
+     *
+     * @return 썸네일 파일
+     */
     public MultipartFile getCommunityThumbnailFile() {
-        return communityThumbnailUrl;
+        return communityThumbnailFile;
     }
-
 }
