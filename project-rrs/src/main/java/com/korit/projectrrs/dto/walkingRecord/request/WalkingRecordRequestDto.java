@@ -20,10 +20,8 @@ public class WalkingRecordRequestDto {
     private WalkingRecordWeatherState walkingRecordWeatherState;
     @NotNull
     private Integer walkingRecordDistance;
-
-    private Integer walkingRecordWalkingHours;
-    private Integer walkingRecordWalkingMinutes;
-
+    @NotNull
+    private Integer walkingRecordWalkingTime;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate walkingRecordCreateAt;

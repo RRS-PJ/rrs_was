@@ -38,8 +38,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                 ? dto.getWalkingRecordWeatherState()
                 : WalkingRecordWeatherState.SUNNY;
         Integer walkingRecordDistance = dto.getWalkingRecordDistance();
-        Integer hours = dto.getWalkingRecordWalkingHours();
-        Integer minutes = dto.getWalkingRecordWalkingMinutes();
+        Integer walkingRecordWalkingTime = dto.getWalkingRecordWalkingTime();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
 
@@ -55,16 +54,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_DISTANCE);
         }
 
-        int totalMinutes = 0;
-        if (hours != null && minutes != null) {
-            totalMinutes = (hours * 60) + minutes;
-        } else if (hours != null) {
-            totalMinutes = hours * 60; // 시간만 있는 경우
-        } else if (minutes != null) {
-            totalMinutes = minutes; // 분만 있는 경우
-        }
-
-        if ((hours == null && minutes == null) || minutes < 0 || minutes >= 60 || hours < 0) {
+        if (walkingRecordWalkingTime == null || walkingRecordWalkingTime <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_TIME);
         }
 
@@ -90,7 +80,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                     .pet(pet)
                     .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
                     .walkingRecordDistance(walkingRecordDistance)
-                    .walkingRecordWalkingTime(totalMinutes)
+                    .walkingRecordWalkingTime(walkingRecordWalkingTime)
                     .walkingRecordCreateAt(walkingRecordCreateAt)
                     .walkingRecordMemo(walkingRecordMemo)
                     .build();
