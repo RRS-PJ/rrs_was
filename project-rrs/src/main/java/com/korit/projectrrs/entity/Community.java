@@ -44,7 +44,7 @@ public class Community {
     @Column(name = "COMMUNITY_CONTENTS", nullable = false, columnDefinition = "TEXT")
     private String communityContent;
 
-    @Column(name = "COMMUNITY_THUMBNAIL_File", nullable = false, columnDefinition = "VARCHAR(255) default 'example.jpg'")
+    @Column(name = "COMMUNITY_THUMBNAIL_File")
     private String communityThumbnailFile;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
