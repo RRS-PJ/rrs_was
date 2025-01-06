@@ -20,10 +20,13 @@ public class GetReviewResponseDto {
     private String profileImageUrl;
     private LocalDateTime reviewCreatedAt;
 
-    public GetReviewResponseDto(Review review){
+    public GetReviewResponseDto(Review review, User user){
         this.reviewId = review.getReviewId();
         this.reviewScore = review.getReviewScore();
         this.reviewContent = review.getReviewContent();
+        this.userNickname = user.getNickname();
+        this.username = user.getUsername();
+        this.profileImageUrl = user.getProfileImageUrl();
         this.reviewCreatedAt = review.getReviewCreatedAt();
     }
 }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class GetAllCSResponseDto {
+    private Long customerSupportId;
     private String customerSupportTitle;
     private String customerSupportContent;
     private char customerSupportCategory;
@@ -18,6 +19,7 @@ public class GetAllCSResponseDto {
     private char customerSupportStatus;
 
     public GetAllCSResponseDto(CustomerSupport customerSupport){
+        this.customerSupportId = customerSupport.getCsId();
         this.customerSupportTitle = customerSupport.getCustomerSupportTitle();
         this.customerSupportContent = customerSupport.getCustomerSupportContent();
         this.customerSupportCategory = customerSupport.getCustomerSupportCategory();

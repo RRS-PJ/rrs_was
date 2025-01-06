@@ -11,6 +11,7 @@ import java.util.List;
 
 @Data
 public class GetReservationResponseDto {
+    private Long reservationId;
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;
 
@@ -23,6 +24,7 @@ public class GetReservationResponseDto {
     private ReservationStatus reservationStatus;
 
     public GetReservationResponseDto(Reservation reservation, double avgReviewScore){
+        this.reservationId = reservation.getReservationId();
         this.reservationStartDate = reservation.getReservationStartDate();
         this.reservationEndDate = reservation.getReservationEndDate();
 

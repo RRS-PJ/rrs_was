@@ -29,6 +29,7 @@ public class ReservationController {
     private final String RESERVATION_PUT = "/{reservationId}";
     private final String RESERVATION_STATUS = "/update-reservation-status";
     private final String FIND_PROVIDER_BY_DATE = "/get-provider";
+    private final String HAS_REVIEW = "/has-review/{reservationId}";
 
     @PostMapping(RESERVATION_POST)
     private ResponseEntity<ResponseDto<CreateReservationResponseDto>> createReservation (
@@ -102,6 +103,16 @@ public class ReservationController {
             @Valid @RequestBody UpdateStatusRequestDto dto
     ){
         ResponseDto<UpdateStatusResponseDto> response = reservationService.updateReservationStatus(dto);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping(HAS_REVIEW)
+    private ResponseEntity<ResponseDto<HasReview>> hasReview (
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long reservationId
+    ){
+        ResponseDto<HasReview> response = reservationService.hasReview(reservationId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

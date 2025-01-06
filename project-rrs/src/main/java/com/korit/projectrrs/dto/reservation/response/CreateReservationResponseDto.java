@@ -13,6 +13,7 @@ import java.util.List;
 public class CreateReservationResponseDto {
     private GetChosenProviderInfoResponseDto providerInfo;
 
+    private Long reservationId;
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;
 
@@ -25,6 +26,7 @@ public class CreateReservationResponseDto {
     public CreateReservationResponseDto(Reservation reservation, double avgReviewScore){
         this.providerInfo = new GetChosenProviderInfoResponseDto(reservation.getProvider(), avgReviewScore);
 
+        this.reservationId = reservation.getReservationId();
         this.reservationStartDate = reservation.getReservationStartDate();
         this.reservationEndDate = reservation.getReservationEndDate();
 
