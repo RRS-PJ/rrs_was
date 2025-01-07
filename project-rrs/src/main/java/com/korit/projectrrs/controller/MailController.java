@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 public class MailController {
     private final MailService mailService;
 
-    @PostMapping("/send")
-    public String sendEmail(@RequestBody SendMailRequestDto mailDto) throws MessagingException {
-        return mailService.sendSimpleMessage(mailDto.getEmail(), mailDto.getUsername());
-    }
-
-    @GetMapping("/verify")
-    public String verifyEmail(@RequestParam String token) {
-        return mailService.verifyEmail(token);
-    }
+//    @PostMapping("/send")
+//    public String sendEmail(@RequestBody SendMailRequestDto mailDto, String token) throws MessagingException {
+//        return mailService.sendSimpleMessage(mailDto.getEmail(), mailDto.getUsername(), token);
+//    }
+//
+//    @GetMapping("/verify")
+//    public String verifyEmail(@RequestParam String token) {
+//        return mailService.verifyEmail(token);
+//    }
 }

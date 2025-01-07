@@ -225,6 +225,11 @@ public class ResponseMessage {
 
     // 사용자 정보 수정 관련 메시지
     public static final String NO_MODIFIED_VALUES = "No changes detected in the provided values."; // 수정 값이 없을 때 반환 메시지
+
     public static final String NOT_EXIST_REVIEW = "This review is not exist";
     public static final String USERS_FETCHED_SUCCESSFULLY = "Success to fetch users";
+    public static final String FAIL_TO_SEND_EMAIL = "Fail to send email";
+
+    public static final String NO_EXIST_USER_NAME_IN_TOKEN = "Username not found in token"; // 유효하지 않은 사용자 이름 형식
+    public static final String NOT_EXIST_USER = "This user is not exist";
 }

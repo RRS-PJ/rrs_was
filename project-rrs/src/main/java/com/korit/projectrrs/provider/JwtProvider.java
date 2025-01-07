@@ -45,8 +45,9 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateEmailValidToken(String username) {
+    public String generateEmailValidToken(String email, String username) {
         return Jwts.builder()
+                .claim("email", email)
                 .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtEmailExpirationMs))
