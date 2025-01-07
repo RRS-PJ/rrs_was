@@ -6,16 +6,23 @@ import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
+import com.korit.projectrrs.dto.mail.SendMailRequestDto;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.provider.JwtProvider;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.AuthService;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.korit.projectrrs.service.MailService;
+import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -23,6 +30,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
     private final JwtProvider jwtProvider;
+    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     @Override
     public ResponseDto<SignUpResponseDto> signUp(@Valid SignUpRequestDto dto) {
@@ -165,4 +174,57 @@ public class AuthServiceImpl implements AuthService {
         // 6. 성공 응답 반환 //
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
+    @Override
+    public ResponseDto<Void> findUserInfoByEmail(SendMailRequestDto dto) throws MessagingException {
+        String username = dto.getUsername();
+        String email = dto.getEmail();
+        String token = null;
+        MimeMessage message = null;
+        Long userId = null;
+
+        if (username == null || username.isEmpty()) {
+            username = userRepository.findUsernameByEmail(email)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.EXIST_USER_EMAIL));
+            token = jwtProvider.generateEmailValidToken(email, username);
+            message = mailService.createMailForId(email, username, token);
+        } else {
+            userId = userRepository.findUserIdByUsernameAndEmail(username, email)
+                    .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER_ID));
+            token = jwtProvider.generateJwtToken(userId);
+            message = mailService.createMailForPw(email, username, token);
+        }
+
+        try {
+            javaMailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.FAIL_TO_SEND_EMAIL);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
+    }
+
+    @Override
+    public ResponseDto<String> findUsernameByToken(String token) {
+        if (!jwtProvider.isValidToken(token)) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_TOKEN);
+        }
+
+        String username = jwtProvider.getUsernameFromJwt(token);
+
+        if (username == null || username.isEmpty()) {
+            return ResponseDto.setFailed(ResponseMessage.NO_EXIST_USER_NAME_IN_TOKEN);
+        }
+
+        int visibleLength = 5;
+        String visiblePart = username.substring(0, Math.min(visibleLength, username.length()));
+        String maskedPart = "*".repeat(Math.max(0, username.length() - visibleLength));
+        String maskedUsername = visiblePart + maskedPart;
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, maskedUsername);
+    }
+
 }

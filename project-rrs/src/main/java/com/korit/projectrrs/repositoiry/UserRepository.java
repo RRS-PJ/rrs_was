@@ -26,4 +26,10 @@ WHERE
     AND U.ROLES LIKE '%ROLE_PROVIDER%';
 """,nativeQuery = true)
     Optional<User> findProviderById(@Param("userId") Long providerId);
+
+    @Query(value = "SELECT u.username FROM USERS u WHERE u.email = :email", nativeQuery = true)
+    Optional<String> findUsernameByEmail(@Param("email") String email);
+
+    @Query("SELECT u.userId FROM User u WHERE u.username = :username AND u.email = :email")
+    Optional<Long> findUserIdByUsernameAndEmail(@Param("username") String username, @Param("email") String email);
 }
