@@ -165,8 +165,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, @Valid UpdateWalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState();
         Integer walkingRecordDistance = dto.getWalkingRecordDistance();
-        Integer hours = dto.getWalkingRecordWalkingHours();
-        Integer minutes = dto.getWalkingRecordWalkingMinutes();
+        Integer walkingRecordWalkingTime = dto.getWalkingRecordWalkingTime();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
         List<MultipartFile> files = dto.getFiles();
@@ -177,11 +176,9 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_DISTANCE);
         }
 
-        if (minutes != null && minutes < 0 || minutes >= 60) {
+        if (walkingRecordWalkingTime == null || walkingRecordWalkingTime <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_TIME);
         }
-
-        int totalMinutes = (hours != null ? hours : 0) * 60 + minutes;
 
         if (walkingRecordCreateAt != null && walkingRecordCreateAt.isAfter(LocalDate.now())) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_BIRTH_DATE);
@@ -221,7 +218,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             walkingRecord = walkingRecord.toBuilder()
                     .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
                     .walkingRecordDistance(walkingRecordDistance != null ? walkingRecordDistance : walkingRecord.getWalkingRecordDistance())
-                    .walkingRecordWalkingTime(totalMinutes)
+                    .walkingRecordWalkingTime(walkingRecordWalkingTime != null ? walkingRecordWalkingTime : walkingRecord.getWalkingRecordWalkingTime())
                     .walkingRecordCreateAt(walkingRecordCreateAt != null ? walkingRecordCreateAt : walkingRecord.getWalkingRecordCreateAt())
                     .walkingRecordMemo(walkingRecordMemo != null ? walkingRecordMemo : walkingRecord.getWalkingRecordMemo())
                     .build();
