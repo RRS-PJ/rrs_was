@@ -2,6 +2,7 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.user.request.UpdatePasswordRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final String UPDATE_PASSWORD = "/update-password";
 
     @GetMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
@@ -52,6 +54,17 @@ public class UserController {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<Void> response = userService.deleteUser(userId, inputPassword);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PutMapping(UPDATE_PASSWORD)
+    public ResponseEntity<ResponseDto<UserResponseDto>> updatePassword(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody UpdatePasswordRequestDto dto
+    ) {
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<UserResponseDto> response = userService.updatePassword(userId, dto);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 }

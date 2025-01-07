@@ -2,6 +2,7 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.user.request.UpdatePasswordRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
@@ -10,6 +11,7 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -159,5 +161,40 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
+    }
+
+    @Override
+    public ResponseDto<UserResponseDto> updatePassword(Long userId, UpdatePasswordRequestDto dto) {
+        String password = dto.getPassword();
+        String confirmPassword = dto.getConfirmPassword();
+        UserResponseDto data = null;
+
+        if (password != null && !password.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
+            if (!password.equals(confirmPassword)) {
+                return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
+            }
+
+            if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+                return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
+            }
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER));
+
+        String encodedPassword = user.getPassword();
+
+        if (password != null && !password.isEmpty()) {
+            encodedPassword = bCryptpasswordEncoder.encode(password);
+        }
+
+        user = user.toBuilder()
+                .password(encodedPassword)
+                .build();
+
+        userRepository.save(user);
+        data = new UserResponseDto(user);
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }

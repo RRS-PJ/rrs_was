@@ -196,7 +196,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                         .customerSupportStatus('0')
                         .customerSupportTitle(title)
                         .customerSupportContent(content)
-                        .customerSupportCategory(category)
                         .build();
 
                 List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(respondedCS.getCsId());
