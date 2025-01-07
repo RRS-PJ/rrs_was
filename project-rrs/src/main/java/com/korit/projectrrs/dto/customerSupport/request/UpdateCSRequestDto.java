@@ -17,6 +17,8 @@ public class UpdateCSRequestDto {
     @NotBlank
     private char customerSupportCategory;
 
+    private String existFilePath;
+
     private List<MultipartFile> files;
 
     private String path = "customer-support";

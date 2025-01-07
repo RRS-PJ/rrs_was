@@ -16,25 +16,50 @@ import org.springframework.stereotype.Service;
 public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
     private final JwtProvider jwtProvider;
+
     @Value("${spring.mail.username}")
-    private static String senderEmail;
+    private String senderEmail;
+
     @Override
-    public MimeMessage createMail(String mail, String token) throws MessagingException {
+    public MimeMessage createMailForId (String email, String username, String token) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         message.setFrom(senderEmail);
-        message.setRecipients(MimeMessage.RecipientType.TO, mail);
-        message.setSubject("RRS 이메일 인증 링크");
-        String body = "";
-        body += "<h3>RRS 이메일 인증 링크입니다.</h3>";
-        body += "<a href=\"http://localhost:4040/api/v1/mail/verify?token=" + token + "\">여기를 클릭하여 인증하세요</a>";
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+
+        String subject;
+        String body;
+
+        subject = "RRS 이메일 인증 링크";
+        body = "<h3> RRS 이메일 인증 링크입니다.</h3>";
+        body += "<a href=\"http://localhost:3000/find-id/" + token + "\"> 해당 링크를 클릭하여 인증을 완료해 주세요.</a>";
         body += "<p>감사합니다.</p>";
+
+        message.setSubject(subject);
         message.setText(body, "UTF-8", "html");
         return message;
     }
+
     @Override
-    public String sendSimpleMessage(String sendEmail, String username) throws MessagingException {
-        String token = jwtProvider.generateEmailValidToken(username);
-        MimeMessage message = createMail(sendEmail, token);
+    public MimeMessage createMailForPw(String email, String username, String token) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        message.setFrom(senderEmail);
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+
+        String subject;
+        String body;
+
+        subject = "RRS 이메일 인증 링크";
+        body = "<h3>" + username + "님 RRS 이메일 인증 링크입니다.</h3>";
+        body += "<a href=\"http://localhost:3000/find-password/" + token + "\"> 해당 링크를 클릭하여 인증을 완료해 주세요.</a>";
+        body += "<p>감사합니다.</p>";
+
+        message.setSubject(subject);
+        message.setText(body, "UTF-8", "html");
+        return message;
+    }
+
+    @Override
+    public String sendSimpleMessage(MimeMessage message, String token) throws MessagingException {
         try {
             javaMailSender.send(message);
         } catch (MailException e) {
@@ -43,11 +68,13 @@ public class MailServiceImpl implements MailService {
         }
         return token;
     }
+
     @Override
     public String verifyEmail(String token) {
+        String body = "";
         try {
             String username = jwtProvider.getUsernameFromEmailJwt(token);
-            return username + "님 인증되셨습니다.";
+            return username + "님 인증되셨습니다." + body;
         } catch (ExpiredJwtException e) {
             return "만료된 인증 토큰입니다.";
         }
