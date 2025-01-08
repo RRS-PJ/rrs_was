@@ -24,7 +24,7 @@ public class CommunityComment {
     private Community community;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
     @Column(name = "COMMUNITY_COMMENTS_CONTENTS", nullable = false, length = 255)

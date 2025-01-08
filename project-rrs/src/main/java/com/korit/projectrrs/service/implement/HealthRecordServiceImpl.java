@@ -112,7 +112,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                     List<HealthRecordAttachment> newAttachments = new ArrayList<>();
                     if (requestDto.getFiles() != null && !requestDto.getFiles().isEmpty()) {
                         for (MultipartFile file : requestDto.getFiles()) {
-                            String filePath = fileService.uploadFile(file, "health-records");
+                            String filePath = fileService.uploadFile(file, "health-record");
                             if (filePath != null) {
                                 HealthRecordAttachment newAttachment = HealthRecordAttachment.builder()
                                         .healthRecord(existingRecord)

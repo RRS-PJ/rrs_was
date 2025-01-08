@@ -25,4 +25,5 @@ public class CommunityAttachment {
 
     @Column(name = "COMMUNITY_ATTACHMENT_FILE", nullable = false, length = 255)
     private String communityAttachment;
+
 }
