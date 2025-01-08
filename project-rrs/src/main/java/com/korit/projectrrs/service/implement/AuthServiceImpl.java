@@ -219,7 +219,7 @@ public class AuthServiceImpl implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.NO_EXIST_USER_NAME_IN_TOKEN);
         }
 
-        int visibleLength = 5;
+        int visibleLength = 4;
         String visiblePart = username.substring(0, Math.min(visibleLength, username.length()));
         String maskedPart = "*".repeat(Math.max(0, username.length() - visibleLength));
         String maskedUsername = visiblePart + maskedPart;

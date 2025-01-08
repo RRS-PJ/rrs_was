@@ -152,10 +152,12 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
 //            WalkingRecord walkingRecord = optionalWalkingRecord.get();
             if (optionalWalkingRecord.isPresent()) {
-                List<WalkingRecordAttachment> wrAtts = walkingRecordRepository.find
+                List<WalkingRecordAttachment> wrAtts = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
             }
 
-            data = new WalkingRecordResponseDto(walkingRecord);
+            data = new WalkingRecordResponseDto(optionalWalkingRecord.get().toBuilder()
+                    .fileInfos(filesInfo)
+                    .build());
 
         } catch (Exception e) {
             e.printStackTrace();
