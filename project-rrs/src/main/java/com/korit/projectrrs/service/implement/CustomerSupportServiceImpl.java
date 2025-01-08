@@ -173,7 +173,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         UpdateCSResponseDto data = null;
         String title = dto.getCustomerSupportTitle();
         String content = dto.getCustomerSupportContent();
-        char category = dto.getCustomerSupportCategory();
 
         if (title == null || title.isEmpty() || title.length() > 20) {
             return ResponseDto.setFailed(ResponseMessage.CS_TITLE_PROBLEM);
@@ -183,50 +182,43 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         }
 
         try {
-            Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
-            if (optionalCustomerSupport.isPresent()) {
-
-                CustomerSupport respondedCS = optionalCustomerSupport.get();
-
-                if (!respondedCS.getUser().getUserId().equals(userId)) {
-                    return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
-                }
-                respondedCS = respondedCS.toBuilder()
-                        .customerSupportCreateAt(LocalDateTime.now())
-                        .customerSupportStatus('0')
-                        .customerSupportTitle(title)
+            CustomerSupport cs = customerSupportRepository.findById(customerSupportId)
+                    .orElseThrow(() ->  new InternalException(ResponseMessage.NOT_MATCH_USER_ID));
+            cs = cs.toBuilder()
+                    .customerSupportTitle(title)
                         .customerSupportContent(content)
+                        .customerSupportCreateAt(LocalDateTime.now())
                         .build();
 
-                List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(respondedCS.getCsId());
-                for (CustomerSupportAttachment attachment : currentAtt) {
-                    fileService.removeFile(attachment.getCustomerAttachmentFile());
-                    csAttRepository.delete(attachment);
-                }
+            customerSupportRepository.save(cs);
 
-                List<MultipartFile> newFiles = dto.getFiles();
-                if (newFiles != null && !newFiles.isEmpty()) {
-                    for (MultipartFile file : newFiles) {
-                        String filePath = fileService.uploadFile(file, dto.getPath());
-                        if (filePath != null) {
-                            CustomerSupportAttachment attachment = CustomerSupportAttachment.builder()
-                                    .customerSupport(respondedCS)
-                                    .customerAttachmentFile(filePath)
-                                    .build();
-                            csAttRepository.save(attachment);
-                        }
+            List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(cs.getCsId());
+            for (CustomerSupportAttachment attachment : currentAtt) {
+                fileService.removeFile(attachment.getCustomerAttachmentFile());
+                csAttRepository.delete(attachment);
+            }
+
+            List<MultipartFile> newFiles = dto.getFiles();
+            if (newFiles != null && !newFiles.isEmpty()) {
+                for (MultipartFile file : newFiles) {
+                    String filePath = fileService.uploadFile(file, dto.getPath());
+                    if (filePath != null) {
+                        CustomerSupportAttachment attachment = CustomerSupportAttachment.builder()
+                                .customerSupport(cs)
+                                .customerAttachmentFile(filePath)
+                                .build();
+                        csAttRepository.save(attachment);
                     }
                 }
-                List<String> filePaths = csAttRepository.findByCSId(respondedCS.getCsId())
-                        .stream()
-                        .map(CustomerSupportAttachment::getCustomerAttachmentFile)
-                        .toList();
-
-                data = new UpdateCSResponseDto(respondedCS, filePaths);
-
-            } else {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
+
+            List<String> filePaths = csAttRepository.findByCSId(cs.getCsId())
+                    .stream()
+                    .map(CustomerSupportAttachment::getCustomerAttachmentFile)
+                    .toList();
+
+            data = new UpdateCSResponseDto(cs, filePaths);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
