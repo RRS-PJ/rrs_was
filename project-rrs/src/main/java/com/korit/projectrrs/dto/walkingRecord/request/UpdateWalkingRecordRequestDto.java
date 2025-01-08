@@ -21,4 +21,5 @@ public class UpdateWalkingRecordRequestDto {
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
     private List<MultipartFile> files;
+    private List<String> existingFiles;
 }

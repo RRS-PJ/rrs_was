@@ -1,5 +1,6 @@
 package com.korit.projectrrs.dto.walkingRecord.response;
 
+import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.entity.WalkingRecord;
 import com.korit.projectrrs.entity.WalkingRecordAttachment;
 import com.korit.projectrrs.entity.WalkingRecordWeatherState;
@@ -20,6 +21,7 @@ public class WalkingRecordResponseDto {
     private LocalDate walkingRecordCreateAt;
     private String walkingRecordMemo;
     private List<String> fileName;
+    private List<GetFilePathAndName> fileInfos;
 
     public WalkingRecordResponseDto(WalkingRecord walkingRecord) {
         this.walkingRecordId = walkingRecord.getWalkingRecordId();

@@ -7,6 +7,7 @@ import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
+import com.korit.projectrrs.service.WalkingRecordAttachmentService;
 import com.korit.projectrrs.service.WalkingRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,12 +25,15 @@ import java.util.List;
 public class WalkingRecordController {
 
     private final WalkingRecordService walkingRecordService;
+    private final WalkingRecordAttachmentService walkingRecordAttachmentService;
 
     private static final String WALKING_RECORD_POST= "/petId/{petId}";
     private static final String WALKING_RECORD_GET_LIST = "/petId/{petId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
     private static final String WALKING_RECORD_GET_BY_ID = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_PUT = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
+
+    private static final String WALKING_RECORD_ATTACHMENT_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}/{walkingRecordAttachmentId}";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
@@ -90,6 +92,17 @@ public class WalkingRecordController {
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, petId, walkingRecordId);
+        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @DeleteMapping(WALKING_RECORD_ATTACHMENT_DELETE)
+    public ResponseEntity<ResponseDto<Void>> deleteWalkingRecordAttachment(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable Long attachmentId
+    ) {
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<Void> response = walkingRecordAttachmentService.deleteWalkingRecordAttachment(userId, attachmentId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

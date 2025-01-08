@@ -150,7 +150,10 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
             }
 
-            WalkingRecord walkingRecord = optionalWalkingRecord.get();
+//            WalkingRecord walkingRecord = optionalWalkingRecord.get();
+            if (optionalWalkingRecord.isPresent()) {
+                List<WalkingRecordAttachment> wrAtts = walkingRecordRepository.find
+            }
 
             data = new WalkingRecordResponseDto(walkingRecord);
 
@@ -168,7 +171,8 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         Integer walkingRecordWalkingTime = dto.getWalkingRecordWalkingTime();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
-        List<MultipartFile> files = dto.getFiles();
+        List<MultipartFile> newFiles = dto.getFiles();
+        List<String> existingFiles = dto.getExistingFiles();
 
         WalkingRecordResponseDto data = null;
 
@@ -193,18 +197,28 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
-            // 기존 첨부파일 삭제
-            List<WalkingRecordAttachment> currentAttachments = walkingRecord.getWalkingRecordAttachments();
-            if (currentAttachments != null) {
-                for (WalkingRecordAttachment attachment : currentAttachments) {
-                    fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
-                    walkingRecordAttachmentRepository.delete(attachment);
-                }
+            if (existingFiles != null && !existingFiles.isEmpty()) {
+                walkingRecord.getWalkingRecordAttachments().removeIf(attachment -> {
+                    if (!existingFiles.contains(attachment.getWalkingRecordAttachmentFile())) {
+                        fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
+                        return true;
+                    }
+                    return false;
+                });
             }
 
+            // 기존 첨부파일 삭제 var.1
+//            List<WalkingRecordAttachment> currentAttachments = walkingRecord.getWalkingRecordAttachments();
+//            if (currentAttachments != null) {
+//                for (WalkingRecordAttachment attachment : currentAttachments) {
+//                    fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
+//                    walkingRecordAttachmentRepository.delete(attachment);
+//                }
+//            }
+
             // 새로운 첨부파일 추가
-            if (files != null && !files.isEmpty()) {
-                for (MultipartFile file : files) {
+            if (newFiles != null && !newFiles.isEmpty()) {
+                for (MultipartFile file : newFiles) {
                     String filePath = fileService.uploadFile(file, "walking-record");
                     if (filePath != null) {
                         WalkingRecordAttachment attachment = new WalkingRecordAttachment();
