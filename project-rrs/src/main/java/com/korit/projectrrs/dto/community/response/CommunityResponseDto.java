@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -20,19 +21,18 @@ import java.util.stream.Collectors;
 @Setter
 public class CommunityResponseDto {
 
-    private Long communityId;                // 게시글 ID
-    private String nickname;                 // 작성자 닉네임
-    private String communityTitle;           // 게시글 제목
-    private LocalDateTime communityCreatedAt; // 생성 날짜
-    private LocalDateTime communityUpdatedAt; // 수정 날짜
-    private int communityLikeCount = 0;      // 좋아요 수 기본값: 0
-    private String communityContent;         // 게시글 내용
-    private String communityThumbnailFile;   // 썸네일 이미지 URL
+    private Long communityId;
+    private String nickname;
+    private String communityTitle;
+    private LocalDateTime communityCreatedAt;
+    private LocalDateTime communityUpdatedAt;
+    private int communityLikeCount = 0;
+    private String communityContent;
+    private String communityThumbnailFile;
 
-    private List<CommunityCommentResponseDto> comments = Collections.emptyList(); // 댓글
-    private List<String> attachments = Collections.emptyList(); // 첨부파일 경로
-    private List<String> userLikedNicknames = Collections.emptyList(); // 좋아요한 사용자 ID 목록
-
+    private List<CommunityCommentResponseDto> comments = new ArrayList<>();
+    private List<String> attachments = new ArrayList<>();
+    private List<String> userLikedNicknames = new ArrayList<>();
     /**
      * Community 엔티티를 기반으로 CommunityResponseDto를 생성합니다.
      * @param community Community 엔티티

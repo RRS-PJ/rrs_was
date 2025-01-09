@@ -3,6 +3,7 @@ package com.korit.projectrrs.dto.community.response;
 import com.korit.projectrrs.entity.Community;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -13,17 +14,17 @@ import java.time.LocalDateTime;
 @Setter
 public class CommunityResponseAllDto {
 
-    private Long communityId;                // 게시글 ID
-    private String nickname;                 // 작성자 닉네임
-    private String communityTitle;           // 게시글 제목
-    private int communityLikeCount;          // 좋아요 수
-    private LocalDateTime communityCreatedAt; // 생성 날짜
-    private LocalDateTime communityUpdatedAt; // 수정 날짜
-    private String communityContent;         // 게시글 내용
-    private String communityThumbnailFile;    // 썸네일 URL
+    private Long communityId;
+    private String nickname;
+    private String communityTitle;
+    private int communityLikeCount;
+    private LocalDateTime communityCreatedAt;
+    private LocalDateTime communityUpdatedAt;
+    private String communityContent;
+    private String communityThumbnailFile;
 
     public CommunityResponseAllDto() {
-        this.communityLikeCount = 0; // 기본값 설정
+        this.communityLikeCount = 0;
     }
 
     public CommunityResponseAllDto(Community community) {

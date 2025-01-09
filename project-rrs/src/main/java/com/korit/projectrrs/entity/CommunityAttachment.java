@@ -23,7 +23,7 @@ public class CommunityAttachment {
     @JoinColumn(name = "COMMUNITY_ID", nullable = false)
     private Community community;
 
-    @Column(name = "COMMUNITY_ATTACHMENT_FILE", nullable = false, length = 255)
+    @Column(name = "COMMUNITY_ATTACHMENT_FILE", length = 255)
     private String communityAttachment;
 
 }

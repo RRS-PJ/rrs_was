@@ -232,4 +232,5 @@ public class ResponseMessage {
 
     public static final String NO_EXIST_USER_NAME_IN_TOKEN = "Username not found in token"; // 유효하지 않은 사용자 이름 형식
     public static final String NOT_EXIST_USER = "This user is not exist";
+    public static final String NO_CONTENT = "";
 }

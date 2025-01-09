@@ -15,11 +15,13 @@ public class CommunityUpdateRequestDto {
     private String communityContent;
     private MultipartFile communityThumbnailFile;
     private List<MultipartFile> attachments = new ArrayList<>();
+
     public List<MultipartFile> getFiles() {
-        return attachments;
+        return attachments != null ? attachments : new ArrayList<>();
     }
 
-    public MultipartFile getCommunityThumbnailFile() {
-        return communityThumbnailFile;
+    public boolean isValid() {
+        return communityTitle != null && !communityTitle.trim().isEmpty()
+                && communityContent != null && !communityContent.trim().isEmpty();
     }
 }

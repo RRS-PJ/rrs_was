@@ -45,13 +45,11 @@ public class CommunityServiceImpl implements CommunityService {
 
             User user = optionalUser.get();
 
-            // Handle thumbnail
             String thumbnailFile = null;
             if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
                 thumbnailFile = fileService.uploadFile(dto.getCommunityThumbnailFile(), "community-thumbnail");
             }
 
-            // Create community
             Community community = Community.builder()
                     .user(user)
                     .communityTitle(dto.getCommunityTitle())
@@ -61,7 +59,6 @@ public class CommunityServiceImpl implements CommunityService {
 
             communityRepository.save(community);
 
-            // Handle attachments
             List<MultipartFile> multifiles = dto.getFiles();
             List<String> fileNames = new ArrayList<>();
             if (multifiles != null && !multifiles.isEmpty()) {
@@ -90,6 +87,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Transactional
     public ResponseDto<CommunityResponseDto> updateCommunity(Long userId, Long communityId, CommunityUpdateRequestDto dto) {
         try {
+
             Optional<Community> optionalCommunity = communityRepository.findById(communityId);
             if (optionalCommunity.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.COMMUNITY_NOT_FOUND);
@@ -100,39 +98,26 @@ public class CommunityServiceImpl implements CommunityService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_AUTHORIZED_TO_UPDATE);
             }
 
-            // Handle thumbnail
             String thumbnailFile = community.getCommunityThumbnailFile();
             if (dto.getCommunityThumbnailFile() != null && !dto.getCommunityThumbnailFile().isEmpty()) {
                 if (thumbnailFile != null) {
                     fileService.removeFile(thumbnailFile);
                 }
                 thumbnailFile = fileService.uploadFile(dto.getCommunityThumbnailFile(), "community-thumbnail");
-            } else {
-                thumbnailFile = null;
             }
 
             community.updateDetails(dto.getCommunityTitle(), dto.getCommunityContent(), thumbnailFile);
 
-            // Remove existing attachments
-            List<CommunityAttachment> currentAttachments = communityAttachmentRepository.findByCommunityCommunityId(community.getCommunityId());
-            for (CommunityAttachment attachment : currentAttachments) {
-                fileService.removeFile(attachment.getCommunityAttachment());
-                communityAttachmentRepository.delete(attachment);
-            }
-
-            // Add new attachments
             List<String> fileNames = new ArrayList<>();
             if (dto.getFiles() != null && !dto.getFiles().isEmpty()) {
                 for (MultipartFile file : dto.getFiles()) {
                     String uploadedFileName = fileService.uploadFile(file, "community");
-                    if (uploadedFileName != null) {
-                        fileNames.add(uploadedFileName);
-                        CommunityAttachment newAttachment = CommunityAttachment.builder()
-                                .community(community)
-                                .communityAttachment(uploadedFileName)
-                                .build();
-                        communityAttachmentRepository.save(newAttachment);
-                    }
+                    CommunityAttachment newAttachment = CommunityAttachment.builder()
+                            .community(community)
+                            .communityAttachment(uploadedFileName)
+                            .build();
+                    communityAttachmentRepository.save(newAttachment);
+                    fileNames.add(uploadedFileName);
                 }
             }
 
@@ -143,6 +128,7 @@ public class CommunityServiceImpl implements CommunityService {
 
             return ResponseDto.setSuccess(ResponseMessage.COMMUNITY_UPDATED_SUCCESSFULLY, responseDto);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
@@ -161,14 +147,12 @@ public class CommunityServiceImpl implements CommunityService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_AUTHORIZED_TO_DELETE);
             }
 
-            // Remove attachments
             List<CommunityAttachment> attachments = communityAttachmentRepository.findByCommunityCommunityId(communityId);
             for (CommunityAttachment attachment : attachments) {
                 fileService.removeFile(attachment.getCommunityAttachment());
                 communityAttachmentRepository.delete(attachment);
             }
 
-            // Remove thumbnail if exists
             String thumbnailFile = community.getCommunityThumbnailFile();
             if (thumbnailFile != null) {
                 fileService.removeFile(thumbnailFile);

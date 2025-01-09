@@ -19,7 +19,6 @@ public class FileServiceImpl implements FileService {
     @Value("${file.upload-dir}")
     private String rootPath;
 
-
     @Override
     public String uploadFile(MultipartFile file, String path) {
 
