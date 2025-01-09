@@ -42,6 +42,6 @@ public class Reservation {
     @Column(name = "RESERVATION_MEMO")
     private String reservationMemo = "";
 
-    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Review review;
 }

@@ -236,6 +236,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
             }
 
+            List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(customerSupportId);
+            for (CustomerSupportAttachment attachment : currentAtt) {
+                fileService.removeFile(attachment.getCustomerAttachmentFile());
+                csAttRepository.delete(attachment);
+            }
+
             customerSupportRepository.deleteById(customerSupportId);
         } catch (Exception e) {
             e.printStackTrace();
