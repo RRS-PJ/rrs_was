@@ -2,8 +2,10 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
+import com.korit.projectrrs.dto.walkingRecord.response.GetWalkingRecordResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.entity.*;
@@ -16,6 +18,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,14 +154,9 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID);
             }
 
-//            WalkingRecord walkingRecord = optionalWalkingRecord.get();
-            if (optionalWalkingRecord.isPresent()) {
-                List<WalkingRecordAttachment> wrAtts = walkingRecordRepository.findWalkingRecordBytPetIdAndWalkingRecordId(userId, petId, walkingRecordId);
-            }
+            WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
-            data = new WalkingRecordResponseDto(optionalWalkingRecord.get().toBuilder()
-                    .fileInfos(filesInfo)
-                    .build());
+            data = new WalkingRecordResponseDto(walkingRecord);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,26 +198,16 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
-            if (existingFiles != null && !existingFiles.isEmpty()) {
-                walkingRecord.getWalkingRecordAttachments().removeIf(attachment -> {
-                    if (!existingFiles.contains(attachment.getWalkingRecordAttachmentFile())) {
-                        fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
-                        return true;
-                    }
-                    return false;
-                });
+            // 기존 첨부파일 삭제
+            List<WalkingRecordAttachment> existingAttachments = walkingRecordAttachmentRepository.findByWRId(userId, petId, walkingRecordId);
+            System.out.println("기존 파일: " + existingAttachments.size());
+
+            for (WalkingRecordAttachment attachment : existingAttachments) {
+                fileService.removeFile((attachment.getWalkingRecordAttachmentFile()));
+                walkingRecordAttachmentRepository.delete(attachment);
             }
 
-            // 기존 첨부파일 삭제 var.1
-//            List<WalkingRecordAttachment> currentAttachments = walkingRecord.getWalkingRecordAttachments();
-//            if (currentAttachments != null) {
-//                for (WalkingRecordAttachment attachment : currentAttachments) {
-//                    fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
-//                    walkingRecordAttachmentRepository.delete(attachment);
-//                }
-//            }
-
-            // 새로운 첨부파일 추가
+            // 새로운 첨부파일 추가 ver.1
             if (newFiles != null && !newFiles.isEmpty()) {
                 for (MultipartFile file : newFiles) {
                     String filePath = fileService.uploadFile(file, "walking-record");
@@ -228,7 +217,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                         attachment.setWalkingRecordAttachmentFile(filePath);
                         walkingRecordAttachmentRepository.save(attachment);
                     }
-                }
+               }
             }
 
             walkingRecord = walkingRecord.toBuilder()

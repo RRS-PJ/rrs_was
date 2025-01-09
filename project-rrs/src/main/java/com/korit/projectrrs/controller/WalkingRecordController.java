@@ -7,7 +7,6 @@ import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
-import com.korit.projectrrs.service.WalkingRecordAttachmentService;
 import com.korit.projectrrs.service.WalkingRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import java.util.List;
 public class WalkingRecordController {
 
     private final WalkingRecordService walkingRecordService;
-    private final WalkingRecordAttachmentService walkingRecordAttachmentService;
 
     private static final String WALKING_RECORD_POST= "/petId/{petId}";
     private static final String WALKING_RECORD_GET_LIST = "/petId/{petId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
@@ -92,17 +90,6 @@ public class WalkingRecordController {
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<Void> response = walkingRecordService.deleteWalkingRecord(userId, petId, walkingRecordId);
-        HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status).body(response);
-    }
-
-    @DeleteMapping(WALKING_RECORD_ATTACHMENT_DELETE)
-    public ResponseEntity<ResponseDto<Void>> deleteWalkingRecordAttachment(
-            @AuthenticationPrincipal PrincipalUser principalUser,
-            @PathVariable Long attachmentId
-    ) {
-        Long userId = principalUser.getUser().getUserId();
-        ResponseDto<Void> response = walkingRecordAttachmentService.deleteWalkingRecordAttachment(userId, attachmentId);
         HttpStatus status = response.isResult() ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
