@@ -2,10 +2,8 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
-import com.korit.projectrrs.dto.walkingRecord.response.GetWalkingRecordResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
 import com.korit.projectrrs.entity.*;
@@ -18,8 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -200,14 +196,13 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             // 기존 첨부파일 삭제
             List<WalkingRecordAttachment> existingAttachments = walkingRecordAttachmentRepository.findByWRId(userId, petId, walkingRecordId);
-            System.out.println("기존 파일: " + existingAttachments.size());
 
             for (WalkingRecordAttachment attachment : existingAttachments) {
                 fileService.removeFile((attachment.getWalkingRecordAttachmentFile()));
                 walkingRecordAttachmentRepository.delete(attachment);
             }
 
-            // 새로운 첨부파일 추가 ver.1
+            // 새로운 첨부파일 추가
             if (newFiles != null && !newFiles.isEmpty()) {
                 for (MultipartFile file : newFiles) {
                     String filePath = fileService.uploadFile(file, "walking-record");
