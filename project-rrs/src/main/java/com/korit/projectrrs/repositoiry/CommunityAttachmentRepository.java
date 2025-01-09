@@ -12,7 +12,8 @@ import java.util.List;
 
 @Repository
 public interface CommunityAttachmentRepository extends JpaRepository<CommunityAttachment, Long> {
-    List<CommunityAttachment> findByCommunityCommunityId(Long communityId);
+    @Query("SELECT ca FROM CommunityAttachment ca WHERE ca.community.communityId = :communityId")
+    List<CommunityAttachment> findByCommunityCommunityId(@Param("communityId") Long communityId);
 
     @Transactional
     @Modifying

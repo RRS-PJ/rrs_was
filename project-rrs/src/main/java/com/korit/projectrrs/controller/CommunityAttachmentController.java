@@ -1,12 +1,16 @@
 package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.dto.communityAttachment.response.CommunityAttachmentDTO;
+import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.service.CommunityAttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(ApiMappingPattern.ATTACHMENT)
@@ -17,13 +21,16 @@ public class CommunityAttachmentController {
 
     // 특정 커뮤니티의 첨부파일 조회
     @GetMapping("/community/{communityId}")
-    public ResponseEntity<?> getAttachmentsByCommunityId(
+    public ResponseEntity<ResponseDto<List<CommunityAttachmentDTO>>> getAttachmentsByCommunityId(
             @PathVariable Long communityId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         // 인증된 사용자 확인
         System.out.println("Authenticated User: " + userDetails.getUsername());
-        return ResponseEntity.ok(communityAttachmentService.getAttachmentsByCommunityId(communityId));
+
+        // Service 호출
+        ResponseDto<List<CommunityAttachmentDTO>> response = communityAttachmentService.getAttachmentsByCommunityId(communityId);
+        return ResponseEntity.ok(response);
     }
 
     // 특정 첨부파일 삭제
