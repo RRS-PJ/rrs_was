@@ -21,6 +21,7 @@ public class Todo {
     @Column(name = "TODO_ID", nullable = false, unique = true)
     private Long todoId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;

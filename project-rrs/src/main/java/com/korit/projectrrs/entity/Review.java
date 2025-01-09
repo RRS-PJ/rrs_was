@@ -21,6 +21,7 @@ public class Review {
     @Column(name = "REVIEW_ID", nullable = false, unique = true)
     private Long reviewId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user; // USER_ID와 연결된 USER 엔티티
