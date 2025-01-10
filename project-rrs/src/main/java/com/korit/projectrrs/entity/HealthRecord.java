@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class HealthRecord {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PET_ID", nullable = false)
+    @JsonBackReference
     private Pet pet;
 
     @Column(name = "HEALTH_RECORD_WEIGHT", nullable = false)

@@ -16,6 +16,7 @@ import com.korit.projectrrs.repositoiry.ReservationRepository;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReviewService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
@@ -203,11 +204,19 @@ public class ReviewServiceImpl implements ReviewService {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
+    @Transactional
     @Override
     public ResponseDto<Void> deleteReview(Long reviewId) {
         try {
-            if(!reviewRepository.existsById(reviewId)) ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
-            reviewRepository.deleteById(reviewId);
+            Review review = reviewRepository.findById(reviewId)
+                    .orElseThrow(() -> new RuntimeException("Review not found"));
+
+            Reservation reservation = review.getReservation();
+            reservation.setReview(null);
+            reservationRepository.save(reservation);
+
+            reviewRepository.delete(review);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
