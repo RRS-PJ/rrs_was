@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.heallthrordAttachment.response.HealthRecordAttachmentDTO;
 import com.korit.projectrrs.service.HealthRecordAttachmentService;
