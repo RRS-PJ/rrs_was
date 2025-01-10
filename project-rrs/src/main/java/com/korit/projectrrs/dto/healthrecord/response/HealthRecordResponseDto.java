@@ -21,7 +21,7 @@ public class HealthRecordResponseDto {
     private String abnormalSymptoms;
     private String memo;
     private LocalDate createdAt;
-    private List<String> attachments; // 첨부파일 리스트 추가
+    private List<String> attachments;
 
     public HealthRecordResponseDto(HealthRecord healthRecord) {
         this.healthRecordId = healthRecord.getHealthRecordId();
@@ -32,11 +32,10 @@ public class HealthRecordResponseDto {
         this.memo = healthRecord.getMemo();
         this.createdAt = healthRecord.getCreatedAt();
 
-        // Optional을 사용하여 첨부파일 경로 리스트를 안전하게 처리
         this.attachments = Optional.ofNullable(healthRecord.getAttachments())
-                .orElseGet(Collections::emptyList) // null일 경우 빈 리스트 반환
+                .orElseGet(Collections::emptyList)
                 .stream()
-                .map(HealthRecordAttachment::getHealthRecordAttachmentFile) // 파일 경로를 리스트로 변환
+                .map(HealthRecordAttachment::getHealthRecordAttachmentFile)
                 .collect(Collectors.toList());
     }
 }
