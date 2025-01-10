@@ -1,9 +1,6 @@
 package com.korit.projectrrs.dto.auth.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,4 +45,9 @@ public class SignUpRequestDto {
     private String email;
 
     private String profileImageUrl;
+
+    @NotBlank
+    @Pattern(regexp="^(home|kakao|naver)$")
+    private String joinPath;
+    private String snsId;
 }
