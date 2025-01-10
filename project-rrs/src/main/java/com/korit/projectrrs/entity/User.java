@@ -57,6 +57,19 @@ public class User {
     @Column(name = "PROVIDER_INTRODUCTION", columnDefinition = "TEXT")
     private String providerIntroduction;
 
+    @Column(nullable = false, length = 5, columnDefinition = "VARCHAR(5) COMMENT '가입 경로 (HOME, KAKAO, NAVER)'")
+    private String joinPath;
+
+    @Column(nullable = true, columnDefinition = "VARCHAR(255) COMMENT 'OAuth2 사용자 아이디'")
+    private String snsId;
+
+    @PrePersist
+    private void setDefaultValues() {
+        if (this.joinPath == null) {
+            this.joinPath = "HOME";
+        }
+    }
+
     @Builder.Default
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
