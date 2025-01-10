@@ -41,7 +41,7 @@ FROM
 WHERE
     U.USERNAME = :username
 """, nativeQuery = true)
-    Optional<User> findByUsername(@Param("uesrname") String username);
+    Optional<User> findByUsername(@Param("username") String username);
 
     User findBySnsIdAndJoinPath(String snsId, String registration);
 }
