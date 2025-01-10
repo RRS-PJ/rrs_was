@@ -26,6 +26,9 @@ dependencies {
 	implementation('commons-validator:commons-validator:1.7')
 //    implementation('org.hibernate.validator:hibernate.validator:8.0.0.Final')
 
+	// 스프링 OAuth2
+	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
 	// JWT 의존성 추가
 	implementation('io.jsonwebtoken:jjwt-api:0.11.2')
 	implementation('io.jsonwebtoken:jjwt-impl:0.11.2')

@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,8 +31,6 @@ public class WalkingRecordController {
     private static final String WALKING_RECORD_GET_BY_ID = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_PUT = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
     private static final String WALKING_RECORD_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
-
-    private static final String WALKING_RECORD_ATTACHMENT_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}/{walkingRecordAttachmentId}";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(

@@ -19,9 +19,9 @@ public class CustomerSupportAttachment {
     @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_ID", nullable = false, unique = true)
     private Long customerSupportAttachmentId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_SUPPORT_ID", nullable = false)
-    @JsonBackReference
     private CustomerSupport customerSupport;
 
     @Column(name = "CUSTOMER_SUPPORT_ATTACHMENT_FILE", nullable = false)

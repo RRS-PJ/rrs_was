@@ -1,11 +1,10 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.user.request.UpdatePasswordRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
-import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.FileService;
@@ -17,9 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

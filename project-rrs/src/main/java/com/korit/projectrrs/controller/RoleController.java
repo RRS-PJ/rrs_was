@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.role.requestDto.RoleRequestDto;
 import com.korit.projectrrs.security.PrincipalUser;
