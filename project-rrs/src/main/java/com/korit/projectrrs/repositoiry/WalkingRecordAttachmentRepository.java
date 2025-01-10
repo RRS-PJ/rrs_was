@@ -15,8 +15,12 @@ import java.util.Optional;
 public interface WalkingRecordAttachmentRepository extends JpaRepository<WalkingRecordAttachment, Long> {
     @Query("SELECT wra " +
             "FROM WalkingRecordAttachment wra " +
-            "WHERE wra.walkingRecordAttachmentId = :wrId")
-    List<WalkingRecordAttachment> findByWRId(@Param("wrId")Long wrId);
+            "WHERE wra.walkingRecord.pet.petId = :petId " +
+            "AND wra.walkingRecord.pet.user.userId = :userId " +
+            "AND wra.walkingRecord.walkingRecordId = :wrId")
+    List<WalkingRecordAttachment> findByWRId(@Param("userId") Long userId,
+                                             @Param("petId") Long petId,
+                                             @Param("wrId") Long wrId);
 
     @Query("SELECT p " +
             "FROM Pet p " +

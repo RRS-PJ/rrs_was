@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (profileImageUrl != null && !profileImageUrl.isEmpty() &&
-                !profileImageUrl.matches(".*\\.(jpg|png)$")) {
+                !profileImageUrl.matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
