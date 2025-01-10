@@ -115,17 +115,17 @@ public class AuthServiceImpl implements AuthService {
         try {
             String encodedPassword = bCryptpasswordEncoder.encode(password);
             User user = User.builder()
-                        .name(name)
-                        .username(username)
-                        .password(encodedPassword)
-                        .nickname(nickname)
-                        .phone(phone)
-                        .address(address)
-                        .addressDetail(addressDetail)
-                        .email(email)
-                        .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
-                        .roles("ROLE_USER")
-                        .build();
+                    .name(name)
+                    .username(username)
+                    .password(encodedPassword)
+                    .nickname(nickname)
+                    .phone(phone)
+                    .address(address)
+                    .addressDetail(addressDetail)
+                    .email(email)
+                    .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
+                    .roles("ROLE_USER")
+                    .build();
 
             userRepository.save(user);
 
@@ -164,21 +164,7 @@ public class AuthServiceImpl implements AuthService {
             int exprTime = jwtProvider.getExpiration();
 
             // 5. 응답 데이터 생성 //
-            data = new LoginResponseDto(
-                    user.getUserId(),
-                    user.getName(),
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getNickname(),
-                    user.getPhone(),
-                    user.getAddress(),
-                    user.getAddressDetail(),
-                    user.getEmail(),
-                    user.getProfileImageUrl(),
-                    user.getRoles(),
-                    user.getProviderIntroduction(),
-                    token,
-                    exprTime);
+            data = new LoginResponseDto(user, token, exprTime);
 
         } catch (Exception e) {
             e.printStackTrace();
