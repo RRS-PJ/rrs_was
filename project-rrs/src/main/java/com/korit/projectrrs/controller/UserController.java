@@ -1,11 +1,10 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.user.request.UpdatePasswordRequestDto;
 import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
-import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.UserService;
 import lombok.RequiredArgsConstructor;

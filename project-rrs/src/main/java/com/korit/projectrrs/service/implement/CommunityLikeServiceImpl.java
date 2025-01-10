@@ -1,6 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.communityLike.response.CommunityLikeResponseDto;
 import com.korit.projectrrs.entity.Community;

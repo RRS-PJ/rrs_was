@@ -1,7 +1,7 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.community.request.CommunityCreateRequestDto;
 import com.korit.projectrrs.dto.community.request.CommunityUpdateRequestDto;
@@ -17,9 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
-import static com.korit.projectrrs.common.ApiMappingPattern.*;
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
 
 @RestController
 @RequestMapping(ApiMappingPattern.COMMUNITY)

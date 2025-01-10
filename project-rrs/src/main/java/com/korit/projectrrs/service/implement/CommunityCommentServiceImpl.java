@@ -1,6 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.communitycomment.request.CommunityCommentCreateRequestDto;
 import com.korit.projectrrs.dto.communitycomment.request.CommunityCommentUpdateRequestDto;

@@ -1,6 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.entity.AvailableDateOfWeek;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.AvailableDateOfWeekRepository;
