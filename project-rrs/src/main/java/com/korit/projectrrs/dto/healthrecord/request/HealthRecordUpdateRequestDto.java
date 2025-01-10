@@ -20,15 +20,10 @@ public class HealthRecordUpdateRequestDto {
     @NotBlank(message = "Abnormal Symptoms are required.")
     private String abnormalSymptoms;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate createdAt;
-
     private String memo;
 
-    // 업로드할 파일 목록을 저장하는 필드
     private List<MultipartFile> attachments;
 
-    // 파일 목록을 반환하는 메서드
     public List<MultipartFile> getFiles() {
         return attachments;
     }

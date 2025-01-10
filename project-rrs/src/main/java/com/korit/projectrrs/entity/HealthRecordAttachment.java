@@ -23,6 +23,7 @@ public class HealthRecordAttachment {
     @JoinColumn(name = "HEALTH_RECORD_ID", nullable = false)
     private HealthRecord healthRecord;
 
-    @Column(name = "HEALTH_RECORD_ATTACHMENT_FILE", nullable = false, length = 255)
+    @Column(name = "HEALTH_RECORD_ATTACHMENT_FILE", length = 255)
     private String healthRecordAttachmentFile;
+
 }

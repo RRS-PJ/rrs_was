@@ -1,7 +1,5 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
-import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
