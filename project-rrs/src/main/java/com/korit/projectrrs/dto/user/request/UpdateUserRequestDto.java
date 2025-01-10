@@ -3,6 +3,7 @@ package com.korit.projectrrs.dto.user.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Data
@@ -19,8 +20,6 @@ public class UpdateUserRequestDto {
     private String address;
     @NotNull
     private String addressDetail;
-    @NotNull
-    private String profileImageUrl;
 
-    private boolean status;
+    private MultipartFile profileImageUrl;
 }

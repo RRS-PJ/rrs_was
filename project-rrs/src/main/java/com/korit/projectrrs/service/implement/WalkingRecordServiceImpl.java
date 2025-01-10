@@ -45,6 +45,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         WalkingRecordResponseDto data = null;
 
         List<WalkingRecordWeatherState> validWeatherStates = Arrays.asList(WalkingRecordWeatherState.values());
+        List<String> validExtensions = Arrays.asList("jpg", "png", "jpeg");
 
         if (!validWeatherStates.contains(walkingRecordWeatherState)) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_WEATHER_STATE);
@@ -93,6 +94,17 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             if (Multifiles == null || Multifiles.isEmpty()) {
                 Multifiles = new ArrayList<>();  // 빈 배열로 초기화
+            }
+
+            if (Multifiles != null && !Multifiles.isEmpty()) {
+                for (MultipartFile file : Multifiles) {
+                    String fileName = file.getOriginalFilename();
+                    String fileExtension = fileName != null ? fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase() : "";
+
+                    if (!validExtensions.contains(fileExtension)) {
+                        return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
+                    }
+                }
             }
 
             for (MultipartFile multifiles : Multifiles) {
@@ -165,23 +177,26 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     public ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, @Valid UpdateWalkingRecordRequestDto dto) {
         WalkingRecordWeatherState walkingRecordWeatherState = dto.getWalkingRecordWeatherState();
         Integer walkingRecordDistance = dto.getWalkingRecordDistance();
-        Integer hours = dto.getWalkingRecordWalkingHours();
-        Integer minutes = dto.getWalkingRecordWalkingMinutes();
+        Integer walkingRecordWalkingTime = dto.getWalkingRecordWalkingTime();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
-        List<MultipartFile> files = dto.getFiles();
+        List<WalkingRecordWeatherState> validWeatherStates = Arrays.asList(WalkingRecordWeatherState.values());
+        List<MultipartFile> newFiles = dto.getFiles();
+        List<String> validExtensions = Arrays.asList("jpg", "png", "jpeg");
 
         WalkingRecordResponseDto data = null;
+
+        if (!validWeatherStates.contains(walkingRecordWeatherState)) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_WEATHER_STATE);
+        }
 
         if (walkingRecordDistance != null && walkingRecordDistance <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_DISTANCE);
         }
 
-        if (minutes != null && minutes < 0 || minutes >= 60) {
+        if (walkingRecordWalkingTime == null || walkingRecordWalkingTime <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_TIME);
         }
-
-        int totalMinutes = (hours != null ? hours : 0) * 60 + minutes;
 
         if (walkingRecordCreateAt != null && walkingRecordCreateAt.isAfter(LocalDate.now())) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_BIRTH_DATE);
@@ -197,17 +212,16 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
             WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
             // 기존 첨부파일 삭제
-            List<WalkingRecordAttachment> currentAttachments = walkingRecord.getWalkingRecordAttachments();
-            if (currentAttachments != null) {
-                for (WalkingRecordAttachment attachment : currentAttachments) {
-                    fileService.removeFile(attachment.getWalkingRecordAttachmentFile());
-                    walkingRecordAttachmentRepository.delete(attachment);
-                }
+            List<WalkingRecordAttachment> existingAttachments = walkingRecordAttachmentRepository.findByWRId(userId, petId, walkingRecordId);
+
+            for (WalkingRecordAttachment attachment : existingAttachments) {
+                fileService.removeFile((attachment.getWalkingRecordAttachmentFile()));
+                walkingRecordAttachmentRepository.delete(attachment);
             }
 
             // 새로운 첨부파일 추가
-            if (files != null && !files.isEmpty()) {
-                for (MultipartFile file : files) {
+            if (newFiles != null && !newFiles.isEmpty()) {
+                for (MultipartFile file : newFiles) {
                     String filePath = fileService.uploadFile(file, "walking-record");
                     if (filePath != null) {
                         WalkingRecordAttachment attachment = new WalkingRecordAttachment();
@@ -215,13 +229,13 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                         attachment.setWalkingRecordAttachmentFile(filePath);
                         walkingRecordAttachmentRepository.save(attachment);
                     }
-                }
+               }
             }
 
             walkingRecord = walkingRecord.toBuilder()
                     .walkingRecordWeatherState(walkingRecordWeatherState != null ? walkingRecordWeatherState : WalkingRecordWeatherState.SUNNY)
                     .walkingRecordDistance(walkingRecordDistance != null ? walkingRecordDistance : walkingRecord.getWalkingRecordDistance())
-                    .walkingRecordWalkingTime(totalMinutes)
+                    .walkingRecordWalkingTime(walkingRecordWalkingTime != null ? walkingRecordWalkingTime : walkingRecord.getWalkingRecordWalkingTime())
                     .walkingRecordCreateAt(walkingRecordCreateAt != null ? walkingRecordCreateAt : walkingRecord.getWalkingRecordCreateAt())
                     .walkingRecordMemo(walkingRecordMemo != null ? walkingRecordMemo : walkingRecord.getWalkingRecordMemo())
                     .build();

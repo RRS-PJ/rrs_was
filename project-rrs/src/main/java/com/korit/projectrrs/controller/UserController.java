@@ -7,6 +7,7 @@ import com.korit.projectrrs.dto.user.request.UpdateUserRequestDto;
 import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody UpdateUserRequestDto dto
+            @Valid @ModelAttribute UpdateUserRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<UserResponseDto> response = userService.updateUser(userId, dto);
