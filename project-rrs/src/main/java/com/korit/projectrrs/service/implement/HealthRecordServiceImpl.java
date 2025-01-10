@@ -40,7 +40,6 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         Double weight = requestDto.getWeight();
         short petAge = requestDto.getPetAge();
 
-        // 유효성 검사
         if (weight == null || weight <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WEIGHT);
         }
@@ -65,7 +64,6 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                     .build();
             healthRecordRepository.save(healthRecord);
 
-            // 파일 업로드 처리
             List<MultipartFile> files = requestDto.getFiles();
             List<String> fileNames = new ArrayList<>();
             if (files != null && !files.isEmpty()) {
@@ -93,24 +91,21 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     @Override
     @Transactional
     public ResponseDto<HealthRecordResponseDto> updateHealthRecord(Long userId, Long petId, Long healthRecordId, HealthRecordUpdateRequestDto requestDto) {
+        System.out.println(userId);
+        System.out.println(healthRecordId);
+        System.out.println(petId);
         return healthRecordRepository.findByHealthRecordIdAndPet_PetIdAndPet_User_UserId(healthRecordId, petId, userId)
                 .map(existingRecord -> {
-                    // 기본 정보 업데이트
+
+                    // 기존 건강 기록 정보 업데이트
                     existingRecord.setWeight(requestDto.getWeight());
                     existingRecord.setPetAge(requestDto.getPetAge());
                     existingRecord.setAbnormalSymptoms(requestDto.getAbnormalSymptoms());
                     existingRecord.setMemo(requestDto.getMemo());
 
-                    // 기존 파일 삭제
-                    List<HealthRecordAttachment> currentAttachments = healthRecordAttachmentRepository.findByHealthRecord_HealthRecordId(existingRecord.getHealthRecordId());
-                    for (HealthRecordAttachment attachment : currentAttachments) {
-                        fileService.removeFile(attachment.getHealthRecordAttachmentFile());
-                        healthRecordAttachmentRepository.delete(attachment);
-                    }
-
-                    // 새로운 파일 업로드 및 파일 목록 생성
-                    List<HealthRecordAttachment> newAttachments = new ArrayList<>();
+                    // 첨부파일 추가 로직
                     if (requestDto.getFiles() != null && !requestDto.getFiles().isEmpty()) {
+                        List<HealthRecordAttachment> newAttachments = new ArrayList<>();
                         for (MultipartFile file : requestDto.getFiles()) {
                             String filePath = fileService.uploadFile(file, "health-record");
                             if (filePath != null) {
@@ -122,18 +117,17 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                                 newAttachments.add(newAttachment);
                             }
                         }
+
+                        // 기존 첨부파일에 새 첨부파일 추가
+                        existingRecord.getAttachments().addAll(newAttachments);
                     }
 
-                    // 첨부 파일 목록 갱신
-                    existingRecord.getAttachments().clear();
-                    existingRecord.getAttachments().addAll(newAttachments);
-
-                    // 기존 레코드 저장
+                    // 기존 첨부파일 유지 (삭제 로직 제거)
                     healthRecordRepository.save(existingRecord);
 
-                    // 응답 DTO 생성
+                    // 응답 생성
                     HealthRecordResponseDto responseDto = new HealthRecordResponseDto(existingRecord);
-                    responseDto.setAttachments(newAttachments.stream()
+                    responseDto.setAttachments(existingRecord.getAttachments().stream()
                             .map(HealthRecordAttachment::getHealthRecordAttachmentFile)
                             .collect(Collectors.toList()));
 
@@ -141,6 +135,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                 })
                 .orElseGet(() -> ResponseDto.setFailed(ResponseMessage.RECORD_NOT_FOUND));
     }
+
 
     @Override
     @Transactional
@@ -152,7 +147,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_AUTHORIZED);
             }
 
-            List<HealthRecordAttachment> attachments = healthRecordAttachmentRepository.findByHealthRecord_HealthRecordId(healthRecordId);
+            List<HealthRecordAttachment> attachments = healthRecordAttachmentRepository.findByHealthRecordId(healthRecordId);
             for (HealthRecordAttachment attachment : attachments) {
                 fileService.removeFile(attachment.getHealthRecordAttachmentFile());
                 healthRecordAttachmentRepository.delete(attachment);
