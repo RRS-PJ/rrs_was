@@ -115,17 +115,17 @@ public class AuthServiceImpl implements AuthService {
         try {
             String encodedPassword = bCryptpasswordEncoder.encode(password);
             User user = User.builder()
-                        .name(name)
-                        .username(username)
-                        .password(encodedPassword)
-                        .nickname(nickname)
-                        .phone(phone)
-                        .address(address)
-                        .addressDetail(addressDetail)
-                        .email(email)
-                        .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
-                        .roles("ROLE_USER")
-                        .build();
+                    .name(name)
+                    .username(username)
+                    .password(encodedPassword)
+                    .nickname(nickname)
+                    .phone(phone)
+                    .address(address)
+                    .addressDetail(addressDetail)
+                    .email(email)
+                    .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
+                    .roles("ROLE_USER")
+                    .build();
 
             userRepository.save(user);
 
