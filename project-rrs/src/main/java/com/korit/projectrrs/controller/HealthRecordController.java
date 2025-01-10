@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.healthrecord.request.HealthRecordCreateRequestDto;
 import com.korit.projectrrs.dto.healthrecord.request.HealthRecordUpdateRequestDto;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.korit.projectrrs.common.ApiMappingPattern.*;
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
 
 @RestController
 @RequestMapping(ApiMappingPattern.HEALTH_RECORDS)

@@ -1,6 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.customerSupport.request.CreateCSRequestDto;
 import com.korit.projectrrs.dto.customerSupport.request.UpdateCSRequestDto;
@@ -234,6 +234,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
             if (!customerSupport.getUser().getUserId().equals(userId)){
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
+            }
+
+            List<CustomerSupportAttachment> currentAtt = csAttRepository.findByCSId(customerSupportId);
+            for (CustomerSupportAttachment attachment : currentAtt) {
+                fileService.removeFile(attachment.getCustomerAttachmentFile());
+                csAttRepository.delete(attachment);
             }
 
             customerSupportRepository.deleteById(customerSupportId);

@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-import com.korit.projectrrs.common.ApiMappingPattern;
+
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.announcement.AnnouncementResponseAllDto;
 import com.korit.projectrrs.dto.announcement.AnnouncementResponseDto;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.korit.projectrrs.common.ApiMappingPattern.ANNOUNCEMENT_BY_ID;
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.ANNOUNCEMENT_BY_ID;
 
 @RestController
 @RequestMapping(ApiMappingPattern.ANNOUNCEMENT)

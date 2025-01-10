@@ -1,5 +1,6 @@
 package com.korit.projectrrs.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class CustomerSupport {
     @Column(name = "CUSTOMER_SUPPORT_ID", nullable = false, unique = true)
     private Long csId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
