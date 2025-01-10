@@ -45,6 +45,7 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         WalkingRecordResponseDto data = null;
 
         List<WalkingRecordWeatherState> validWeatherStates = Arrays.asList(WalkingRecordWeatherState.values());
+        List<String> validExtensions = Arrays.asList("jpg", "png", "jpeg");
 
         if (!validWeatherStates.contains(walkingRecordWeatherState)) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_WEATHER_STATE);
@@ -93,6 +94,17 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             if (Multifiles == null || Multifiles.isEmpty()) {
                 Multifiles = new ArrayList<>();  // 빈 배열로 초기화
+            }
+
+            if (Multifiles != null && !Multifiles.isEmpty()) {
+                for (MultipartFile file : Multifiles) {
+                    String fileName = file.getOriginalFilename();
+                    String fileExtension = fileName != null ? fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase() : "";
+
+                    if (!validExtensions.contains(fileExtension)) {
+                        return ResponseDto.setFailed(ResponseMessage.INVALID_FILE);
+                    }
+                }
             }
 
             for (MultipartFile multifiles : Multifiles) {
@@ -168,10 +180,15 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         Integer walkingRecordWalkingTime = dto.getWalkingRecordWalkingTime();
         LocalDate walkingRecordCreateAt = dto.getWalkingRecordCreateAt();
         String walkingRecordMemo = dto.getWalkingRecordMemo();
+        List<WalkingRecordWeatherState> validWeatherStates = Arrays.asList(WalkingRecordWeatherState.values());
         List<MultipartFile> newFiles = dto.getFiles();
-        List<String> existingFiles = dto.getExistingFiles();
+        List<String> validExtensions = Arrays.asList("jpg", "png", "jpeg");
 
         WalkingRecordResponseDto data = null;
+
+        if (!validWeatherStates.contains(walkingRecordWeatherState)) {
+            return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_WEATHER_STATE);
+        }
 
         if (walkingRecordDistance != null && walkingRecordDistance <= 0) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_WALKING_RECORD_DISTANCE);

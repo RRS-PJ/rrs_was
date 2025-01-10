@@ -56,7 +56,7 @@ public class PetServiceImpl implements PetService {
         }
 
         if (petImageUrl != null && !petImageUrl.isEmpty() &&
-                !petImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
+                !petImageUrl.matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -168,7 +168,7 @@ public class PetServiceImpl implements PetService {
         }
 
         if (petImageUrl != null && !petImageUrl.isEmpty() &&
-                !petImageUrl.matches("^(https?://.*\\.(jpg|png))$")) {
+                !petImageUrl.matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 

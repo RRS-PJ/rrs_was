@@ -21,13 +21,19 @@ public class FileServiceImpl implements FileService {
     @Value("${file.upload-dir}")
     private String rootPath;
 
-
     @Override
     public String uploadFile(MultipartFile file, String path) {
-
         if (file == null || file.isEmpty()) return null;
 
-        String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        String originalFileName = file.getOriginalFilename();
+        String uuid = extractUUIDFromFileName(originalFileName);
+
+        // UUID가 파일명에 없으면 새로운 UUID를 생성
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+        }
+
+        String newFileName = uuid + "_" + originalFileName.substring(originalFileName.indexOf('_') + 1);
         String filePath = "file/" + path + "/" + newFileName;
 
         Path uploadDir = Paths.get(rootPath, "file", path);
@@ -41,8 +47,23 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
             return null;
         }
-
         return filePath;
+    }
+
+    // 파일명에서 UUID 추출
+    private String extractUUIDFromFileName(String fileName) {
+        String[] parts = fileName.split("_");
+
+        System.out.println("File Name: " + fileName);
+        System.out.println("Split Parts: ");
+        for (String part : parts) {
+            System.out.println(part);
+        }
+
+        if (parts.length > 1) {
+            return parts[0];  // 첫 번째 부분이 UUID
+        }
+        return null;
     }
 
     private void createDirectoriesIfNoExists(Path directory) throws IOException {

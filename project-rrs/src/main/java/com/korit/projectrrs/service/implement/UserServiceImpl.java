@@ -8,12 +8,14 @@ import com.korit.projectrrs.dto.user.response.UserResponseDto;
 import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.UserRepository;
+import com.korit.projectrrs.service.FileService;
 import com.korit.projectrrs.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
+    private final FileService fileService;
 
     @Override
     public ResponseDto<UserResponseDto> getUserInfo(Long userId) {
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
         String phone = dto.getPhone();
         String address = dto.getAddress();
         String addressDetail = dto.getAddressDetail();
-        String profileImageUrl = dto.getProfileImageUrl();
+        MultipartFile profileImage = dto.getProfileImageUrl();
 
         UserResponseDto data = null;
 
@@ -79,8 +82,8 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
-        if (profileImageUrl != null && !profileImageUrl.isEmpty() &&
-                !profileImageUrl.matches(".*\\.(jpg|png)$")) {
+        if (profileImage != null && !profileImage.isEmpty() &&
+                !profileImage.getOriginalFilename().matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -101,7 +104,7 @@ public class UserServiceImpl implements UserService {
                     (phone == null || phone.equals(user.getPhone())) &&
                     (address == null || address.equals(user.getAddress())) &&
                     (addressDetail == null || addressDetail.equals(user.getAddressDetail())) &&
-                    (profileImageUrl == null || profileImageUrl.equals(user.getProfileImageUrl())) &&
+                    (profileImage == null || profileImage.getOriginalFilename().equals(user.getProfileImageUrl())) &&
                     (password == null || password.isEmpty());
 
             if (isSame) {
@@ -114,19 +117,25 @@ public class UserServiceImpl implements UserService {
                 encodedPassword = bCryptpasswordEncoder.encode(password);
             }
 
+            String profileImageUrl = user.getProfileImageUrl();
+            String defaultProfileImageUrl = "images/default-profile.png";
+
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String filePath = fileService.uploadFile(profileImage, "profileImage");
+                if (filePath != null) {
+                    profileImageUrl = filePath;
+                }
+            } else if (profileImageUrl == null || profileImageUrl.isEmpty()) {
+                profileImageUrl = defaultProfileImageUrl;
+            }
+
             user = user.toBuilder()
                     .name(name != null ? name : user.getName())
                     .password(encodedPassword)
                     .phone(phone != null ? phone : user.getPhone())
                     .address(address != null ? address : user.getAddress())
                     .addressDetail(addressDetail != null ? addressDetail : user.getAddressDetail())
-                    .profileImageUrl(
-                            (profileImageUrl != null && !profileImageUrl.isEmpty())
-                                    ? profileImageUrl
-                                    : (profileImageUrl == null && user.getProfileImageUrl() != null)
-                                    ? user.getProfileImageUrl()
-                                    : "example.jpg"
-                    )
+                    .profileImageUrl(profileImageUrl)
                     .build();
 
             userRepository.save(user);
