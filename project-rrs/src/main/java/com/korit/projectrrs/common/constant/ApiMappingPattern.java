@@ -53,4 +53,7 @@ public class ApiMappingPattern {
     public static final String COMMENT_DELETE_BY_COMMUNITY_ID = "/{communityId}/{commentId}";
     public static final String COMMENT_GET_BY_COMMUNITY_ID = "/{communityId}";
     public static final String COMMUNITY_LIKE = "/api/v1/users/community/like";
+
+    public static final String HEALTH_RECORDS_ATTACHMENT = "api/v1/health-attachments";
+    public static final String ATTACHMENT = "/api/v1/community-attachments";
 }

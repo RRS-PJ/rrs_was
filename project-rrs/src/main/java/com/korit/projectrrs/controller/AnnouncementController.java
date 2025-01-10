@@ -1,6 +1,6 @@
 package com.korit.projectrrs.controller;
 
-
+import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.announcement.AnnouncementResponseAllDto;
 import com.korit.projectrrs.dto.announcement.AnnouncementResponseDto;
