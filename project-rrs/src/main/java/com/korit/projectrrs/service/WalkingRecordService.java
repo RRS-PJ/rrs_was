@@ -5,7 +5,6 @@ import com.korit.projectrrs.dto.walkingRecord.request.UpdateWalkingRecordRequest
 import com.korit.projectrrs.dto.walkingRecord.request.WalkingRecordRequestDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordListResponseDto;
 import com.korit.projectrrs.dto.walkingRecord.response.WalkingRecordResponseDto;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
