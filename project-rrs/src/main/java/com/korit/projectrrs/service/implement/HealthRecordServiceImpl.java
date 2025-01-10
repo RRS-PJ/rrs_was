@@ -1,6 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
-import com.korit.projectrrs.common.ResponseMessage;
+import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.healthrecord.request.HealthRecordCreateRequestDto;
 import com.korit.projectrrs.dto.healthrecord.request.HealthRecordUpdateRequestDto;
