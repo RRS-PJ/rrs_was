@@ -33,7 +33,15 @@ WHERE
     @Query("SELECT u.userId FROM User u WHERE u.username = :username AND u.email = :email")
     Optional<Long> findUserIdByUsernameAndEmail(@Param("username") String username, @Param("email") String email);
 
-    Optional<User> findByUsername(String username);
+    @Query(value = """
+SELECT
+    *
+FROM
+    USERS U
+WHERE
+    U.USERNAME = :username
+""", nativeQuery = true)
+    Optional<User> findByUsername(@Param("uesrname") String username);
 
     User findBySnsIdAndJoinPath(String snsId, String registration);
 }
