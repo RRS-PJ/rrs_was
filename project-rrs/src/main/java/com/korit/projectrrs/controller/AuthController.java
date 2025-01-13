@@ -2,6 +2,7 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.auth.reponse.DuplicateFieldCheckResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
 
 @RestController
 @RequestMapping(ApiMappingPattern.AUTH)
@@ -53,5 +56,29 @@ public class AuthController {
         ResponseDto<String> response = authService.findUsernameByToken(token);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping(DUPLICATE_USERNAME_PATH)
+    public ResponseEntity<ResponseDto<DuplicateFieldCheckResponseDto>> checkUsernameDuplicate(@RequestParam String username) {
+        ResponseDto<DuplicateFieldCheckResponseDto> response = authService.checkUsernameDuplicate(username);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(DUPLICATE_NICKNAME_PATH)
+    public ResponseEntity<ResponseDto<DuplicateFieldCheckResponseDto>> checkNicknameDuplicate(@RequestParam String nickname) {
+        ResponseDto<DuplicateFieldCheckResponseDto> response = authService.checkNicknameDuplicate(nickname);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(DUPLICATE_PHONE_PATH)
+    public ResponseEntity<ResponseDto<DuplicateFieldCheckResponseDto>> checkPhoneDuplicate(@RequestParam String phone) {
+        ResponseDto<DuplicateFieldCheckResponseDto> response = authService.checkPhoneDuplicate(phone);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(DUPLICATE_EMAIL_PATH)
+    public ResponseEntity<ResponseDto<DuplicateFieldCheckResponseDto>> checkEmailDuplicate(@RequestParam String email) {
+        ResponseDto<DuplicateFieldCheckResponseDto> response = authService.checkEmailDuplicate(email);
+        return ResponseEntity.ok(response);
     }
 }

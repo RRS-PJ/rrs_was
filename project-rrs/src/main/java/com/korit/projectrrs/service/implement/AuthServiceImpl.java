@@ -3,6 +3,7 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
+import com.korit.projectrrs.dto.auth.reponse.DuplicateFieldCheckResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
@@ -241,4 +242,51 @@ public class AuthServiceImpl implements AuthService {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, maskedUsername);
     }
 
+    @Override
+    public ResponseDto<DuplicateFieldCheckResponseDto> checkUsernameDuplicate(String username) {
+        boolean isDuplicate = userRepository.existsByUsername(username);
+        DuplicateFieldCheckResponseDto responseDto = DuplicateFieldCheckResponseDto.builder()
+                .isDuplicate(isDuplicate)
+                .build();
+        return ResponseDto.<DuplicateFieldCheckResponseDto>builder()
+                .result(!isDuplicate)
+                .data(responseDto)
+                .build();
+    }
+
+    @Override
+    public ResponseDto<DuplicateFieldCheckResponseDto> checkNicknameDuplicate(String nickname) {
+        boolean isDuplicate = userRepository.existsByNickname(nickname);
+        DuplicateFieldCheckResponseDto responseDto = DuplicateFieldCheckResponseDto.builder()
+                .isDuplicate(isDuplicate)
+                .build();
+        return ResponseDto.<DuplicateFieldCheckResponseDto>builder()
+                .result(!isDuplicate)
+                .data(responseDto)
+                .build();
+    }
+
+    @Override
+    public ResponseDto<DuplicateFieldCheckResponseDto> checkPhoneDuplicate(String phone) {
+        boolean isDuplicate = userRepository.existsByPhone(phone);
+        DuplicateFieldCheckResponseDto responseDto = DuplicateFieldCheckResponseDto.builder()
+                .isDuplicate(isDuplicate)
+                .build();
+        return ResponseDto.<DuplicateFieldCheckResponseDto>builder()
+                .result(!isDuplicate)
+                .data(responseDto)
+                .build();
+    }
+
+    @Override
+    public ResponseDto<DuplicateFieldCheckResponseDto> checkEmailDuplicate(String email) {
+        boolean isDuplicate = userRepository.existsByEmail(email);
+        DuplicateFieldCheckResponseDto responseDto = DuplicateFieldCheckResponseDto.builder()
+                .isDuplicate(isDuplicate)
+                .build();
+        return ResponseDto.<DuplicateFieldCheckResponseDto>builder()
+                .result(!isDuplicate)
+                .data(responseDto)
+                .build();
+    }
 }
