@@ -1,5 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
+
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
@@ -164,7 +165,20 @@ public class AuthServiceImpl implements AuthService {
             int exprTime = jwtProvider.getExpiration();
 
             // 5. 응답 데이터 생성 //
-            data = new LoginResponseDto(user, token, exprTime);
+            data = new LoginResponseDto(
+                    user.getUserId(),
+                    user.getName(),
+                    user.getUsername(),
+                    user.getNickname(),
+                    user.getPhone(),
+                    user.getAddress(),
+                    user.getAddressDetail(),
+                    user.getEmail(),
+                    user.getProfileImageUrl(),
+                    user.getRoles(),
+                    user.getProviderIntroduction(),
+                    token,
+                    exprTime);
 
         } catch (Exception e) {
             e.printStackTrace();
