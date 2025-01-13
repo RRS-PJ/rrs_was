@@ -55,4 +55,9 @@ public class ApiMappingPattern {
 
     public static final String HEALTH_RECORDS_ATTACHMENT = "api/v1/health-attachments";
     public static final String ATTACHMENT = "/api/v1/community-attachments";
+
+    public static final String DUPLICATE_USERNAME_PATH = "/duplicate-username";
+    public static final String DUPLICATE_NICKNAME_PATH = "/duplicate-nickname";
+    public static final String DUPLICATE_PHONE_PATH = "/duplicate-phone";
+    public static final String DUPLICATE_EMAIL_PATH = "/duplicate-email";
 }
