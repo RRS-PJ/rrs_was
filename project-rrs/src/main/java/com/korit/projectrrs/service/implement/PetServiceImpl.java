@@ -10,10 +10,12 @@ import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.PetRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
+import com.korit.projectrrs.service.FileService;
 import com.korit.projectrrs.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     @Override
     public ResponseDto<PetResponseDto> createPet(Long userId, @Valid PetRequestDto dto) {
@@ -33,7 +36,7 @@ public class PetServiceImpl implements PetService {
         Character petGender = dto.getPetGender();
         String petBirthDate = dto.getPetBirthDate();
         Integer petWeight = dto.getPetWeight();
-        String petImageUrl = dto.getPetImageUrl();
+        MultipartFile petImageUrl = dto.getPetImageUrl();
         Character petNeutralityYn = dto.getPetNeutralityYn();
         String petAddInfo = dto.getPetAddInfo();
 
@@ -56,7 +59,7 @@ public class PetServiceImpl implements PetService {
         }
 
         if (petImageUrl != null && !petImageUrl.isEmpty() &&
-                !petImageUrl.matches("(?i).*\\.(jpg|png|jpeg)$")) {
+                !petImageUrl.getOriginalFilename().matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -73,6 +76,15 @@ public class PetServiceImpl implements PetService {
 
             User user = optionalUser.get();
 
+            String uploadedFileName = null;
+            if (petImageUrl != null && !petImageUrl.isEmpty()) {
+                uploadedFileName = fileService.uploadFile(petImageUrl, "pet-profileImage");
+            }
+
+            if (uploadedFileName == null) {
+                uploadedFileName = "/static/images/pet-default-profile.jpg";  // 기본 이미지 파일 경로
+            }
+
             Pet pet = Pet.builder()
                     .petName(petName)
                     .petGender(petGender)
@@ -80,7 +92,7 @@ public class PetServiceImpl implements PetService {
                     .petWeight(petWeight)
                     .petNeutralityYn(petNeutralityYn)
                     .petAddInfo(petAddInfo)
-                    .petImageUrl(petImageUrl != null ? petImageUrl : "petExample.jpg")
+                    .petImageUrl(uploadedFileName)
                     .user(user)
                     .build();
 
@@ -145,7 +157,7 @@ public class PetServiceImpl implements PetService {
         Character petGender = dto.getPetGender();
         String petBirthDate = dto.getPetBirthDate();
         Integer petWeight = dto.getPetWeight();
-        String petImageUrl = dto.getPetImageUrl();
+        MultipartFile petImage = dto.getPetImageUrl();
         Character petNeutralityYn = dto.getPetNeutralityYn();
         String petAddInfo = dto.getPetAddInfo();
 
@@ -167,8 +179,8 @@ public class PetServiceImpl implements PetService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_WEIGHT);
         }
 
-        if (petImageUrl != null && !petImageUrl.isEmpty() &&
-                !petImageUrl.matches("(?i).*\\.(jpg|png|jpeg)$")) {
+        if (petImage != null && !petImage.isEmpty() &&
+                !petImage.getOriginalFilename().matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_PROFILE);
         }
 
@@ -176,7 +188,7 @@ public class PetServiceImpl implements PetService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_PET_NEUTRALITY_YN);
         }
 
-        try {
+            try {
             Optional<Pet> optionalPet = petRepository.findPetByUserId(userId, petId);
 
             if (optionalPet.isEmpty()) {
@@ -185,20 +197,38 @@ public class PetServiceImpl implements PetService {
 
             Pet pet = optionalPet.get();
 
+            boolean isSame = (petName == null || petName.equals(pet.getPetName())) &&
+                    (petGender == null || petGender.equals(pet.getPetGender())) &&
+                    (petBirthDate == null || petBirthDate.equals(pet.getPetBirthDate())) &&
+                    (petWeight == null || petWeight.equals(pet.getPetWeight())) &&
+                    (petNeutralityYn == null || petNeutralityYn.equals(pet.getPetNeutralityYn()) &&
+                    (petAddInfo == null || petAddInfo.equals(pet.getPetAddInfo())) &&
+                    (petImage == null || petImage.getOriginalFilename().equals(pet.getPetImageUrl())));
+
+            if (isSame) {
+                return ResponseDto.setFailed(ResponseMessage.NO_MODIFIED_VALUES);
+            }
+
+            String petImageUrl = pet.getPetImageUrl();
+            String defaultProfileImageUrl = "images/pet-default-profile.png";
+
+            if (petImage != null && !petImage.isEmpty()) {
+                String filePath = fileService.uploadFile(petImage, "pet-profileImage");
+                if (filePath != null) {
+                    petImageUrl = filePath;
+                }
+            } else if (petImageUrl == null || petImageUrl.isEmpty()) {
+                petImageUrl = defaultProfileImageUrl;
+            }
+
             pet = pet.toBuilder()
                     .petName(petName != null ? petName : pet.getPetName())
                     .petGender(petGender != null ? petGender : pet.getPetGender())
                     .petBirthDate(petBirthDate != null ? petBirthDate : pet.getPetBirthDate())
                     .petWeight(petWeight != null ? petWeight : pet.getPetWeight())
-                    .petImageUrl(
-                            (petImageUrl != null && !petImageUrl.isEmpty())
-                                    ? petImageUrl
-                                    : (petImageUrl == null && pet.getPetImageUrl() != null)
-                                    ? pet.getPetImageUrl()
-                                    : "petExample.jpg"
-                    )
                     .petNeutralityYn(petNeutralityYn != null ? petNeutralityYn : pet.getPetNeutralityYn())
                     .petAddInfo(petAddInfo != null ? petAddInfo : pet.getPetAddInfo())
+                    .petImageUrl(petImageUrl)
                     .build();
 
             petRepository.save(pet);

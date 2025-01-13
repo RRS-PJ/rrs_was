@@ -8,6 +8,7 @@ import com.korit.projectrrs.dto.pet.response.PetListResponseDto;
 import com.korit.projectrrs.dto.pet.response.PetResponseDto;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.PetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class PetController {
     @PostMapping
     public ResponseEntity<ResponseDto<PetResponseDto>> createPet(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody PetRequestDto dto
+            @Valid @ModelAttribute PetRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<PetResponseDto> response = petService.createPet(userId, dto);
@@ -63,7 +64,7 @@ public class PetController {
     public ResponseEntity<ResponseDto<PetResponseDto>> updatePet(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
-            @RequestBody UpdatePetRequestDto dto
+            @Valid @ModelAttribute UpdatePetRequestDto dto
     ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<PetResponseDto> response = petService.updatePet(userId, petId, dto);
