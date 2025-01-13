@@ -1,9 +1,12 @@
 package com.korit.projectrrs.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import org.hibernate.dialect.Replacer;
 
 @Data
+@Builder
 @AllArgsConstructor(staticName="set")
 public class ResponseDto<D> {
     private boolean result;
