@@ -91,4 +91,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CustomerSupport> customerSupports = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AvailableDateOfWeek> availableDates;
 }

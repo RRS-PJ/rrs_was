@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,7 +76,38 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public ResponseDto<ProviderResponseDto> getProviderInfo(Long userId) {
-        return null;
+        ProviderResponseDto data = null;
+        List<AvailableDateOfWeek> availableDates = null;
+        String providerIntroduction = null;
+
+        try {
+            Optional<User> optionalUser = userRepository.findById(userId);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            User user = optionalUser.get();
+
+            boolean isActive = user.getRoles().contains("ROLE_PROVIDER");
+
+            if (isActive) {
+                availableDates = user.getAvailableDates();
+                providerIntroduction = user.getProviderIntroduction();
+            }
+
+            data = new ProviderResponseDto(
+                    availableDates.stream()
+                            .map(AvailableDateOfWeekResponseDto::new)
+                            .collect(Collectors.toList()),
+                    providerIntroduction
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
@@ -93,33 +125,4 @@ public class ProviderServiceImpl implements ProviderService {
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
-
-//    @Override
-//    public ResponseDto<ProviderResponseDto> getProviderInfo(Long userId) {
-//        ProviderResponseDto data = null;
-//        List<AvailableDateOfWeek> availableDates = null;
-//        String providerIntroduction = null;
-//
-//        try {
-//            Optional<User> optionalUser = userRepository.findById(userId);
-//
-//            if (optionalUser.isEmpty()) {
-//                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
-//            }
-//
-//            User user = optionalUser.get();
-//
-//            boolean isActive = user.getRoles().contains("ROLE_PROVIDER");
-//
-//            if (isActive) {
-//                availableDates = user.getAvailableDateOfWeek();
-//                providerIntroduction = user.getProviderIntroduction();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
-//        }
-//
-//        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
-//    }
 }

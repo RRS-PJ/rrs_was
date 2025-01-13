@@ -1,6 +1,8 @@
 package com.korit.projectrrs.dto.provider.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.korit.projectrrs.dto.role.requestDto.RoleRequestDto;
+import com.korit.projectrrs.dto.role.responseDto.RoleResponseDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
