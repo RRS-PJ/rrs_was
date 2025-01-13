@@ -92,8 +92,8 @@ public class ProviderServiceImpl implements ProviderService {
             boolean isActive = user.getRoles().contains("ROLE_PROVIDER");
 
             if (isActive) {
-                availableDates = user.getAvailableDates();
-                providerIntroduction = user.getProviderIntroduction();
+                availableDates = Optional.ofNullable(user.getAvailableDates()).orElse(new ArrayList<>());
+                providerIntroduction = Optional.ofNullable(user.getProviderIntroduction()).orElse("");
             }
 
             data = new ProviderResponseDto(
