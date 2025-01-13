@@ -65,6 +65,15 @@ public class JwtProvider {
                 .compact();  // JWT 생성
     }
 
+    public String generateJwtTokenByUsername(String username) {
+        return Jwts.builder()
+                .claim("username", username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     // JWT에서 username 추출
     public String getUsernameFromJwt(String token) {
         Claims claims = getClaims(token);
