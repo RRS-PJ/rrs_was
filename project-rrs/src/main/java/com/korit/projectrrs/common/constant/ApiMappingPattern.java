@@ -36,7 +36,6 @@ public class ApiMappingPattern {
     public static final String USAGE_GUIDE = "/api/v1/usageGuide";
     public static final String USAGE_GUIDE_BY_ID = "/{usageGuideId}";
 
-
     // 펫 및 건강 기록
     public static final String PET = "/api/v1/users/pet";
     public static final String HEALTH_RECORDS = "/api/v1/users/pet/petHealth";
