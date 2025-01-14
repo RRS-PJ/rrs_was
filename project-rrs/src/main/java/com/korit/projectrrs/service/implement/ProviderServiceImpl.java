@@ -8,6 +8,7 @@ import com.korit.projectrrs.dto.provider.response.GetOneProviderInfoResponseDto;
 import com.korit.projectrrs.dto.provider.response.ProviderResponseDto;
 import com.korit.projectrrs.entity.AvailableDateOfWeek;
 import com.korit.projectrrs.entity.User;
+import com.korit.projectrrs.repositoiry.AvailableDateOfWeekRepository;
 import com.korit.projectrrs.repositoiry.ReviewRepository;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.AvailableDateOfWeekService;
@@ -31,6 +32,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final AvailableDateOfWeekService availableDateOfWeekService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final AvailableDateOfWeekRepository availableDateOfWeekRepository;
 
     @Transactional
     public ResponseDto<ProviderResponseDto> updateProvider(Long userId, ProviderRequestDto dto) {
@@ -48,9 +50,16 @@ public class ProviderServiceImpl implements ProviderService {
 
             if (hasProviderRole) {
                 List<AvailableDateOfWeek> createdDates = new ArrayList<>();
+
                 for (LocalDate date : availableDates) {
-                    AvailableDateOfWeek createDate = availableDateOfWeekService.addDate(userId, date);
-                    createdDates.add(createDate);
+                    List<AvailableDateOfWeek> existingDates = availableDateOfWeekRepository.findByProvider_UserIdAndAvailableDate(userId, date);
+
+                    if (!existingDates.isEmpty()) {
+                        availableDateOfWeekRepository.deleteAll(existingDates);
+                    } else {
+                        AvailableDateOfWeek createDate = availableDateOfWeekService.addDate(userId, date);
+                        createdDates.add(createDate);
+                    }
                 }
 
                 List<AvailableDateOfWeekResponseDto> responseList = createdDates.stream()

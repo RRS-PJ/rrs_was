@@ -114,10 +114,6 @@ public class PetServiceImpl implements PetService {
         try {
             List<Pet> pets = petRepository.findAllPetByUserId(userId);
 
-            if (pets.isEmpty()) {
-                return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
-            }
-
             data = pets.stream()
                     .map(PetListResponseDto::new)
                     .collect(Collectors.toList());
