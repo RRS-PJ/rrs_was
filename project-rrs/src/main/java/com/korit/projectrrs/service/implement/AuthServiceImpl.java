@@ -47,6 +47,8 @@ public class AuthServiceImpl implements AuthService {
         String addressDetail = dto.getAddressDetail();
         String email = dto.getEmail();
         String profileImageUrl = dto.getProfileImageUrl();
+        String snsId = dto.getSnsId();
+        String joinPath = dto.getJoinPath();
 
         SignUpResponseDto data = null;
 
@@ -129,6 +131,8 @@ public class AuthServiceImpl implements AuthService {
                     .email(email)
                     .profileImageUrl(profileImageUrl)
                     .roles("ROLE_USER")
+                    .snsId(snsId)
+                    .joinPath(joinPath)
                     .build();
 
             // 데이터베이스에 저장
