@@ -44,7 +44,7 @@ public class CommunityResponseDto {
         this.communityUpdatedAt = community.getCommunityUpdatedAt();
         this.communityLikeCount = community.getCommunityLikeCount();
         this.communityContent = community.getCommunityContent();
-        this.communityThumbnailFile = community.getCommunityThumbnailFile(); // 기본값 설정 로직 제거
+        this.communityThumbnailFile = community.getCommunityThumbnailFile();
 
         // 좋아요한 사용자 닉네임 목록
         if (Objects.nonNull(community.getUserLiked())) {
