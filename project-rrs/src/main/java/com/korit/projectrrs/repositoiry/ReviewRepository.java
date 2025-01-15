@@ -51,7 +51,7 @@ FROM
     INNER JOIN RESERVATIONS RV ON RV.RESERVATION_ID = R.RESERVATION_ID
     INNER JOIN USERS U ON U.USER_ID = RV.PROVIDER_ID
 WHERE
-    U.USER_ID = :providerId\s
+    U.USER_ID = :providerId
     AND U.ROLES LIKE '%ROLE_PROVIDER%'
 """, nativeQuery = true)
     Optional<Double> findAvgReviewScoreByProvider(@Param("providerId") Long providerId);

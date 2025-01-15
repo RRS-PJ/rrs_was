@@ -3,9 +3,10 @@ package com.korit.projectrrs.service.implement;
 
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.DuplicateFieldCheckResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
+import com.korit.projectrrs.dto.auth.request.SNSLoginRequestDto;
+import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
+import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
+import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 import com.korit.projectrrs.dto.mail.SendMailRequestDto;
@@ -298,5 +299,45 @@ public class AuthServiceImpl implements AuthService {
                 .result(!isDuplicate)
                 .data(responseDto)
                 .build();
+    }
+
+    @Override
+    public ResponseDto<LoginResponseDto> snsLogin(Long userId) {
+        LoginResponseDto data = null;
+
+        try {
+            // 3. 사용자 인증 //
+            User user = userRepository.findById(userId)
+                    .orElse(null);
+
+            if (user == null) {
+                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
+            }
+
+            String token = jwtProvider.generateJwtToken(userId, user.getRoles());
+            int exprTime = jwtProvider.getExpiration();
+
+            // 5. 응답 데이터 생성 //
+            data = new LoginResponseDto(
+                    user.getUserId(),
+                    user.getName(),
+                    user.getUsername(),
+                    user.getNickname(),
+                    user.getPhone(),
+                    user.getAddress(),
+                    user.getAddressDetail(),
+                    user.getEmail(),
+                    user.getProfileImageUrl(),
+                    user.getRoles(),
+                    user.getProviderIntroduction(),
+                    token,
+                    exprTime);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }

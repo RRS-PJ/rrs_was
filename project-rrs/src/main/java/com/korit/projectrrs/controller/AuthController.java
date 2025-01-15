@@ -2,18 +2,23 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.DuplicateFieldCheckResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
+import com.korit.projectrrs.dto.auth.request.SNSLoginRequestDto;
+import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
+import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
+import com.korit.projectrrs.dto.auth.response.SNSLoginResponseDto;
+import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 import com.korit.projectrrs.dto.mail.SendMailRequestDto;
+import com.korit.projectrrs.entity.User;
+import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.AuthService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
@@ -29,6 +34,7 @@ public class AuthController {
     private static final String LOGIN_PATH= "/login";
     private static final String FIND_BY_EMAIL= "/send-email";
     private static final String FIND_ID_BY_TOKEN= "/find-id/{token}";
+    private static final String SNS_LOGIN= "/sns-login";
 
     @PostMapping(SING_UP_PATH)
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto dto) {
@@ -80,5 +86,15 @@ public class AuthController {
     public ResponseEntity<ResponseDto<DuplicateFieldCheckResponseDto>> checkEmailDuplicate(@RequestParam String email) {
         ResponseDto<DuplicateFieldCheckResponseDto> response = authService.checkEmailDuplicate(email);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(SNS_LOGIN)
+    public ResponseEntity<ResponseDto<LoginResponseDto>> snsLogin (
+            @AuthenticationPrincipal PrincipalUser principalUser
+    ){
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<LoginResponseDto> response = authService.snsLogin(userId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(response);
     }
 }
