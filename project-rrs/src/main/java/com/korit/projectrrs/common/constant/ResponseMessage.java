@@ -204,6 +204,7 @@ public class ResponseMessage {
     public static final String MINIMUM_ONE_DAY_RESERVATION = "Reservation must be at least one day.";
 
     public static final String NOT_EXIST_RESERVATION = "Reservation is not exist";
+    public static final String NOT_EXIST_PROVISION = "Provision is not exist";
     public static final String RESERVATION_MEMO_TOO_LONG = "The reservation's memo is too long";
     public static final String RESERVATION_VALIDATION_ERROR = "date of reservation's validationError";
     public static final String RESERVATION_ALREADY_EXISTS = "This provider already has a reservation";

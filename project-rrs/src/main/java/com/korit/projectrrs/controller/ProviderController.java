@@ -20,7 +20,7 @@ public class ProviderController {
 
     private final ProviderService providerService;
 
-    private static final String PROVIDER_PUT = "/profile/{userId}";
+    private static final String PROVIDER_PUT = "/profile";
     private static final String PROVIDER_GET = "/profile";
     private static final String ONE_PROVIDER_INFO = "/{providerId}";
 

@@ -48,6 +48,8 @@ public class AuthServiceImpl implements AuthService {
         String addressDetail = dto.getAddressDetail();
         String email = dto.getEmail();
         String profileImageUrl = dto.getProfileImageUrl();
+        String snsId = dto.getSnsId();
+        String joinPath = dto.getJoinPath();
 
         SignUpResponseDto data = null;
 
@@ -116,7 +118,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         try {
+
             String encodedPassword = bCryptpasswordEncoder.encode(password);
+
             User user = User.builder()
                     .name(name)
                     .username(username)
@@ -126,18 +130,24 @@ public class AuthServiceImpl implements AuthService {
                     .address(address)
                     .addressDetail(addressDetail)
                     .email(email)
-                    .profileImageUrl(profileImageUrl != null ? profileImageUrl : "example.jpg")
+                    .profileImageUrl(profileImageUrl)
                     .roles("ROLE_USER")
+                    .snsId(snsId)
+                    .joinPath(joinPath)
                     .build();
 
+            // 데이터베이스에 저장
             userRepository.save(user);
 
+            // 응답 데이터 생성
             data = new SignUpResponseDto(user);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
+
+        // 성공 응답
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 

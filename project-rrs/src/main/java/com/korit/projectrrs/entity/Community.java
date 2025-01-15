@@ -56,7 +56,6 @@ public class Community {
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityLikes> userLiked = new ArrayList<>();
 
-    // 헬퍼 메서드 추가: userId 값을 반환
     public String getNickname() {
         return user != null ? user.getNickname() : null;
     }
