@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -50,6 +49,7 @@ public class ProvisionResponseDto {
             this.petAddInfo = pet.getPetAddInfo();
             this.petNeutralityYn = pet.getPetNeutralityYn();
         }
+        this.userId = reservation.getUser().getUserId();
         this.nickName = reservation.getUser().getNickname();
         this.address = reservation.getUser().getAddress();
         this.phone = reservation.getUser().getPhone();

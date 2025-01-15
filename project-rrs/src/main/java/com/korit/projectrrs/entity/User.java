@@ -83,7 +83,7 @@ public class User {
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Reservation> providerReservations = new ArrayList<>();
+    private List<Reservation> provisions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
