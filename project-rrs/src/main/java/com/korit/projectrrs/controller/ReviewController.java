@@ -73,8 +73,6 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-
-
     @GetMapping(LATEST_REVIEW_BY_PROVIDER)
     private ResponseEntity<ResponseDto<GetReviewResponseDto>> getLatestReviewByProviderId (
             @AuthenticationPrincipal PrincipalUser principalUser,

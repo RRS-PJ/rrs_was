@@ -1,4 +1,4 @@
-package com.korit.projectrrs.dto.auth.reponse;
+package com.korit.projectrrs.dto.auth.response;
 
 import com.korit.projectrrs.entity.User;
 import lombok.Getter;

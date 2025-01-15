@@ -1,9 +1,9 @@
 package com.korit.projectrrs.service;
 
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.DuplicateFieldCheckResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.LoginResponseDto;
-import com.korit.projectrrs.dto.auth.reponse.SignUpResponseDto;
+import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
+import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
+import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 import com.korit.projectrrs.dto.mail.SendMailRequestDto;
@@ -19,4 +19,6 @@ public interface AuthService {
     ResponseDto<LoginResponseDto> login(LoginRequestDto dto);
     ResponseDto<Void> findUserInfoByEmail(SendMailRequestDto dto) throws MessagingException;
     ResponseDto<String> findUsernameByToken(String token);
+
+    ResponseDto<LoginResponseDto> snsLogin(Long userId);
 }

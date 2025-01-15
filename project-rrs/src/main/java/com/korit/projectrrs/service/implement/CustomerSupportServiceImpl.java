@@ -67,12 +67,11 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
 
             customerSupportRepository.save(customerSupport);
 
-            // 파일 업로드 처리
             List<MultipartFile> Multifiles = dto.getFiles();
             List<String > fileNames = new ArrayList<>();
 
             if (Multifiles == null || Multifiles.isEmpty()) {
-                Multifiles = new ArrayList<>();  // 빈 배열로 초기화
+                Multifiles = new ArrayList<>();
             };
 
             for (MultipartFile multiFile : Multifiles) {

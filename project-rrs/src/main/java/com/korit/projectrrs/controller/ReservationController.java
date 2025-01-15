@@ -25,7 +25,6 @@ public class ReservationController {
     private final String RESERVATION_POST = "/write";
     private final String RESERVATION_GET = "/{reservationId}";
     private final String RESERVATION_GET_MINE_USER = "/mine/user";
-    private final String RESERVATION_GET_MINE_PROVIDER = "/mine/provider";
     private final String RESERVATION_PUT = "/{reservationId}";
     private final String RESERVATION_STATUS = "/update-reservation-status";
     private final String FIND_PROVIDER_BY_DATE = "/get-provider";
@@ -49,17 +48,6 @@ public class ReservationController {
             ) {
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<List<GetReservationResponseDto>> response = reservationService.getAllReservationByUserId(userId);
-        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
-    }
-
-    // providerId로 조회 제공자 본인 예약 내역만 조회 가능하다.
-    @GetMapping(RESERVATION_GET_MINE_PROVIDER)
-    private ResponseEntity<ResponseDto<List<GetByProviderIdResponseDto>>> getAllReservationByProviderId (
-            @AuthenticationPrincipal PrincipalUser principalUser
-    ) {
-        Long providerId = principalUser.getUser().getUserId();
-        ResponseDto<List<GetByProviderIdResponseDto>> response = reservationService.getReservationByProviderId(providerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

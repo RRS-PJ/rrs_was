@@ -142,32 +142,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ResponseDto<List<GetByProviderIdResponseDto>> getReservationByProviderId(Long providerId) {
-        List<GetByProviderIdResponseDto> data = null;
-
-        try {
-            // 댕시터가 있는지 확인
-            if (!userRepository.existsById(providerId)) {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_PROVIDER_ID);
-            }
-
-            List<Reservation> reservations = reservationRepository.findAllByProviderId(providerId);
-
-            if (reservations.isEmpty()) {
-                return ResponseDto.setSuccess(ResponseMessage.SUCCESS, new ArrayList<>());
-            }
-
-            data = reservations.stream()
-                    .map(GetByProviderIdResponseDto::new)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
-        }
-        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
-    }
-
-    @Override
     public ResponseDto<GetReservationResponseDto> getReservationByReservationId(Long reservationId) {
         GetReservationResponseDto data = null;
 
