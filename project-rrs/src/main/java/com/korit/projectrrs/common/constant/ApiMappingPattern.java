@@ -8,6 +8,7 @@ public class ApiMappingPattern {
     public static final String AVAILABLEDATEOFWEEK = "/api/v1/availableDateOfWeek";
     public static final String PROVIDER = "/api/v1/provider";
     public static final String ROLE = "/api/v1/role";
+    public static final String PROVISION = "/api/v1/provider/provision";
 
     public static final String TODO = "/api/v1/todos";
     public static final String ARTICLE = "/api/v1/articles";
