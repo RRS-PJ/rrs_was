@@ -75,7 +75,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             };
 
             for (MultipartFile multiFile : Multifiles) {
-                String fileName = fileService.uploadFile(multiFile, "inquiry_and_report");
+                String fileName = fileService.uploadFile(multiFile, "inquiry-and-report");
                 fileNames.add(fileName);
 
                 if (fileName != null) {
