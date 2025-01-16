@@ -306,7 +306,6 @@ public class AuthServiceImpl implements AuthService {
         LoginResponseDto data = null;
 
         try {
-            // 3. 사용자 인증 //
             User user = userRepository.findById(userId)
                     .orElse(null);
 
@@ -317,7 +316,6 @@ public class AuthServiceImpl implements AuthService {
             String token = jwtProvider.generateJwtToken(userId, user.getRoles());
             int exprTime = jwtProvider.getExpiration();
 
-            // 5. 응답 데이터 생성 //
             data = new LoginResponseDto(
                     user.getUserId(),
                     user.getName(),

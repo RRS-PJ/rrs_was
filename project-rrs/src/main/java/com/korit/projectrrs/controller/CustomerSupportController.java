@@ -25,11 +25,12 @@ import java.util.List;
 public class CustomerSupportController {
     private final CustomerSupportService customerSupportService;
 
+    private final String CUSTOMER_SUPPORT_CREATE = "/write";
     private final String CUSTOMER_SUPPORT_GET = "/{customerSupportId}";
     private final String CUSTOMER_SUPPORT_UPDATE = "/{customerSupportId}";
     private final String CUSTOMER_SUPPORT_DELETE = "/{customerSupportId}";
 
-    @PostMapping
+    @PostMapping(CUSTOMER_SUPPORT_CREATE)
     private ResponseEntity<ResponseDto<CreateCSResponseDto>> createCustomerSupport (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @ModelAttribute CreateCSRequestDto dto
