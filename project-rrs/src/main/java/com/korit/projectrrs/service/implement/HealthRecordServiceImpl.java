@@ -164,9 +164,6 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     @Transactional(readOnly = true)
     public ResponseDto<List<HealthRecordAllResponseDto>> getAllHealthRecords(Long userId, Long petId) {
         List<HealthRecord> records = healthRecordRepository.findAllByPet_User_UserIdAndPet_PetId(userId, petId);
-        if (records.isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.RECORDS_NOT_FOUND);
-        }
 
         List<HealthRecordAllResponseDto> dtos = records.stream()
                 .map(HealthRecordAllResponseDto::new)
