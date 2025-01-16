@@ -15,4 +15,5 @@ public interface WalkingRecordService {
     ResponseDto<WalkingRecordResponseDto> getWalkingRecordInfo(Long userId, Long petId, Long walkingRecordId);
     ResponseDto<WalkingRecordResponseDto> updateWalkingRecord(Long userId, Long petId, Long walkingRecordId, UpdateWalkingRecordRequestDto dto);
     ResponseDto<Void> deleteWalkingRecord(Long userId, Long petId, Long walkingRecordId);
+    ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordAll(Long userId, LocalDate walkingRecordCreateAt);
 }
