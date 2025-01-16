@@ -269,4 +269,26 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         }
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, null);
     }
+
+    @Override
+    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordAll(Long userId, LocalDate walkingRecordCreateAt) {
+        List<WalkingRecordListResponseDto> data = new ArrayList<>();
+
+        try {
+            List<WalkingRecord> walkingRecords = walkingRecordRepository.findWalkingRecordByUserIdAndCreateAt(userId, walkingRecordCreateAt);
+
+            if (walkingRecords.isEmpty()) {
+                return ResponseDto.setSuccess(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID, data);
+            }
+
+            data = walkingRecords.stream()
+                    .map(WalkingRecordListResponseDto::new)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
+        }
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
 }
