@@ -104,7 +104,7 @@ public class ProviderServiceImpl implements ProviderService {
                 availableDates = Optional.ofNullable(user.getAvailableDates()).orElse(new ArrayList<>());
                 providerIntroduction = Optional.ofNullable(user.getProviderIntroduction()).orElse("");
             }
-
+            System.out.println("as");
             data = new ProviderResponseDto(
                     availableDates.stream()
                             .map(AvailableDateOfWeekResponseDto::new)

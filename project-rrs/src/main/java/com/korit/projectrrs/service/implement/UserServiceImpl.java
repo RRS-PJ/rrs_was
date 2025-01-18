@@ -171,16 +171,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDto<UserResponseDto> updatePassword(Long userId, UpdatePasswordRequestDto dto) {
-        String password = dto.getPassword();
+        String newPassword = dto.getNewPassword();
         String confirmPassword = dto.getConfirmPassword();
         UserResponseDto data = null;
 
-        if (password != null && !password.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
-            if (!password.equals(confirmPassword)) {
+        if (newPassword != null && !newPassword.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
+
+            if (!newPassword.equals(confirmPassword)) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
 
-            if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
+            if (!newPassword.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
                 return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
             }
         }
@@ -189,18 +190,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_USER));
 
         String encodedPassword = user.getPassword();
-
-        if (password != null && !password.isEmpty()) {
-            encodedPassword = bCryptpasswordEncoder.encode(password);
+        if (newPassword != null && !newPassword.isEmpty()) {
+            encodedPassword = bCryptpasswordEncoder.encode(newPassword);
         }
-
         user = user.toBuilder()
                 .password(encodedPassword)
                 .build();
 
         userRepository.save(user);
         data = new UserResponseDto(user);
-
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }
