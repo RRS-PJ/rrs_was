@@ -49,17 +49,27 @@ public class ProviderServiceImpl implements ProviderService {
                     .anyMatch(role -> role.trim().equals("ROLE_PROVIDER"));
 
             if (hasProviderRole) {
-                List<AvailableDateOfWeek> createdDates = new ArrayList<>();
+                List<AvailableDateOfWeek> existingDates = availableDateOfWeekRepository.findAllAvailableDateByUserId(userId);
+                List<LocalDate> newDates = new ArrayList<>(availableDates);
 
-                for (LocalDate date : availableDates) {
-                    List<AvailableDateOfWeek> existingDates = availableDateOfWeekRepository.findByProvider_UserIdAndAvailableDate(userId, date);
+                List<LocalDate> datesToAdd = new ArrayList<>(newDates);
+                datesToAdd.removeAll(existingDates.stream().map(AvailableDateOfWeek::getAvailableDate).collect(Collectors.toList()));
 
-                    if (!existingDates.isEmpty()) {
-                        availableDateOfWeekRepository.deleteAll(existingDates);
-                    } else {
-                        AvailableDateOfWeek createDate = availableDateOfWeekService.addDate(userId, date);
-                        createdDates.add(createDate);
+                List<LocalDate> datesToRemove = new ArrayList<>(existingDates.stream().map(AvailableDateOfWeek::getAvailableDate).collect(Collectors.toList()));
+                datesToRemove.removeAll(newDates);
+
+                LocalDate today = LocalDate.now();
+                for (LocalDate dateToRemove : datesToRemove) {
+                    if (dateToRemove.isBefore(today)) {
+                        return ResponseDto.setFailed(ResponseMessage.PAST_WORK_DATES_CANNOT_BE_DELETED);
                     }
+                    availableDateOfWeekRepository.deleteByProvider_UserIdAndAvailableDate(userId, dateToRemove);
+                }
+
+                List<AvailableDateOfWeek> createdDates = new ArrayList<>();
+                for (LocalDate dateToAdd : datesToAdd) {
+                    AvailableDateOfWeek createDate = availableDateOfWeekService.addDate(userId, dateToAdd);
+                    createdDates.add(createDate);
                 }
 
                 List<AvailableDateOfWeekResponseDto> responseList = createdDates.stream()
@@ -104,7 +114,7 @@ public class ProviderServiceImpl implements ProviderService {
                 availableDates = Optional.ofNullable(user.getAvailableDates()).orElse(new ArrayList<>());
                 providerIntroduction = Optional.ofNullable(user.getProviderIntroduction()).orElse("");
             }
-            System.out.println("as");
+
             data = new ProviderResponseDto(
                     availableDates.stream()
                             .map(AvailableDateOfWeekResponseDto::new)
