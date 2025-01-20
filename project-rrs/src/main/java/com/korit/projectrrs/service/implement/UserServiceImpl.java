@@ -52,12 +52,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDto<UserResponseDto> updateUser(Long userId,@Valid UpdateUserRequestDto dto) {
         String name = dto.getName();
-        String password = dto.getPassword();
-        String confirmPassword = dto.getConfirmPassword();
         String phone = dto.getPhone();
         String address = dto.getAddress();
         String addressDetail = dto.getAddressDetail();
-        MultipartFile profileImage = dto.getProfileImageUrl();
+        MultipartFile profileImageUrl = dto.getProfileImageUrl();
 
         UserResponseDto data = null;
 
@@ -65,22 +63,12 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
 
-        if (password != null && !password.isEmpty() && confirmPassword != null && !confirmPassword.isEmpty()) {
-            if (!password.equals(confirmPassword)) {
-                return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
-            }
-
-            if (!password.matches("(?=.*\\d)(?=.*[!@#$%^&*()_\\-+=])[A-Za-z\\d!@#$%^&*()_\\-+=]{8,15}$")) {
-                return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PASSWORD);
-            }
-        }
-
         if (phone != null && (phone.isEmpty() || !phone.matches("^[0-9]{11}$"))) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PHONE);
         }
 
-        if (profileImage != null && !profileImage.isEmpty() &&
-                !profileImage.getOriginalFilename().matches("(?i).*\\.(jpg|png|jpeg)$")) {
+        if (profileImageUrl != null && !profileImageUrl.isEmpty() &&
+                !profileImageUrl.getOriginalFilename().matches("(?i).*\\.(jpg|png|jpeg)$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
@@ -101,30 +89,28 @@ public class UserServiceImpl implements UserService {
                     (phone == null || phone.equals(user.getPhone())) &&
                     (address == null || address.equals(user.getAddress())) &&
                     (addressDetail == null || addressDetail.equals(user.getAddressDetail())) &&
-                    (profileImage == null || profileImage.getOriginalFilename().equals(user.getProfileImageUrl())) &&
-                    (password == null || password.isEmpty());
+                    (profileImageUrl == null || profileImageUrl.equals(user.getProfileImageUrl()));
 
+            System.out.println("As");
             if (isSame) {
                 return ResponseDto.setFailed(ResponseMessage.NO_MODIFIED_VALUES);
             }
 
+            System.out.println("D");
             String encodedPassword = user.getPassword();
+            System.out.println("F");
 
-            if (password != null && !password.isEmpty()) {
-                encodedPassword = bCryptpasswordEncoder.encode(password);
-            }
-
-            String profileImageUrl = user.getProfileImageUrl();
-            String defaultProfileImageUrl = "images/default-profile.png";
-
-            if (profileImage != null && !profileImage.isEmpty()) {
-                String filePath = fileService.uploadFile(profileImage, "profileImage");
+            System.out.println("c");
+            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                String filePath = fileService.uploadFile(profileImageUrl, "profileImage");
                 if (filePath != null) {
-                    profileImageUrl = filePath;
+                    user.setProfileImageUrl(filePath);
                 }
-            } else if (profileImageUrl == null || profileImageUrl.isEmpty()) {
-                profileImageUrl = defaultProfileImageUrl;
+            } else {
+                user.setProfileImageUrl(user.getProfileImageUrl());
             }
+
+            System.out.println("b");
 
             user = user.toBuilder()
                     .name(name != null ? name : user.getName())
@@ -132,7 +118,6 @@ public class UserServiceImpl implements UserService {
                     .phone(phone != null ? phone : user.getPhone())
                     .address(address != null ? address : user.getAddress())
                     .addressDetail(addressDetail != null ? addressDetail : user.getAddressDetail())
-                    .profileImageUrl(profileImageUrl)
                     .build();
 
             userRepository.save(user);

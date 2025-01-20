@@ -11,10 +11,6 @@ public class UpdateUserRequestDto {
     @NotNull
     private String name;
     @NotNull
-    private String password;
-    @NotNull
-    private String confirmPassword;
-    @NotNull
     private String phone;
     @NotNull
     private String address;
