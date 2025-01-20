@@ -142,6 +142,7 @@ public class ResponseMessage {
     // 댕시터 관련 메세지
     public static final String NOT_EXIST_PROVIDER_ID = "Provider is not exist";
     public static final String NOT_REGISTERED_PROVIDER = "Provider is not registered";
+    public static final String PAST_WORK_DATES_CANNOT_BE_DELETED = "Past work dates cannot be deleted."; // 과거 근무일 삭제 불가
 
     // 첨부파일 관련 메세지
     public static final String FILE_UPLOAD_FAILED = "File upload is failed";
