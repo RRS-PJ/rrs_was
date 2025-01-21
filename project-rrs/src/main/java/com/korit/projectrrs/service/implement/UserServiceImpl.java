@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         String address = dto.getAddress();
         String addressDetail = dto.getAddressDetail();
         MultipartFile profileImageUrl = dto.getProfileImageUrl();
+        String profileUrl = dto.getProfileUrl();
 
         UserResponseDto data = null;
 
@@ -89,29 +90,24 @@ public class UserServiceImpl implements UserService {
                     (phone == null || phone.equals(user.getPhone())) &&
                     (address == null || address.equals(user.getAddress())) &&
                     (addressDetail == null || addressDetail.equals(user.getAddressDetail())) &&
-                    (profileImageUrl == null || profileImageUrl.equals(user.getProfileImageUrl()));
+                    (profileImageUrl == null || profileImageUrl.equals(user.getProfileImageUrl())) &&
+                    (profileUrl == null);
 
-            System.out.println("As");
             if (isSame) {
                 return ResponseDto.setFailed(ResponseMessage.NO_MODIFIED_VALUES);
             }
 
-            System.out.println("D");
-            String encodedPassword = user.getPassword();
-            System.out.println("F");
-
-            System.out.println("c");
-            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                String filePath = fileService.uploadFile(profileImageUrl, "profileImage");
-            } else {
-                user.setProfileImageUrl(user.getProfileImageUrl());
+            if (profileImageUrl == null && profileUrl != null) {
+                user.setProfileImageUrl(profileUrl);  // 기본 이미지 URL 설정
             }
 
-            System.out.println("b");
+            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                String filePath = fileService.uploadFile(profileImageUrl, "profileImage");  // 파일 업로드 서비스 호출
+                user.setProfileImageUrl(filePath);  // 파일 경로 저장
+            }
 
             user = user.toBuilder()
                     .name(name != null ? name : user.getName())
-                    .password(encodedPassword)
                     .phone(phone != null ? phone : user.getPhone())
                     .address(address != null ? address : user.getAddress())
                     .addressDetail(addressDetail != null ? addressDetail : user.getAddressDetail())
