@@ -103,9 +103,6 @@ public class UserServiceImpl implements UserService {
             System.out.println("c");
             if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
                 String filePath = fileService.uploadFile(profileImageUrl, "profileImage");
-                if (filePath != null) {
-                    user.setProfileImageUrl(filePath);
-                }
             } else {
                 user.setProfileImageUrl(user.getProfileImageUrl());
             }
