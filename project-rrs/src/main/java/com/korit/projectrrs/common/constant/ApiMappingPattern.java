@@ -20,10 +20,9 @@ public class ApiMappingPattern {
     // 커뮤니티
     public static final String COMMUNITY = "/api/v1/users/community";
     public static final String COMMUNITY_POST = "/write";
-    public static final String COMMUNITY_PUT = "edit/{communityId}";
-    public static final String COMMUNITY_DELETE = "delete/{communityId}";
+    public static final String COMMUNITY_PUT = "/edit/{communityId}";
+    public static final String COMMUNITY_DELETE = "/delete/{communityId}";
     public static final String COMMUNITY_GET_BY_ID = "/{communityId}";
-    public static final String COMMUNITY_LIKE_COUNT = "/like/{communityId}";
 
     // 공지사항
     public static final String ANNOUNCEMENT = "/api/v1/announcements";
@@ -45,6 +44,7 @@ public class ApiMappingPattern {
     public static final String HEALTH_RECORD_GET_BY_ID = "/{petId}/{healthRecordId}";
     public static final String HEALTH_RECORD_UPDATE = "/{petId}/{healthRecordId}";
     public static final String HEALTH_RECORD_DELETE = "/{petId}/{healthRecordId}";
+    public static final String HEALTH_RECORD_BY_USERID = "/user/all-records";
 
     // 커뮤니티 댓글
     public static final String COMMENT = "/api/v1/users/community/comment";

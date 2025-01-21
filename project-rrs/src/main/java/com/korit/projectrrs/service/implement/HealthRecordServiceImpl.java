@@ -174,6 +174,19 @@ public class HealthRecordServiceImpl implements HealthRecordService {
 
     @Override
     @Transactional(readOnly = true)
+    public ResponseDto<List<HealthRecordAllResponseDto>> getAllHealthRecordsByUserId(Long userId) {
+
+        List<HealthRecord> records = healthRecordRepository.findAllByPet_User_UserId(userId);
+
+        List<HealthRecordAllResponseDto> dtos = records.stream()
+                .map(HealthRecordAllResponseDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseDto.setSuccess(ResponseMessage.RECORD_FETCHED_SUCCESSFULLY, dtos);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ResponseDto<HealthRecordResponseDto> getHealthRecord(Long userId, Long petId, Long healthRecordId) {
         try {
             HealthRecord record = healthRecordRepository.findById(healthRecordId)

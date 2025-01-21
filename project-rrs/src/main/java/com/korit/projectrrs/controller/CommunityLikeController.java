@@ -21,13 +21,6 @@ public class CommunityLikeController {
 
     private final CommunityLikeService communityLikeService;
 
-    /**
-     * 좋아요 토글 엔드포인트
-     *
-     * @param communityId 커뮤니티 ID
-     * @param principalUser 인증된 사용자 정보
-     * @return 좋아요 상태 및 좋아요 수
-     */
     @PostMapping("/{communityId}")
     public ResponseEntity<ResponseDto<Map<String, Object>>> toggleLike(
             @PathVariable Long communityId,
@@ -38,19 +31,11 @@ public class CommunityLikeController {
         return new ResponseEntity<>(response, status);
     }
 
-    /**
-     * 특정 커뮤니티에 좋아요를 누른 사용자 목록 조회 엔드포인트
-     *
-     * @param communityId 커뮤니티 ID
-     * @param principalUser 인증된 사용자 정보 (추가)
-     * @return 커뮤니티 ID와 사용자 닉네임 목록
-     */
     @GetMapping("/{communityId}/likes")
     public ResponseEntity<ResponseDto<List<CommunityLikeResponseDto>>> getUsersWhoLikedCommunity(
             @PathVariable Long communityId,
             @AuthenticationPrincipal PrincipalUser principalUser) {
 
-        // principalUser.getUser()를 활용하여 인증된 사용자 정보로 추가 처리 가능
         ResponseDto<List<CommunityLikeResponseDto>> response = communityLikeService.getUsersWhoLikedCommunity(communityId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(response, status);
