@@ -74,6 +74,16 @@ public class HealthRecordController {
         return ResponseEntity.status(status).body(response);
     }
 
+    @GetMapping(HEALTH_RECORD_BY_USERID)
+    public ResponseEntity<ResponseDto<List<HealthRecordAllResponseDto>>> getAllHealthRecordsByUser(
+            @AuthenticationPrincipal PrincipalUser principalUser
+    ) {
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<List<HealthRecordAllResponseDto>> response = healthRecordService.getAllHealthRecordsByUserId(userId);
+        HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
     @DeleteMapping(HEALTH_RECORD_DELETE)
     public ResponseEntity<ResponseDto<Void>> deleteHealthRecord(
             @AuthenticationPrincipal PrincipalUser principalUser,

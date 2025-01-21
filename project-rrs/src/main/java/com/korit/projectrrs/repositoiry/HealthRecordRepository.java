@@ -13,4 +13,6 @@ public interface HealthRecordRepository extends JpaRepository<HealthRecord, Long
     Optional<HealthRecord> findByHealthRecordIdAndPet_PetIdAndPet_User_UserId(Long healthRecordId, Long petId, Long userId);
 
     List<HealthRecord> findAllByPet_User_UserIdAndPet_PetId(Long userId, Long petId);
+
+    List<HealthRecord> findAllByPet_User_UserId(Long userId);
 }
