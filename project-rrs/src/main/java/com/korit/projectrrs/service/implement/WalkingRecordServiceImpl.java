@@ -271,11 +271,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordAll(Long userId, LocalDate walkingRecordCreateAt) {
+    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordAll(Long userId) {
         List<WalkingRecordListResponseDto> data = new ArrayList<>();
 
         try {
-            List<WalkingRecord> walkingRecords = walkingRecordRepository.findWalkingRecordByUserIdAndCreateAt(userId, walkingRecordCreateAt);
+            List<WalkingRecord> walkingRecords = walkingRecordRepository.findByPet_User_UserId(userId);
 
             if (walkingRecords.isEmpty()) {
                 return ResponseDto.setSuccess(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID, data);
