@@ -26,10 +26,6 @@ public interface WalkingRecordRepository extends JpaRepository<WalkingRecord, Lo
             "AND w.walkingRecordCreateAt = :walkingRecordCreateAt")
     List<WalkingRecord> findAllWalkingReccrdByCreateAt(@Param("petId") Long petId, @Param("walkingRecordCreateAt") LocalDate walkingRecordCreateAt);
 
-    @Query("SELECT w " +
-            "FROM WalkingRecord w " +
-            "WHERE w.pet.user.userId = :userId " +
-            "AND w.walkingRecordCreateAt = :walkingRecordCreateAt")
-    List<WalkingRecord> findWalkingRecordByUserIdAndCreateAt(@Param("userId") Long userId, @Param("walkingRecordCreateAt") LocalDate walkingRecordCreateAt);
+    List<WalkingRecord> findByPet_User_UserId(Long userId);
 }
 

@@ -57,11 +57,13 @@ public class UserController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping(UPDATE_PASSWORD)
+    @PostMapping(UPDATE_PASSWORD)
     public ResponseEntity<ResponseDto<UserResponseDto>> updatePassword(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody UpdatePasswordRequestDto dto
     ) {
+        System.out.println(principalUser);
+        System.out.println(dto);
         Long userId = principalUser.getUser().getUserId();
         ResponseDto<UserResponseDto> response = userService.updatePassword(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;

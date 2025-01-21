@@ -40,7 +40,7 @@ public class Pet {
     @Column(nullable = false)
     private Integer petWeight;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'petExample.jpg'")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'pet-default-profile.jpg")
     private String petImageUrl;
 
     private String petAddInfo;

@@ -1,5 +1,6 @@
 package com.korit.projectrrs.service.implement;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.pet.request.PetRequestDto;
@@ -206,7 +207,7 @@ public class PetServiceImpl implements PetService {
             }
 
             String petImageUrl = pet.getPetImageUrl();
-            String defaultProfileImageUrl = "images/pet-default-profile.png";
+            String defaultProfileImageUrl = "/static/images/pet-default-profile.jpg";
 
             if (petImage != null && !petImage.isEmpty()) {
                 String filePath = fileService.uploadFile(petImage, "pet-profileImage");
