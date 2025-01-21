@@ -19,4 +19,7 @@ public interface HealthRecordService {
     ResponseDto<List<HealthRecordAllResponseDto>> getAllHealthRecords(Long userId, Long petId);
 
     ResponseDto<HealthRecordResponseDto> getHealthRecord(Long userId, Long petId, Long healthRecordId);
+
+    ResponseDto<List<HealthRecordAllResponseDto>> getAllHealthRecordsByUserId(Long userId);
+
 }
