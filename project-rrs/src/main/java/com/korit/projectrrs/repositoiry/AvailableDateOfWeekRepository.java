@@ -25,4 +25,7 @@ public interface AvailableDateOfWeekRepository extends JpaRepository<AvailableDa
     List<AvailableDateOfWeek> findAllAvailableDateByUserId(@Param("userId") Long userId);
 
     List<AvailableDateOfWeek> findByProvider_UserIdAndAvailableDate(Long userId, LocalDate availableDate);
+
+    void deleteByProvider_UserIdAndAvailableDate(Long userId, LocalDate availableDate);
+
 }
