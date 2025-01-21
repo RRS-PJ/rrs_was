@@ -135,7 +135,6 @@ public class TodoServiceImpl implements TodoService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_TODO_ID);
             }
 
-
             Todo updatedTodo = todo.toBuilder()
                     .todoPreparationContent(todoContent == null ? todo.getTodoPreparationContent() : todoContent)
                     .todoCreateAt(todoCreateAt == null ? todo.getTodoCreateAt() : todoCreateAt)
@@ -162,7 +161,6 @@ public class TodoServiceImpl implements TodoService {
             if (!todo.getUser().getUserId().equals(userId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
             }
-
             todoRepository.deleteById(todoId);
         } catch (Exception e) {
             e.printStackTrace();

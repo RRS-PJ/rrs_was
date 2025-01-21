@@ -199,7 +199,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 6. 성공 응답 반환 //
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
-    }
+     }
 
     @Value("${spring.mail.username}")
     private String senderEmail;
