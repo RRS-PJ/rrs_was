@@ -16,6 +16,7 @@ SELECT DISTINCT u.USER_ID
 FROM `USERS` u
 JOIN `AVAILABLE_DATE_OF_WEEK` adw ON u.USER_ID = adw.PROVIDER_ID
 WHERE adw.AVAILABLE_DATE BETWEEN :startDate AND :endDate
+AND u.USER_ID <> :userId
 AND NOT EXISTS (
     SELECT 1
     FROM `RESERVATIONS` r
@@ -40,7 +41,7 @@ HAVING NOT EXISTS (
     )
 );
 """, nativeQuery = true)
-    Set<Long> findProviderByDate(@Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
+    Set<Long> findProviderByDate(@Param("userId") Long userId, @Param("startDate")LocalDate startDate, @Param("endDate")LocalDate endDate);
 
     @Query(value = """
 SELECT

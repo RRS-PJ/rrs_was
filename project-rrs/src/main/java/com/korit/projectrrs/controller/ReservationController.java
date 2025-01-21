@@ -80,7 +80,8 @@ public class ReservationController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @RequestBody GetProviderByDateRequestDto dto
     ) {
-        ResponseDto<Set<GetProviderByDateResponseDto>> response = reservationService.findProviderByDate(dto);
+        Long userId = principalUser.getUser().getUserId();
+        ResponseDto<Set<GetProviderByDateResponseDto>> response = reservationService.findProviderByDate(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
