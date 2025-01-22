@@ -54,6 +54,4 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
     }
-
-
 }

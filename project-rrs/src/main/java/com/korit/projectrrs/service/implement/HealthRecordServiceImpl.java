@@ -97,13 +97,11 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         return healthRecordRepository.findByHealthRecordIdAndPet_PetIdAndPet_User_UserId(healthRecordId, petId, userId)
                 .map(existingRecord -> {
 
-                    // 기존 건강 기록 정보 업데이트
                     existingRecord.setWeight(requestDto.getWeight());
                     existingRecord.setPetAge(requestDto.getPetAge());
                     existingRecord.setAbnormalSymptoms(requestDto.getAbnormalSymptoms());
                     existingRecord.setMemo(requestDto.getMemo());
 
-                    // 첨부파일 추가 로직
                     if (requestDto.getFiles() != null && !requestDto.getFiles().isEmpty()) {
                         List<HealthRecordAttachment> newAttachments = new ArrayList<>();
                         for (MultipartFile file : requestDto.getFiles()) {
@@ -118,14 +116,11 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                             }
                         }
 
-                        // 기존 첨부파일에 새 첨부파일 추가
                         existingRecord.getAttachments().addAll(newAttachments);
                     }
 
-                    // 기존 첨부파일 유지 (삭제 로직 제거)
                     healthRecordRepository.save(existingRecord);
 
-                    // 응답 생성
                     HealthRecordResponseDto responseDto = new HealthRecordResponseDto(existingRecord);
                     responseDto.setAttachments(existingRecord.getAttachments().stream()
                             .map(HealthRecordAttachment::getHealthRecordAttachmentFile)
@@ -135,7 +130,6 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                 })
                 .orElseGet(() -> ResponseDto.setFailed(ResponseMessage.RECORD_NOT_FOUND));
     }
-
 
     @Override
     @Transactional
