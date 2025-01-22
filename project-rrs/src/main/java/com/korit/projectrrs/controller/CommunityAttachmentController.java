@@ -39,10 +39,9 @@ public class CommunityAttachmentController {
             @PathVariable Long attachmentId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         communityAttachmentService.deleteAttachmentById(attachmentId);
         return ResponseEntity.ok("Attachment deleted successfully");
     }
@@ -53,10 +52,9 @@ public class CommunityAttachmentController {
             @PathVariable Long communityId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         communityAttachmentService.deleteAttachmentsByCommunityId(communityId);
         return ResponseEntity.ok("All attachments for community deleted successfully");
     }
