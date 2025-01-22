@@ -24,7 +24,6 @@ public class TodoController {
     private final TodoService todoService;
 
     private final String TODO_CREATE = "/write";
-    private final String TODO_GET = "";
     private final String TODO_GET_BY_DAY = "/day";
     private final String TODO_UPDATE = "/{todoId}";
     private final String TODO_DELETE = "/{todoId}";
@@ -40,7 +39,7 @@ public class TodoController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(TODO_GET)
+    @GetMapping
     private ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodosByUserId(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {

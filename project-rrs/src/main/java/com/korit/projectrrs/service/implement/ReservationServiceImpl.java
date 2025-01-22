@@ -63,6 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
             return ResponseDto.setFailed(ResponseMessage.MINIMUM_ONE_DAY_RESERVATION);
         }
 
+        // 이미 예약인 경우
         int isReserved = reservationRepository.existsByProviderAndDateRange(dto.getProviderId(), dto.getReservationStartDate(), dto.getReservationEndDate());
         if (isReserved == 1) {
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_ALREADY_EXISTS);
@@ -193,13 +194,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(GetProviderByDateRequestDto dto) {
+    public ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(Long userId, GetProviderByDateRequestDto dto) {
         Set<GetProviderByDateResponseDto> data = null;
         LocalDate startDate = dto.getStartDate();
         LocalDate endDate = dto.getEndDate();
 
         try {
-            Set<Long> providerIds = reservationRepository.findProviderByDate(startDate, endDate);
+            Set<Long> providerIds = reservationRepository.findProviderByDate(userId, startDate, endDate);
 
             if (providerIds.isEmpty()) {
                 return ResponseDto.setSuccess(ResponseMessage.SUCCESS, Collections.emptySet());

@@ -12,7 +12,7 @@ public interface ReservationService {
     ResponseDto<List<GetReservationResponseDto>> getAllReservationByUserId(Long userId);
     ResponseDto<GetReservationResponseDto> getReservationByReservationId(Long userId);
     ResponseDto<UpdateReservationResponseDto> updateReservationByReservationId(Long reservationId,ReservationUpdateRequestDto dto);
-    ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(GetProviderByDateRequestDto dto);
+    ResponseDto<Set<GetProviderByDateResponseDto>> findProviderByDate(Long userId, GetProviderByDateRequestDto dto);
     ResponseDto<UpdateStatusResponseDto> updateReservationStatus(UpdateStatusRequestDto dto);
     ResponseDto<HasReview> hasReview(Long reservationId);
 }

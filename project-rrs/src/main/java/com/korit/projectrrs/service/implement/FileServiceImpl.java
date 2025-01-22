@@ -59,7 +59,7 @@ public class FileServiceImpl implements FileService {
         }
 
         if (parts.length > 1) {
-            return parts[0];  // 첫 번째 부분이 UUID
+            return parts[0];
         }
         return null;
     }
