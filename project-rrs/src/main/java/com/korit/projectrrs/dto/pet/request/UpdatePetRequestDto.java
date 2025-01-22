@@ -20,4 +20,6 @@ public class UpdatePetRequestDto {
     private Character petNeutralityYn;
 
     private String petAddInfo;
+
+    private String defaultUrl;
 }
