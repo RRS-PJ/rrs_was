@@ -67,14 +67,6 @@ public class ResponseMessage {
     public static final String PASSWORD_REQUIRES_SPECIAL_CHAR = "Password must contain a special character."; // 특수문자가 포함되어야 함
     public static final String PASSWORD_SAME_AS_CURRENT = "New password cannot be the same as the current password."; // 새 비밀번호와 기존 비밀번호가 동일함
 
-
-
-
-
-
-            ; // 새 비밀번호와 기존 비밀번호가 동일함
-
-
     // 사용자 휴대폰 관련 메시지
     public static final String EXIST_USER_PHONE = "Phone already exists.";
     public static final String INVALID_USER_PHONE = "Invalid user phone number format."; // 유효하지 않은 사용자 전화번호 형식

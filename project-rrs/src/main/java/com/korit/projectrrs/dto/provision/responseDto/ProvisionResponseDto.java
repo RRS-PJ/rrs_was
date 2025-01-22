@@ -1,7 +1,6 @@
 package com.korit.projectrrs.dto.provision.responseDto;
 
 import com.korit.projectrrs.dto.pet.response.PetResponseDto;
-import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.Reservation;
 import com.korit.projectrrs.entity.ReservationStatus;
 import lombok.AllArgsConstructor;

@@ -16,9 +16,8 @@ public class PetRequestDto {
     private String petBirthDate;
     @NotBlank
     private Integer petWeight;
-    private MultipartFile petImageUrl;
     @NotBlank
     private Character petNeutralityYn;
-
     private String petAddInfo;
+    private MultipartFile petImageUrl;
 }

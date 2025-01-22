@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiMappingPattern.PROVIDER)
 @RequiredArgsConstructor
 public class ProviderController {
-
     private final ProviderService providerService;
 
     private static final String PROVIDER_PUT = "/profile";

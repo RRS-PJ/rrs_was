@@ -2,15 +2,12 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.request.SNSLoginRequestDto;
 import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
 import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
-import com.korit.projectrrs.dto.auth.response.SNSLoginResponseDto;
 import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 import com.korit.projectrrs.dto.mail.SendMailRequestDto;
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.AuthService;
 import jakarta.mail.MessagingException;
@@ -20,14 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
 
 @RestController
 @RequestMapping(ApiMappingPattern.AUTH)
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
 
     private static final String SING_UP_PATH= "/sign-up";

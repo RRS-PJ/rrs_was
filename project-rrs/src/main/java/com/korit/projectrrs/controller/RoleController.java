@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiMappingPattern.ROLE)
 @RequiredArgsConstructor
 public class RoleController {
-
     private final RoleServiceImpl roleService;
 
     @PutMapping

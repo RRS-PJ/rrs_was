@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,7 +22,6 @@ import java.util.List;
 @RequestMapping(ApiMappingPattern.WALKING_RECORD)
 @RequiredArgsConstructor
 public class WalkingRecordController {
-
     private final WalkingRecordService walkingRecordService;
 
     private static final String WALKING_RECORD_POST= "/petId/{petId}";
