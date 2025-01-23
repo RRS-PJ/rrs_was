@@ -49,6 +49,7 @@ public class ApiMappingPattern {
     public static final String HEALTH_RECORD_UPDATE = "/{petId}/{healthRecordId}";
     public static final String HEALTH_RECORD_DELETE = "/{petId}/{healthRecordId}";
     public static final String HEALTH_RECORD_BY_USERID = "/all-records";
+
     public static final String HEALTH_RECORDS_ATTACHMENT = "api/v1/health-attachments";
     public static final String HEALTH_RECORDS_ATTACHMENT_BY_RECORD_ID = "/health-record/{healthRecordId}";
     public static final String DELETE_ATTACHMENT_BY_ATTACHMENT_ID = "/{attachmentId}";
