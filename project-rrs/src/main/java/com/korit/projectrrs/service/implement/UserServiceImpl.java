@@ -98,12 +98,12 @@ public class UserServiceImpl implements UserService {
             }
 
             if (profileImageUrl == null && profileUrl != null) {
-                user.setProfileImageUrl(profileUrl);  // 기본 이미지 URL 설정
+                user.setProfileImageUrl(profileUrl);
             }
 
             if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                String filePath = fileService.uploadFile(profileImageUrl, "profileImage");  // 파일 업로드 서비스 호출
-                user.setProfileImageUrl(filePath);  // 파일 경로 저장
+                String filePath = fileService.uploadFile(profileImageUrl, "profileImage");
+                user.setProfileImageUrl(filePath);
             }
 
             user = user.toBuilder()

@@ -25,7 +25,7 @@ public class WalkingRecordController {
     private final WalkingRecordService walkingRecordService;
 
     private static final String WALKING_RECORD_POST= "/{petId}";
-    private static final String WALKING_RECORD_GET_LIST = "/{petId}?date={date}";
+    private static final String WALKING_RECORD_GET_LIST = "/{petId}";
     private static final String WALKING_RECORD_GET_BY_ID = "/{petId}/{walkingRecordId}";
     private static final String WALKING_RECORD_PUT = "/{petId}/{walkingRecordId}";
     private static final String WALKING_RECORD_DELETE = "/{petId}/{walkingRecordId}";
@@ -46,10 +46,10 @@ public class WalkingRecordController {
     public ResponseEntity<ResponseDto<List<WalkingRecordListResponseDto>>> getWalkingRecordList(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate walkingRecordCreateAt
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petId, walkingRecordCreateAt);
+        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petId, date);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
