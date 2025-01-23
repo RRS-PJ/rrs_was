@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.ALL_COMMUNITY_LIKE_BY_COMMUNITY_ID;
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.COMMUNITY_LIKE_BY_COMMUNITY_ID;
+
 @RestController
 @RequestMapping(ApiMappingPattern.COMMUNITY_LIKE)
 @RequiredArgsConstructor
@@ -21,7 +24,7 @@ public class CommunityLikeController {
 
     private final CommunityLikeService communityLikeService;
 
-    @PostMapping("/{communityId}")
+    @PostMapping(COMMUNITY_LIKE_BY_COMMUNITY_ID)
     public ResponseEntity<ResponseDto<Map<String, Object>>> toggleLike(
             @PathVariable Long communityId,
             @AuthenticationPrincipal PrincipalUser principalUser) {
@@ -31,7 +34,7 @@ public class CommunityLikeController {
         return new ResponseEntity<>(response, status);
     }
 
-    @GetMapping("/{communityId}/likes")
+    @GetMapping(ALL_COMMUNITY_LIKE_BY_COMMUNITY_ID)
     public ResponseEntity<ResponseDto<List<CommunityLikeResponseDto>>> getUsersWhoLikedCommunity(
             @PathVariable Long communityId,
             @AuthenticationPrincipal PrincipalUser principalUser) {

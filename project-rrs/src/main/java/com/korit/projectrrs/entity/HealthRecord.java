@@ -47,7 +47,6 @@ public class HealthRecord {
     @OneToMany(mappedBy = "healthRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HealthRecordAttachment> attachments = new ArrayList<>();
 
-    // 헬퍼 메서드 추가: Pet의 사용자 ID 반환
     public Long getPetId() {
         return pet != null && pet.getUser() != null ? pet.getUser().getUserId() : null;
     }
