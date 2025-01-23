@@ -12,7 +12,6 @@ public class GetProviderByDateRequestDto {
     @NotNull
     @Future
     private LocalDate startDate;
-
     @NotNull
     @Future
     private LocalDate endDate;

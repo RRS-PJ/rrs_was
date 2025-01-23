@@ -1,11 +1,9 @@
 package com.korit.projectrrs.dto.customerSupport.response;
 
-import com.korit.projectrrs.dto.fileUpload.response.GetFilePathAndName;
 import com.korit.projectrrs.entity.CustomerSupport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;

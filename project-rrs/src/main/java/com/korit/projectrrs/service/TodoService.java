@@ -4,7 +4,6 @@ import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.todo.request.TodoRequestDto;
 import com.korit.projectrrs.dto.todo.request.UpdateTodoRequestDto;
 import com.korit.projectrrs.dto.todo.response.TodoResponseDto;
-import com.korit.projectrrs.security.PrincipalUser;
 
 import java.time.LocalDate;
 import java.util.List;

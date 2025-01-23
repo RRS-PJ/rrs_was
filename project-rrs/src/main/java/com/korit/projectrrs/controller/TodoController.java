@@ -23,12 +23,10 @@ import java.util.List;
 public class TodoController {
     private final TodoService todoService;
 
-    private final String TODO_CREATE = "/write";
-    private final String TODO_GET_BY_DAY = "/day";
     private final String TODO_UPDATE = "/{todoId}";
     private final String TODO_DELETE = "/{todoId}";
 
-    @PostMapping(TODO_CREATE)
+    @PostMapping
     private ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @RequestBody TodoRequestDto dto
@@ -49,7 +47,7 @@ public class TodoController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping(TODO_GET_BY_DAY)
+    @GetMapping("/day")
     private ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodosByUserIdAndDay(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestParam LocalDate day

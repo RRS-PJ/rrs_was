@@ -49,10 +49,11 @@ public class Pet {
 
     @Builder.Default
     @JsonManagedReference
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<WalkingRecord> walkingRecords = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<HealthRecord> healthRecords;
 
     // 헬퍼 메서드 추가: userId 값을 반환
