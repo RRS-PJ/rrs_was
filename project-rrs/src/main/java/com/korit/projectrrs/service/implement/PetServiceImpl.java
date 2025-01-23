@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service.implement;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.pet.request.PetRequestDto;
@@ -17,7 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
-
     private final PetRepository petRepository;
     private final UserRepository userRepository;
     private final FileService fileService;

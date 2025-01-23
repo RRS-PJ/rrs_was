@@ -13,12 +13,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiMappingPattern.ROLE)
+@RequestMapping(ApiMappingPattern.PROVIDER)
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleServiceImpl roleService;
 
-    @PutMapping
+    private static final String ROLE_PUT = "/role/me";
+    private static final String ROLE_GET = "/role/me";
+
+    @PutMapping(ROLE_PUT)
     public ResponseEntity<ResponseDto<RoleResponseDto>> updateProviderRole(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody RoleRequestDto dto
@@ -29,7 +32,7 @@ public class RoleController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(ROLE_GET)
     public ResponseEntity<ResponseDto<RoleResponseDto>> getProviderRole(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {

@@ -13,7 +13,6 @@ import java.util.List;
 public class ProviderRequestDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private List<LocalDate> availableDate;
-
     @NotNull
     private String providerIntroduction;
 }

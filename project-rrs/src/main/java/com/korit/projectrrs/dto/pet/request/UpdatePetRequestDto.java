@@ -8,18 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class UpdatePetRequestDto {
     private String petName;
-
     private Character petGender;
-
     private String petBirthDate;
-
     private Integer petWeight;
-
     private MultipartFile petImageUrl;
-
     private Character petNeutralityYn;
-
     private String petAddInfo;
-
     private String defaultUrl;
 }

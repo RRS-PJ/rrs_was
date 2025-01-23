@@ -3,7 +3,6 @@ package com.korit.projectrrs.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.dialect.Replacer;
 
 @Data
 @Builder
@@ -16,7 +15,6 @@ public class ResponseDto<D> {
     public static <D> ResponseDto<D> setSuccess(String message, D data) {
         return ResponseDto.set(true, message, data);
     }
-
     public static <D> ResponseDto<D> setFailed(String message) {
         return ResponseDto.set(false, message, null);
     }

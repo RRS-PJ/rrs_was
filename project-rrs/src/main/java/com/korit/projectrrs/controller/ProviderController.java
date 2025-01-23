@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProviderController {
     private final ProviderService providerService;
 
-    private static final String PROVIDER_PUT = "/profile";
-    private static final String PROVIDER_GET = "/profile";
+    private static final String PROVIDER_PUT = "/me";
+    private static final String PROVIDER_GET = "/me";
     private static final String ONE_PROVIDER_INFO = "/{providerId}";
 
     @PutMapping(PROVIDER_PUT)

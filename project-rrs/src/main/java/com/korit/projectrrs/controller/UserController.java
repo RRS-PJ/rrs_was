@@ -20,9 +20,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final String USER_GET = "/me";
+    private final String USER_PUT = "/me";
+    private final String USER_DELETE = "/me";
     private final String UPDATE_PASSWORD = "/me/password";
 
-    @GetMapping
+    @GetMapping(USER_GET)
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
@@ -32,7 +35,7 @@ public class UserController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @PutMapping
+    @PutMapping(USER_PUT)
     public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @ModelAttribute UpdateUserRequestDto dto
@@ -43,7 +46,7 @@ public class UserController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping(USER_DELETE)
     public ResponseEntity<ResponseDto<Void>> deleteUser(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody

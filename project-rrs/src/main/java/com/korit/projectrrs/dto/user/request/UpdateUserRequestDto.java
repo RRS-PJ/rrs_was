@@ -16,7 +16,6 @@ public class UpdateUserRequestDto {
     private String address;
     @NotNull
     private String addressDetail;
-
     private MultipartFile profileImageUrl;
     private String profileUrl;
 }

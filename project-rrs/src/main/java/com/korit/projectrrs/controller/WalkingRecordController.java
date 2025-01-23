@@ -24,11 +24,11 @@ import java.util.List;
 public class WalkingRecordController {
     private final WalkingRecordService walkingRecordService;
 
-    private static final String WALKING_RECORD_POST= "/petId/{petId}";
-    private static final String WALKING_RECORD_GET_LIST = "/petId/{petId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
-    private static final String WALKING_RECORD_GET_BY_ID = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_PUT = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
+    private static final String WALKING_RECORD_POST= "/{petId}";
+    private static final String WALKING_RECORD_GET_LIST = "/{petId}?date={date}";
+    private static final String WALKING_RECORD_GET_BY_ID = "/{petId}/{walkingRecordId}";
+    private static final String WALKING_RECORD_PUT = "/{petId}/{walkingRecordId}";
+    private static final String WALKING_RECORD_DELETE = "/{petId}/{walkingRecordId}";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(

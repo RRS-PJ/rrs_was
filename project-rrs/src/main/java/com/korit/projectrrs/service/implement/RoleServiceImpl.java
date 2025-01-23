@@ -4,13 +4,11 @@ import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.role.requestDto.RoleRequestDto;
 import com.korit.projectrrs.dto.role.responseDto.RoleResponseDto;
-import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.repositoiry.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -84,4 +82,3 @@ public class RoleServiceImpl {
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }
-
