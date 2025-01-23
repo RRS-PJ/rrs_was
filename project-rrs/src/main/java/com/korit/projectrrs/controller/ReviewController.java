@@ -24,15 +24,14 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    private static final String REVIEW = "/{reviewId}";
-    private static final String GET_REVIEW_BY_RESERVATION_ID = "/reservation/{reservationId}";
-    private static final String UPDATE_REVIEW_BY_RESERVATION_ID = "/reservation/{reservationId}";
-    private static final String CREATE_REVIEW = "/write";
-    private static final String PROVIDER = "/provider/{providerId}";
-    private static final String LATEST_REVIEW_BY_PROVIDER = "/latest-review/{providerId}";
-    private static final String PROVIDER_AVG = "/provider-avg/{providerId}";
+    private static final String GET_REVIEW_BY_RESERVATION_ID = "/reservations/{reservationId}";
+    private static final String UPDATE_REVIEW_BY_RESERVATION_ID = "/reservations/{reservationId}";
+    private static final String PROVIDER_AVG = "/providers/{providerId}/average";
+    private static final String PROVIDER = "/providers/{providerId}";
+    private static final String LATEST_REVIEW_BY_PROVIDER = "/providers/{providerId}/latest";
+    private static final String DELETE_REVIEW = "/{reviewId}";
 
-    @PostMapping(CREATE_REVIEW)
+    @PostMapping
     private ResponseEntity<ResponseDto<CreateReviewResponseDto>> createReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody CreateReviewRequestDto dto
@@ -94,7 +93,7 @@ public class ReviewController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @DeleteMapping(REVIEW)
+    @DeleteMapping(DELETE_REVIEW)
     ResponseEntity<ResponseDto<Void>> deleteReview (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long reviewId

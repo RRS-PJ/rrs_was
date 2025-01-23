@@ -22,15 +22,14 @@ import java.util.Set;
 public class ReservationController {
     private final ReservationService reservationService;
 
-    private final String RESERVATION_POST = "/write";
     private final String RESERVATION_GET = "/{reservationId}";
-    private final String RESERVATION_GET_MINE_USER = "/mine/user";
+    private final String RESERVATION_GET_MINE_USER = "/users/me";
     private final String RESERVATION_PUT = "/{reservationId}";
-    private final String RESERVATION_STATUS = "/update-reservation-status";
-    private final String FIND_PROVIDER_BY_DATE = "/get-provider";
-    private final String HAS_REVIEW = "/has-review/{reservationId}";
+    private final String RESERVATION_STATUS = "/status";
+    private final String FIND_PROVIDER_BY_DATE = "/available-providers";
+    private final String HAS_REVIEW = "/{reservationId}/review";
 
-    @PostMapping(RESERVATION_POST)
+    @PostMapping
     private ResponseEntity<ResponseDto<CreateReservationResponseDto>> createReservation (
             @AuthenticationPrincipal PrincipalUser principalUser,
             @Valid @RequestBody CreateReservationRequestDto dto
@@ -41,7 +40,6 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-    // userId로 조회 이용자 본인 예약 내역만 조회 가능하다.
     @GetMapping(RESERVATION_GET_MINE_USER)
     private ResponseEntity<ResponseDto<List<GetReservationResponseDto>>> getAllReservationByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
@@ -52,7 +50,6 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-    // reservationId로 조회
     @GetMapping(RESERVATION_GET)
     private ResponseEntity<ResponseDto<GetReservationResponseDto>> getReservationByReservationId (
             @AuthenticationPrincipal PrincipalUser principalUser,
@@ -63,7 +60,6 @@ public class ReservationController {
         return ResponseEntity.status(status).body(response);
     }
 
-    // reservation update 사실상 memo 밖에 수정 못한다.
     @PutMapping(RESERVATION_PUT)
     private ResponseEntity<ResponseDto<UpdateReservationResponseDto>> updateReservation (
             @AuthenticationPrincipal PrincipalUser principalUser,

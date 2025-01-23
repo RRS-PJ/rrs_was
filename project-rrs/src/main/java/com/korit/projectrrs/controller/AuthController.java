@@ -27,7 +27,7 @@ public class AuthController {
 
     private static final String SING_UP_PATH= "/sign-up";
     private static final String LOGIN_PATH= "/login";
-    private static final String FIND_BY_EMAIL= "/send-email";
+    private static final String FIND_BY_EMAIL= "/recovery-email";
     private static final String FIND_ID_BY_TOKEN= "/find-id/{token}";
     private static final String SNS_LOGIN= "/sns-login";
 
