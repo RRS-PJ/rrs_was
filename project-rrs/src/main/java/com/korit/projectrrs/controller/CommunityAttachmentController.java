@@ -12,51 +12,46 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
+
 @RestController
-@RequestMapping(ApiMappingPattern.ATTACHMENT)
+@RequestMapping(ApiMappingPattern.COMMUNITY_ATTACHMENT)
 @RequiredArgsConstructor
 public class CommunityAttachmentController {
 
     private final CommunityAttachmentService communityAttachmentService;
 
-    // 특정 커뮤니티의 첨부파일 조회
-    @GetMapping("/community/{communityId}")
+    @GetMapping(ATTACHMENT_BY_COMMUNITY_ID)
     public ResponseEntity<ResponseDto<List<CommunityAttachmentDTO>>> getAttachmentsByCommunityId(
             @PathVariable Long communityId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // Service 호출
         ResponseDto<List<CommunityAttachmentDTO>> response = communityAttachmentService.getAttachmentsByCommunityId(communityId);
         return ResponseEntity.ok(response);
     }
 
-    // 특정 첨부파일 삭제
-    @DeleteMapping("/{attachmentId}")
+    @DeleteMapping(ATTACHMENT_BY_ATTACHMENT_ID)
     public ResponseEntity<?> deleteAttachmentById(
             @PathVariable Long attachmentId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         communityAttachmentService.deleteAttachmentById(attachmentId);
         return ResponseEntity.ok("Attachment deleted successfully");
     }
 
-    // 특정 커뮤니티의 모든 첨부파일 삭제
-    @DeleteMapping("/community/{communityId}")
+    @DeleteMapping(DELETE_ATTACHMENT_BY_COMMUNITY_ID)
     public ResponseEntity<?> deleteAttachmentsByCommunityId(
             @PathVariable Long communityId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         communityAttachmentService.deleteAttachmentsByCommunityId(communityId);
         return ResponseEntity.ok("All attachments for community deleted successfully");
     }

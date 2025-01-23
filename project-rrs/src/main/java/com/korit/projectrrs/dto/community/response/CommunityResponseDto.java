@@ -32,10 +32,7 @@ public class CommunityResponseDto {
     private List<CommunityCommentResponseDto> comments = new ArrayList<>();
     private List<String> attachments = new ArrayList<>();
     private List<String> userLikedNicknames = new ArrayList<>();
-    /**
-     * Community 엔티티를 기반으로 CommunityResponseDto를 생성합니다.
-     * @param community Community 엔티티
-     */
+
     public CommunityResponseDto(Community community) {
         this.communityId = community.getCommunityId();
         this.nickname = community.getUser() != null ? community.getUser().getNickname() : "Unknown";
@@ -46,7 +43,6 @@ public class CommunityResponseDto {
         this.communityContent = community.getCommunityContent();
         this.communityThumbnailFile = community.getCommunityThumbnailFile();
 
-        // 좋아요한 사용자 닉네임 목록
         if (Objects.nonNull(community.getUserLiked())) {
             this.userLikedNicknames = community.getUserLiked().stream()
                     .filter(CommunityLikes::isUserLiked)
@@ -54,14 +50,12 @@ public class CommunityResponseDto {
                     .collect(Collectors.toList());
         }
 
-        // 댓글 리스트 변환
         if (Objects.nonNull(community.getComments())) {
             this.comments = community.getComments().stream()
                     .map(CommunityCommentResponseDto::new)
                     .collect(Collectors.toList());
         }
 
-        // 첨부파일 리스트 변환
         if (Objects.nonNull(community.getAttachments())) {
             this.attachments = community.getAttachments().stream()
                     .map(CommunityAttachment::getCommunityAttachment)

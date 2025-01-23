@@ -14,9 +14,7 @@ public class CommunityCreateRequestDto {
     private String communityTitle;
     @NotBlank(message = "Community content is required.")
     private String communityContent;
-    // 썸네일 파일
     private MultipartFile communityThumbnailFile;
-    // 첨부파일 리스트 (기본값: 빈 리스트)
     private List<MultipartFile> attachments = new ArrayList<>();
     public List<MultipartFile> getFiles() {
         return attachments;

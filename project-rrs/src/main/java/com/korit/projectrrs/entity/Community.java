@@ -60,18 +60,15 @@ public class Community {
         return user != null ? user.getNickname() : null;
     }
 
-    // 좋아요 수 변경
     public void updateLikeCount(int newLikeCount) {
         this.communityLikeCount = newLikeCount;
-        // Like count만 변경될 때는 communityUpdatedAt을 갱신하지 않음
     }
 
-    // 다른 필드 변경
     public void updateDetails(String title, String content, String thumbnailFile) {
         this.communityTitle = title;
         this.communityContent = content;
         this.communityThumbnailFile = thumbnailFile;
-        this.communityUpdatedAt = LocalDateTime.now(); // 명시적으로 갱신
+        this.communityUpdatedAt = LocalDateTime.now();
     }
 
     @PrePersist

@@ -12,51 +12,45 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
+
 @RestController
 @RequestMapping(ApiMappingPattern.HEALTH_RECORDS_ATTACHMENT)
 @RequiredArgsConstructor
 public class HealthRecordAttachmentController {
 
     private final HealthRecordAttachmentService healthRecordAttachmentService;
-
-    // 특정 건강 기록의 첨부파일 조회
-    @GetMapping("/health-record/{healthRecordId}")
+    @GetMapping(HEALTH_RECORDS_ATTACHMENT_BY_RECORD_ID)
     public ResponseEntity<ResponseDto<List<HealthRecordAttachmentDTO>>> getAttachmentsByHealthRecordId(
             @PathVariable Long healthRecordId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // Service 호출
         ResponseDto<List<HealthRecordAttachmentDTO>> response = healthRecordAttachmentService.getAttachmentsByHealthRecordId(healthRecordId);
         return ResponseEntity.ok(response);
     }
 
-    // 특정 첨부파일 삭제
-    @DeleteMapping("/{attachmentId}")
+    @DeleteMapping(DELETE_ATTACHMENT_BY_ATTACHMENT_ID)
     public ResponseEntity<?> deleteAttachmentById(
             @PathVariable Long attachmentId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
+
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         healthRecordAttachmentService.deleteAttachmentById(attachmentId);
         return ResponseEntity.ok("Attachment deleted successfully");
     }
 
-    // 특정 건강 기록의 모든 첨부파일 삭제
-    @DeleteMapping("/health-record/{healthRecordId}")
+    @DeleteMapping(DELETE_ATTACHMENT_BY_HEALTH_RECORD_ID)
     public ResponseEntity<?> deleteAttachmentsByHealthRecordId(
             @PathVariable Long healthRecordId,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // 인증된 사용자 확인
         System.out.println("Authenticated User: " + userDetails.getUsername());
 
-        // 권한 체크 로직 추가 가능
         healthRecordAttachmentService.deleteAttachmentsByHealthRecordId(healthRecordId);
         return ResponseEntity.ok("All attachments for health record deleted successfully");
     }
