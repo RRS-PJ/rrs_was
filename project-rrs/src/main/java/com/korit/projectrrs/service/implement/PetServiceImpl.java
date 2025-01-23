@@ -1,6 +1,5 @@
 package com.korit.projectrrs.service.implement;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
 import com.korit.projectrrs.dto.pet.request.PetRequestDto;
@@ -17,7 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
-
     private final PetRepository petRepository;
     private final UserRepository userRepository;
     private final FileService fileService;
@@ -157,6 +154,7 @@ public class PetServiceImpl implements PetService {
         MultipartFile petImage = dto.getPetImageUrl();
         Character petNeutralityYn = dto.getPetNeutralityYn();
         String petAddInfo = dto.getPetAddInfo();
+        String defaultUrl = dto.getDefaultUrl();
 
         PetResponseDto data = null;
 
@@ -200,23 +198,21 @@ public class PetServiceImpl implements PetService {
                     (petWeight == null || petWeight.equals(pet.getPetWeight())) &&
                     (petNeutralityYn == null || petNeutralityYn.equals(pet.getPetNeutralityYn()) &&
                     (petAddInfo == null || petAddInfo.equals(pet.getPetAddInfo())) &&
-                    (petImage == null || petImage.getOriginalFilename().equals(pet.getPetImageUrl())));
+                    (petImage == null || petImage.getOriginalFilename().equals(pet.getPetImageUrl()))) &&
+                    (defaultUrl == null);
 
             if (isSame) {
                 return ResponseDto.setFailed(ResponseMessage.NO_MODIFIED_VALUES);
             }
 
-            String petImageUrl = pet.getPetImageUrl();
-            String defaultProfileImageUrl = "/static/images/pet-default-profile.jpg";
-
-            if (petImage != null && !petImage.isEmpty()) {
-                String filePath = fileService.uploadFile(petImage, "pet-profileImage");
-                if (filePath != null) {
-                    petImageUrl = filePath;
+                if (petImage == null && defaultUrl != null) {
+                    pet.setPetImageUrl(defaultUrl);  // 기본 이미지 URL 설정
                 }
-            } else if (petImageUrl == null || petImageUrl.isEmpty()) {
-                petImageUrl = defaultProfileImageUrl;
-            }
+
+                if (petImage != null && !petImage.isEmpty()) {
+                    String filePath = fileService.uploadFile(petImage, "pet-profileImage");  // 파일 업로드 서비스 호출
+                    pet.setPetImageUrl(filePath);  // 파일 경로 저장
+                }
 
             pet = pet.toBuilder()
                     .petName(petName != null ? petName : pet.getPetName())
@@ -225,7 +221,6 @@ public class PetServiceImpl implements PetService {
                     .petWeight(petWeight != null ? petWeight : pet.getPetWeight())
                     .petNeutralityYn(petNeutralityYn != null ? petNeutralityYn : pet.getPetNeutralityYn())
                     .petAddInfo(petAddInfo != null ? petAddInfo : pet.getPetAddInfo())
-                    .petImageUrl(petImageUrl)
                     .build();
 
             petRepository.save(pet);

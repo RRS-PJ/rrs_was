@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
 @RequestMapping(ApiMappingPattern.PROVISION)
 @RequiredArgsConstructor
 public class ProvisionController {
-
     private final ProvisionService provisionService;
 
     private static final String PET_GET_BY_ID = "/{reservationId}";

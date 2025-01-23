@@ -17,14 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import static com.korit.projectrrs.common.constant.ApiMappingPattern.*;
 
 @RestController
 @RequestMapping(ApiMappingPattern.AUTH)
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
 
     private static final String SING_UP_PATH= "/sign-up";

@@ -3,12 +3,9 @@ package com.korit.projectrrs.common.constant;
 public class ApiMappingPattern {
     public static final String AUTH = "/api/v1/auth";
     public static final String USER = "/api/v1/users";
-    public static final String WALKING_RECORD = "/api/v1/walking-record";
-    public static final String WALKING_RECORD_ATTACHMENT = "/api/v1/walking-record/petId/{petId}/walkingRecordId/{walkingRecordId}/attachments";
-    public static final String AVAILABLEDATEOFWEEK = "/api/v1/availableDateOfWeek";
-    public static final String PROVIDER = "/api/v1/provider";
-    public static final String ROLE = "/api/v1/role";
-    public static final String PROVISION = "/api/v1/provider/provision";
+    public static final String WALKING_RECORD = "/api/v1/walking-records";
+    public static final String PROVIDER = "/api/v1/providers";
+    public static final String PROVISION = "/api/v1/provisions";
 
     public static final String TODO = "/api/v1/todos";
     public static final String CUSTOMER_SUPPORT = "/api/v1/customer-supports";
@@ -51,8 +48,7 @@ public class ApiMappingPattern {
     public static final String USAGE_GUIDE_BY_ID = "/{usageGuideId}";
 
     // 펫 및 건강 기록
-    public static final String PET = "/api/v1/users/pet";
-
+    public static final String PET = "/api/v1/pets";
     public static final String HEALTH_RECORDS = "/api/v1/health-records";
     public static final String HEALTH_RECORD_CREATE = "/{petId}";
     public static final String HEALTH_RECORD_GET_LIST = "/{petId}";

@@ -14,4 +14,5 @@ public class UpdatePetRequestDto {
     private MultipartFile petImageUrl;
     private Character petNeutralityYn;
     private String petAddInfo;
+    private String defaultUrl;
 }

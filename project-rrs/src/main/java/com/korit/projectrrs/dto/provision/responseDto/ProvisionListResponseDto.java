@@ -1,14 +1,11 @@
 package com.korit.projectrrs.dto.provision.responseDto;
 
-import com.korit.projectrrs.entity.Pet;
 import com.korit.projectrrs.entity.Reservation;
 import com.korit.projectrrs.entity.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

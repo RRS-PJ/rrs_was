@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,14 +22,13 @@ import java.util.List;
 @RequestMapping(ApiMappingPattern.WALKING_RECORD)
 @RequiredArgsConstructor
 public class WalkingRecordController {
-
     private final WalkingRecordService walkingRecordService;
 
-    private static final String WALKING_RECORD_POST= "/petId/{petId}";
-    private static final String WALKING_RECORD_GET_LIST = "/petId/{petId}/walkingRecordCreateAt/{walkingRecordCreateAt}";
-    private static final String WALKING_RECORD_GET_BY_ID = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_PUT = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
-    private static final String WALKING_RECORD_DELETE = "/petId/{petId}/walkingRecordId/{walkingRecordId}";
+    private static final String WALKING_RECORD_POST= "/{petId}";
+    private static final String WALKING_RECORD_GET_LIST = "/{petId}";
+    private static final String WALKING_RECORD_GET_BY_ID = "/{petId}/{walkingRecordId}";
+    private static final String WALKING_RECORD_PUT = "/{petId}/{walkingRecordId}";
+    private static final String WALKING_RECORD_DELETE = "/{petId}/{walkingRecordId}";
 
     @PostMapping(WALKING_RECORD_POST)
     public ResponseEntity<ResponseDto<WalkingRecordResponseDto>> createWalkingRecord(
@@ -48,10 +46,10 @@ public class WalkingRecordController {
     public ResponseEntity<ResponseDto<List<WalkingRecordListResponseDto>>> getWalkingRecordList(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable Long petId,
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate walkingRecordCreateAt
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
         Long userId = principalUser.getUser().getUserId();
-        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petId, walkingRecordCreateAt);
+        ResponseDto<List<WalkingRecordListResponseDto>> response = walkingRecordService.getWalkingRecordList(userId, petId, date);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

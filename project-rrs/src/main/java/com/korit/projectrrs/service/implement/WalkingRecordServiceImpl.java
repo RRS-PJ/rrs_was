@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class WalkingRecordServiceImpl implements WalkingRecordService {
-
     private final PetRepository petRepository;
     private final WalkingRecordRepository walkingRecordRepository;
     private final WalkingRecordAttachmentRepository walkingRecordAttachmentRepository;
@@ -88,12 +87,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             walkingRecordRepository.save(walkingRecord);
 
-            // 파일 업로드 처리
             List<MultipartFile> Multifiles = dto.getFiles();
             List<String> fileNames = new ArrayList<>();
 
             if (Multifiles == null || Multifiles.isEmpty()) {
-                Multifiles = new ArrayList<>();  // 빈 배열로 초기화
+                Multifiles = new ArrayList<>();
             }
 
             if (Multifiles != null && !Multifiles.isEmpty()) {
@@ -130,11 +128,11 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
     }
 
     @Override
-    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate walkingRecordCreateAt) {
+    public ResponseDto<List<WalkingRecordListResponseDto>> getWalkingRecordList(Long userId, Long petId, LocalDate date) {
         List<WalkingRecordListResponseDto> data = new ArrayList<>();
 
         try {
-            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petId, walkingRecordCreateAt);
+            List<WalkingRecord> walkingRecords = walkingRecordRepository.findAllWalkingReccrdByCreateAt(petId, date);
 
             if (walkingRecords.isEmpty()) {
                 return ResponseDto.setSuccess(ResponseMessage.NOT_EXIST_WALKING_RECORD_ID, data);
@@ -182,7 +180,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
         String walkingRecordMemo = dto.getWalkingRecordMemo();
         List<WalkingRecordWeatherState> validWeatherStates = Arrays.asList(WalkingRecordWeatherState.values());
         List<MultipartFile> newFiles = dto.getFiles();
-        List<String> validExtensions = Arrays.asList("jpg", "png", "jpeg");
 
         WalkingRecordResponseDto data = null;
 
@@ -211,7 +208,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
 
             WalkingRecord walkingRecord = optionalWalkingRecord.get();
 
-            // 기존 첨부파일 삭제
             List<WalkingRecordAttachment> existingAttachments = walkingRecordAttachmentRepository.findByWRId(userId, petId, walkingRecordId);
 
             for (WalkingRecordAttachment attachment : existingAttachments) {
@@ -219,7 +215,6 @@ public class WalkingRecordServiceImpl implements WalkingRecordService {
                 walkingRecordAttachmentRepository.delete(attachment);
             }
 
-            // 새로운 첨부파일 추가
             if (newFiles != null && !newFiles.isEmpty()) {
                 for (MultipartFile file : newFiles) {
                     String filePath = fileService.uploadFile(file, "walking-record");

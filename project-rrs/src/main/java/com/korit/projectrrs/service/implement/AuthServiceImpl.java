@@ -1,9 +1,7 @@
 package com.korit.projectrrs.service.implement;
 
-
 import com.korit.projectrrs.common.constant.ResponseMessage;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.request.SNSLoginRequestDto;
 import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
 import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
 import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
@@ -26,10 +24,10 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptpasswordEncoder;
     private final JwtProvider jwtProvider;
@@ -53,7 +51,6 @@ public class AuthServiceImpl implements AuthService {
 
         SignUpResponseDto data = null;
 
-        // 1. 유효성 검사 //
         if (name == null || name.isEmpty() || !name.matches("^[가-힣]+$")) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_NAME);
         }
@@ -100,7 +97,6 @@ public class AuthServiceImpl implements AuthService {
             return ResponseDto.setFailed(ResponseMessage.INVALID_USER_PROFILE);
         }
 
-        // 2. 중복 체크 //
         if (userRepository.existsByUsername((username))) {
             return ResponseDto.setFailed(ResponseMessage.EXIST_USER_ID);
         }
@@ -118,7 +114,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         try {
-
             String encodedPassword = bCryptpasswordEncoder.encode(password);
 
             User user = User.builder()
@@ -136,31 +131,25 @@ public class AuthServiceImpl implements AuthService {
                     .joinPath(joinPath)
                     .build();
 
-            // 데이터베이스에 저장
             userRepository.save(user);
 
-            // 응답 데이터 생성
             data = new SignUpResponseDto(user);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
-        // 성공 응답
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
     public ResponseDto<LoginResponseDto> login(@Valid LoginRequestDto dto) {
-        // 1. 입력값 추출 //
         String username = dto.getUsername();
         String password = dto.getPassword();
 
         LoginResponseDto data = null;
 
         try {
-            // 3. 사용자 인증 //
             User user = userRepository.findUserByUsername(username)
                     .orElse(null);
 
@@ -172,11 +161,9 @@ public class AuthServiceImpl implements AuthService {
                 return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_PASSWORD);
             }
 
-            // 4. 토큰 생성 //
             String token = jwtProvider.generateJwtToken(user.getUserId(), user.getRoles());
             int exprTime = jwtProvider.getExpiration();
 
-            // 5. 응답 데이터 생성 //
             data = new LoginResponseDto(
                     user.getUserId(),
                     user.getName(),
@@ -196,8 +183,6 @@ public class AuthServiceImpl implements AuthService {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-
-        // 6. 성공 응답 반환 //
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
      }
 

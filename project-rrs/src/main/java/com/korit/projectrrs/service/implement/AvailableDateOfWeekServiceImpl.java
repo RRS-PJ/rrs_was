@@ -8,7 +8,6 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.AvailableDateOfWeekService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -17,7 +16,6 @@ import java.util.Optional;
 public class AvailableDateOfWeekServiceImpl implements AvailableDateOfWeekService {
     private final AvailableDateOfWeekRepository availableDateOfWeekRepository;
     private final UserRepository userRepository;
-
 
     @Override
     public AvailableDateOfWeek addDate(Long userId, LocalDate availableDate) {

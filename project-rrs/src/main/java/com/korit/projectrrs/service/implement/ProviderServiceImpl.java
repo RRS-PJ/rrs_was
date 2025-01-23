@@ -17,7 +17,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProviderServiceImpl implements ProviderService {
-
     private final AvailableDateOfWeekService availableDateOfWeekService;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
