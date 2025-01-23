@@ -2,15 +2,12 @@ package com.korit.projectrrs.controller;
 
 import com.korit.projectrrs.common.constant.ApiMappingPattern;
 import com.korit.projectrrs.dto.ResponseDto;
-import com.korit.projectrrs.dto.auth.request.SNSLoginRequestDto;
 import com.korit.projectrrs.dto.auth.response.DuplicateFieldCheckResponseDto;
 import com.korit.projectrrs.dto.auth.response.LoginResponseDto;
-import com.korit.projectrrs.dto.auth.response.SNSLoginResponseDto;
 import com.korit.projectrrs.dto.auth.response.SignUpResponseDto;
 import com.korit.projectrrs.dto.auth.request.LoginRequestDto;
 import com.korit.projectrrs.dto.auth.request.SignUpRequestDto;
 import com.korit.projectrrs.dto.mail.SendMailRequestDto;
-import com.korit.projectrrs.entity.User;
 import com.korit.projectrrs.security.PrincipalUser;
 import com.korit.projectrrs.service.AuthService;
 import jakarta.mail.MessagingException;
@@ -32,7 +29,7 @@ public class AuthController {
 
     private static final String SING_UP_PATH= "/sign-up";
     private static final String LOGIN_PATH= "/login";
-    private static final String FIND_BY_EMAIL= "/send-email";
+    private static final String FIND_BY_EMAIL= "/recovery-email";
     private static final String FIND_ID_BY_TOKEN= "/find-id/{token}";
     private static final String SNS_LOGIN= "/sns-login";
 

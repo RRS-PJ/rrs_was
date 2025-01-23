@@ -42,7 +42,6 @@ public class  ReviewServiceImpl implements ReviewService {
         String content = dto.getReviewContent();
         Long reservationId = dto.getReservationId();
 
-        //유효성 검사
         if (content == null || content.isEmpty() || content.length() > 500) {
             return ResponseDto.setFailed(ResponseMessage.REVIEW_TOO_lONG);
         }

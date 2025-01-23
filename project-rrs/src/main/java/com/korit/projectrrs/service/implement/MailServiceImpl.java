@@ -57,26 +57,4 @@ public class MailServiceImpl implements MailService {
         message.setText(body, "UTF-8", "html");
         return message;
     }
-
-    @Override
-    public String sendSimpleMessage(MimeMessage message, String token) throws MessagingException {
-        try {
-            javaMailSender.send(message);
-        } catch (MailException e) {
-            e.printStackTrace();
-            return "메일 발송 중 오류가 발생하였습니다.";
-        }
-        return token;
-    }
-
-    @Override
-    public String verifyEmail(String token) {
-        String body = "";
-        try {
-            String username = jwtProvider.getUsernameFromEmailJwt(token);
-            return username + "님 인증되셨습니다." + body;
-        } catch (ExpiredJwtException e) {
-            return "만료된 인증 토큰입니다.";
-        }
-    }
 }

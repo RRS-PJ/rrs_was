@@ -20,9 +20,9 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
         TODOS T ON U.USER_ID = T.USER_ID
     WHERE
         U.USER_ID = :userId
-        AND T.TODO_CREATE_AT = :day
-    """, nativeQuery = true)
-    List<Todo> findTodosByUserIdAndDay(@Param("userId") Long userId,@Param("day") LocalDate day);
+        AND DATE(T.TODO_CREATE_AT) = :day
+""", nativeQuery = true)
+    List<Todo> findTodosByUserIdAndDay(@Param("userId") Long userId, @Param("day") LocalDate day);
 
     List<Todo> findAllByUser_UserId(Long userId);
 }

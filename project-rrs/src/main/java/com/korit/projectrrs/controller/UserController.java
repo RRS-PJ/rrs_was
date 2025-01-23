@@ -22,7 +22,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final String UPDATE_PASSWORD = "/update-password";
+    private final String UPDATE_PASSWORD = "/me/password";
 
     @GetMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> getUserInfo(

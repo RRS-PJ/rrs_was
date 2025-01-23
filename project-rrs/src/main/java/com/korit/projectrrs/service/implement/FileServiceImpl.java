@@ -26,7 +26,6 @@ public class FileServiceImpl implements FileService {
         String originalFileName = file.getOriginalFilename();
         String uuid = extractUUIDFromFileName(originalFileName);
 
-        // UUID가 파일명에 없으면 새로운 UUID를 생성
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
         }
@@ -48,7 +47,6 @@ public class FileServiceImpl implements FileService {
         return filePath;
     }
 
-    // 파일명에서 UUID 추출
     private String extractUUIDFromFileName(String fileName) {
         String[] parts = fileName.split("_");
 

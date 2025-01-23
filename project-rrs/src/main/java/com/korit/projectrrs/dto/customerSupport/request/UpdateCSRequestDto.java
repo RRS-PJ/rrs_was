@@ -10,13 +10,9 @@ import java.util.List;
 public class UpdateCSRequestDto {
     @NotBlank
     private String customerSupportTitle;
-
     @NotBlank
     private String customerSupportContent;
-
     private String existFilePath;
-
     private List<MultipartFile> files;
-
-    private String path = "inquiry-and-report";
+    private String path = "customer-support";
 }
