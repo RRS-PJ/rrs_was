@@ -9,8 +9,6 @@ import java.time.LocalDate;
 public class UpdateTodoRequestDto {
     @Size(max = 255)
     private String todoPreparationContent;
-
     private LocalDate todoCreateAt;
-
     private Character todoStatus;
 }

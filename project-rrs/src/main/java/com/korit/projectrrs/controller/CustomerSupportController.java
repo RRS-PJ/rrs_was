@@ -25,10 +25,11 @@ import java.util.List;
 public class CustomerSupportController {
     private final CustomerSupportService customerSupportService;
 
-    private final String CUSTOMER_SUPPORT_CREATE = "/write";
-    private final String CUSTOMER_SUPPORT_GET = "/{customerSupportId}";
-    private final String CUSTOMER_SUPPORT_UPDATE = "/{customerSupportId}";
-    private final String CUSTOMER_SUPPORT_DELETE = "/{customerSupportId}";
+    private final String CUSTOMER_SUPPORT_CREATE = "/me";
+    private final String CUSTOMER_SUPPORT_GET = "/{customerSupportId}/me";
+    private final String CUSTOMER_SUPPORT_GET_All = "/me";
+    private final String CUSTOMER_SUPPORT_UPDATE = "/{customerSupportId}/me";
+    private final String CUSTOMER_SUPPORT_DELETE = "/{customerSupportId}/me";
 
     @PostMapping(CUSTOMER_SUPPORT_CREATE)
     private ResponseEntity<ResponseDto<CreateCSResponseDto>> createCustomerSupport (
@@ -52,7 +53,7 @@ public class CustomerSupportController {
         return ResponseEntity.status(status).body(response);
     }
 
-    @GetMapping
+    @GetMapping(CUSTOMER_SUPPORT_GET_All)
     private ResponseEntity<ResponseDto<List<GetAllCSResponseDto>>> getAllCustomerSupportByUserId (
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {

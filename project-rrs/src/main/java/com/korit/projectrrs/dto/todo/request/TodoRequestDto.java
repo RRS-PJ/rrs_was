@@ -12,7 +12,6 @@ public class TodoRequestDto {
     @NotBlank
     @Size(max = 255)
     private String todoPreparationContent;
-
     @NotNull
     private LocalDate todoCreateAt;
 }

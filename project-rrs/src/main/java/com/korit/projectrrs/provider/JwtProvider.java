@@ -27,10 +27,6 @@ public class JwtProvider {
         return jwtExpirationMs;
     }
 
-    public int getEmailExpiration() {
-        return jwtEmailExpirationMs;
-    }
-
     public JwtProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs) {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.jwtExpirationMs = jwtExpirationMs;
@@ -62,19 +58,12 @@ public class JwtProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
-                .compact();  // JWT 생성
+                .compact();
     }
 
-    // JWT에서 username 추출
     public String getUsernameFromJwt(String token) {
         Claims claims = getClaims(token);
         return claims.get("username", String.class);
-    }
-
-    // JWT에서 roles 추출
-    public String getRolesFromJwt(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("roles", String.class);
     }
 
     public Long getUserIdFromJwt(String token) {
@@ -108,10 +97,5 @@ public class JwtProvider {
                 .setSigningKey(key)
                 .build();
         return jwtParser.parseClaimsJws(token).getBody();
-    }
-
-    public Long getUserIdFromEmailJwt(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("userId", Long.class);
     }
 }

@@ -33,12 +33,10 @@ public class TodoServiceImpl implements TodoService {
         LocalDate todoCreateAt = dto.getTodoCreateAt();
 
         if (todoContent == null || todoContent.trim().isEmpty()) {
-            // Todo 내용 공백
             return ResponseDto.setFailed(ResponseMessage.TODO_IS_EMPTY);
         }
 
         if (todoContent.length() > 255) {
-            // Todo 내용 글자수 초과
             return ResponseDto.setFailed(ResponseMessage.TODO_TOO_LONG);
         }
 
@@ -113,7 +111,6 @@ public class TodoServiceImpl implements TodoService {
 
         if (todoContent != null){
             if (todoContent.length() > 255) {
-                // Todo 내용 글자수 초과
                 return ResponseDto.setFailed(ResponseMessage.TODO_TOO_LONG);
             }
         }

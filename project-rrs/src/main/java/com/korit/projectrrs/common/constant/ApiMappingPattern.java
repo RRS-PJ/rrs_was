@@ -11,9 +11,7 @@ public class ApiMappingPattern {
     public static final String PROVISION = "/api/v1/provider/provision";
 
     public static final String TODO = "/api/v1/todos";
-    public static final String ARTICLE = "/api/v1/articles";
-    public static final String CUSTOMER_SUPPORT = "/api/v1/inquiry-and-report";
-    public static final String CUSTOMER_SUPPORT_ATTACHMENT = "/api/v1/inquiry-and-report-attachment";
+    public static final String CUSTOMER_SUPPORT = "/api/v1/customer-supports";
     public static final String RESERVATION = "/api/v1/reservations";
     public static final String REVIEW = "/api/v1/reviews";
 

@@ -10,7 +10,6 @@ public class UpdateReviewRequestDto {
     @Min(0)
     @Max(5)
     private Double reviewScore;
-
     @NotBlank
     private String reviewContent;
 }

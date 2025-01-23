@@ -13,7 +13,6 @@ import com.korit.projectrrs.repositoiry.UserRepository;
 import com.korit.projectrrs.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.InternalException;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,36 +33,30 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDate startDate = dto.getReservationStartDate();
         LocalDate endDate = dto.getReservationEndDate();
         LocalDate currentDate = LocalDate.now();
-        LocalDate maxAllowedDate = currentDate.plusDays(30);  // 30일 이후의 날짜 제한
+        LocalDate maxAllowedDate = currentDate.plusDays(30);
         String memo = dto.getReservationMemo();
         Long providerId = dto.getProviderId();
 
-        // 시작 날짜가 과거일 경우
         if (startDate.isBefore(currentDate)) {
             return ResponseDto.setFailed(ResponseMessage.START_DATE_CANNOT_BE_IN_PAST);
         }
 
-        // 시작 또는 종료 날짜가 30일 이상 초과한 경우
         if (startDate.isAfter(maxAllowedDate) || endDate.isAfter(maxAllowedDate)) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_DATE_TOO_LATE);
         }
 
-        // 종료 날짜가 시작 날짜보다 이전인 경우
         if (endDate.isBefore(startDate)) {
             return ResponseDto.setFailed(ResponseMessage.INVALID_DATE_RANGE);
         }
 
-        // 예약 기간이 7일을 초과하는 경우
         if (startDate.plusDays(7).isBefore(endDate)) {
             return ResponseDto.setFailed(ResponseMessage.DATE_RANGE_TOO_LONG);
         }
 
-        // 1일 이상의 예약이 아닌 경우
         if (startDate.isEqual(endDate)) {
             return ResponseDto.setFailed(ResponseMessage.MINIMUM_ONE_DAY_RESERVATION);
         }
 
-        // 이미 예약인 경우
         int isReserved = reservationRepository.existsByProviderAndDateRange(dto.getProviderId(), dto.getReservationStartDate(), dto.getReservationEndDate());
         if (isReserved == 1) {
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_ALREADY_EXISTS);
@@ -102,13 +95,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         try {
             if (!userRepository.existsById(userId)) {
-                // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
 
             List<Reservation> reservations = reservationRepository.findAllByUserId(userId);
 
-            // 예약 페이지가 없을 경우
             if(reservations.isEmpty()){
                 return ResponseDto.setSuccess(ResponseMessage.SUCCESS, new ArrayList<>());
             }
@@ -120,7 +111,6 @@ public class ReservationServiceImpl implements ReservationService {
 
             List<Object[]> rawReviewScores = reviewRepository.findAverageReviewScoresByProviders(providerUserIds);
 
-            // List<Object[]> -> Map<Long, Double> 변환
             Map<Long, Double> providerAverageReviewScores = rawReviewScores.stream()
                     .collect(Collectors.toMap(
                             row -> ((Long) row[0]).longValue(),
@@ -166,7 +156,6 @@ public class ReservationServiceImpl implements ReservationService {
         UpdateReservationResponseDto data = null;
         String memo = dto.getReservationMemo();
 
-        //유효성 검사
         if (memo.length() > 1500){
             return ResponseDto.setFailed(ResponseMessage.RESERVATION_MEMO_TOO_LONG);
         }
@@ -175,7 +164,6 @@ public class ReservationServiceImpl implements ReservationService {
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
 
-            // 예약대기가 아니면 수정이 불가능
             if (reservation.getReservationStatus() != ReservationStatus.PENDING){
                 return  ResponseDto.setFailed(ResponseMessage.INVALIDATED_RESERVATION_STATUS);
             }
@@ -226,15 +214,15 @@ public class ReservationServiceImpl implements ReservationService {
         UpdateStatusResponseDto data = null;
 
         try {
-            Reservation cancledReservation = reservationRepository.findById(dto.getReservationId())
+            Reservation updatedReservation = reservationRepository.findById(dto.getReservationId())
                     .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
 
-            cancledReservation = cancledReservation.toBuilder()
+            updatedReservation = updatedReservation.toBuilder()
                     .reservationStatus(dto.getReservationStatus())
                     .build();
-            reservationRepository.save(cancledReservation);
+            reservationRepository.save(updatedReservation);
 
-            data = new UpdateStatusResponseDto(cancledReservation.getReservationStatus());
+            data = new UpdateStatusResponseDto(updatedReservation.getReservationStatus());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
@@ -249,17 +237,13 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new InternalException(ResponseMessage.NOT_EXIST_RESERVATION));
 
-        try {
             boolean result = reviewRepository.existsByReservation_ReservationId(reservationId);
             if(result){
                 data = new HasReview('Y');
             } else {
                 data = new HasReview('N');
             }
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
-        }
+
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 }

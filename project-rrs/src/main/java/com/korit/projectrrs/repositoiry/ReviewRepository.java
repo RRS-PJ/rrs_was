@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,7 +41,6 @@ LIMIT 1
 """, nativeQuery = true)
     Optional<Review> findLatestReviewByProviderId(@Param("providerId") Long providerId);
 
-    // 제공자 ID으로 평균 리뷰 조회
     @Query(value = """
 SELECT 
     AVG(R.REVIEW_SCORE)

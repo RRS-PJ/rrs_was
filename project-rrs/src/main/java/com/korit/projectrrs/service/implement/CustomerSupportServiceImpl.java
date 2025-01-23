@@ -43,7 +43,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         String content = dto.getCustomerSupportContent();
         char category =  dto.getCustomerSupportCategory();
 
-        // 유효성 검사
         if (title == null || title.isEmpty() || title.length() > 20) {
             return ResponseDto.setFailed(ResponseMessage.CS_TITLE_PROBLEM);
         }
@@ -75,7 +74,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
             };
 
             for (MultipartFile multiFile : Multifiles) {
-                String fileName = fileService.uploadFile(multiFile, "inquiry-and-report");
+                String fileName = fileService.uploadFile(multiFile, "customer-support");
                 fileNames.add(fileName);
 
                 if (fileName != null) {
@@ -102,14 +101,12 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         GetCSResponseDto data = null;
         try {
             if (!userRepository.existsById(userId)) {
-                // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
 
             Optional<CustomerSupport> optionalCustomerSupport = customerSupportRepository.findById(customerSupportId);
 
             if (optionalCustomerSupport.isPresent()) {
-                // 유저 아이디 불일치 시
                 if (!userId.equals(optionalCustomerSupport.get().getUser().getUserId())) {
                     return ResponseDto.setFailed(ResponseMessage.NOT_MATCH_USER_ID);
                 }
@@ -131,7 +128,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                         .build();
 
             } else {
-                // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
 
@@ -147,7 +143,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
         List<GetAllCSResponseDto> data = null;
         try {
             if (!userRepository.existsById(userId)) {
-                // 유저 아이디가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER_ID);
             }
             List<CustomerSupport> customerServices = customerSupportRepository.findAllByUserId(userId);
@@ -157,7 +152,6 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
                         .stream().map(GetAllCSResponseDto::new)
                         .collect(Collectors.toList());
             } else {
-                // 고객센터 포스트가 존재하지 않음
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_CUSTOMER_SUPPORT);
             }
         } catch (Exception e) {
