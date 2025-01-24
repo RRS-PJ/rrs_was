@@ -9,7 +9,8 @@ public enum ReservationStatus {
     PENDING("PENDING"),
     IN_PROGRESS("IN_PROGRESS"),
     COMPLETED("COMPLETED"),
-    CANCELLED("CANCELLED");
+    CANCELLED("CANCELLED"),
+    REJECTED("REJECTED");
 
     private String status;
 
